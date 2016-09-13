@@ -1,0 +1,311 @@
+---
+title: "Adjusting for Batch Effect in Network Inference"
+author: "Dan Schlauch"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: html_document
+---
+
+# Introduction
+
+The problem is that batch effect is assumed to affect gene expression on an individual gene level.  In other words, we typically use adjustments, such as empirical bayes to control.
+
+Consider a set of samples from a study involving two batches.
+Let the expression data be distributed as a set of MVN with mean vector $\mu$ and covariance structure $\Sigma$.
+
+Existing batch correction methods are designed to identify differentially expressed genes and thus focus on $\mu$ and the diagonal of $\Sigma$.
+
+For network inference, however, we are less interested in these values and more interesting in the off-diagonal of $\Sigma$.  Mechanisms for batch effect which act on the covariance structure rather than the mean and variance structure will not be corrected for using existing batch correction methods.
+
+```{r}
+library(sva)
+library(MASS)
+library(ggplot2)
+library(limma)
+gene1 <- c(rnorm(50,7),rnorm(50,9))
+gene2 <- c(rnorm(50,7),rnorm(50,9))
+batch <- c(rep("A",50),rep("B",50))
+
+df <- data.frame(gene1,gene2,batch)
+
+ggplot(df, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3) +ggtitle("Raw data")
+correct <- c(rep(0,50),rep(2,50))
+bc <- data.frame(gene1=gene1-correct,gene2=gene2-correct,batch)
+
+ggplot(bc, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3) +ggtitle("Batch corrected data")
+
+```
+
+This is batch correction working as intended.
+
+But what if we can't (won't) assume that batch only affects mean and variance, but also impacts covariance?  This is critical for Network inference.
+
+```{r, cache=TRUE}
+
+genes <- mvrnorm(n = 50, c(7,7), matrix(c(1,.95,.95,1),nrow=2), tol = 1e-6, empirical = FALSE, EISPACK = FALSE)
+gene1 <- c(genes[,1],rnorm(50,9))
+gene2 <- c(genes[,2],rnorm(50,9))
+
+df <- data.frame(gene1=gene1,gene2=gene2,batch)
+ggplot(df, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3) +ggtitle("Raw data")
+
+df <- data.frame(gene1=gene1-correct,gene2=gene2-correct,batch)
+ggplot(df, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3) +ggtitle("Batch corrected data")
+
+```
+
+Existing methods do not address this "2nd order batch effect"
+
+```{r, cache=TRUE}
+numGenes <- 1000
+nBatch1 <- 50
+nBatch2 <- 50
+mvnMean1  <- rexp(numGenes)
+mvnMean2  <- rexp(numGenes)
+mvnSigma1 <- 30*diag(rexp(numGenes))
+mvnSigma2 <- 30*diag(rexp(numGenes))
+batchCovariates <- c(rep("A",nBatch1),rep("B",nBatch2))
+
+data1 <- t(mvrnorm(n = nBatch1, mvnMean1, mvnSigma1, tol = 1e-6, empirical = FALSE, EISPACK = FALSE))
+data2 <- t(mvrnorm(n = nBatch2, mvnMean2, mvnSigma2, tol = 1e-6, empirical = FALSE, EISPACK = FALSE))
+data <- cbind(data1,data2)
+
+
+
+design <- model.matrix(~factor(batchCovariates))
+diffExp <- ebayes(lmFit(data, design))
+limmaPVals <- diffExp$p.value[,2]
+
+qplot(-log(1:numGenes/numGenes),-log(sort(limmaPVals))) + geom_abline(intercept=0,slope=1) +
+    ggtitle("QQ plot for uncorrected batched expression data") + xlab("-log(Expected)") + ylab("-log(Observed)") #+
+
+combatData <- ComBat(data, batchCovariates, prior.plots=T)
+combatDiffExp <- ebayes(lmFit(combatData, design))
+combatLimmaPVals <- combatDiffExp$p.value[,2]
+
+qplot(-log(1:numGenes/numGenes),-log(sort(combatLimmaPVals))) + geom_abline(intercept=0,slope=1) +
+    ggtitle("QQ plot for batched expression data") + xlab("-log(Expected)") + ylab("-log(Observed)")
+
+```
+
+So, in this example, we see that use of empirical Bayes correction allows for the control of false positives in differential expression analysis.  Does it also control false positives in network inference?
+
+```{r, cache=TRUE}
+library(nettools)
+wgcna <- mat2adj(t(data),method="WGCNA")
+allR <- wgcna[row(wgcna)>col(wgcna)]
+tStats <- sort((allR^(1/6))*sqrt(ncol(data)-2))
+
+qplot(sort(abs(qt(1:length(tStats)/length(tStats),df=98))), tStats)  + geom_abline(intercept=0,slope=1) +
+    ggtitle("QQ plot for raw data WGCNA") + xlab("-log(Expected)") + ylab("-log(Observed)")
+
+
+```
+
+We see that batch effect clearly leads to false positives in the absence of correction
+
+```{r, cache=TRUE}
+combatwgcna <- mat2adj(t(combatData),method="WGCNA")
+allR <- combatwgcna[row(combatwgcna)>col(combatwgcna)]
+tStats <- sort((allR^(1/6))*sqrt(ncol(combatData)-2))
+
+qplot(sort(abs(qt(1:length(tStats)/length(tStats),df=98))), tStats)  + geom_abline(intercept=0,slope=1) +
+    ggtitle("QQ plot for corrected data WGCNA") + xlab("-log(Expected)") + ylab("-log(Observed)")
+```
+
+The use of Combat does a good job of limiting false positives in this simple case.
+
+But...
+What if the batch effect impacts the covariance structure rather than the mean structure?
+
+```{r, cache=TRUE}
+SigmaVec <- rep(0,numGenes^2)
+SigmaVec[sample(numGenes^2,10000)] <- rbeta(10000,1,3)
+mvnSigma1 <- matrix(SigmaVec, ncol=numGenes)
+mvnSigma1 <- mvnSigma1 + t(mvnSigma1)
+
+SigmaVec <- rep(0,numGenes^2)
+SigmaVec[sample(numGenes^2,10000)] <- rbeta(10000,1,3)
+mvnSigma2 <- matrix(SigmaVec, ncol=numGenes)
+mvnSigma2 <- mvnSigma2 + t(mvnSigma2)
+
+
+mvnMean1  <- rexp(numGenes)
+mvnMean2  <- rexp(numGenes)
+diag(mvnSigma1) <- colSums(mvnSigma1)
+diag(mvnSigma2) <- colSums(mvnSigma2)
+batchCovariates <- c(rep("A",nBatch1),rep("B",nBatch2))
+
+data1 <- t(mvrnorm(n = nBatch1, mvnMean1, mvnSigma1, tol = 1e-6, empirical = FALSE, EISPACK = FALSE))
+data2 <- t(mvrnorm(n = nBatch2, mvnMean2, mvnSigma2, tol = 1e-6, empirical = FALSE, EISPACK = FALSE))
+data <- cbind(data1,data2)
+
+
+
+
+design <- model.matrix(~factor(batchCovariates))
+diffExp <- ebayes(lmFit(data, design))
+limmaPVals <- diffExp$p.value[,2]
+
+qplot(-log(1:numGenes/numGenes),-log(sort(limmaPVals))) + geom_abline(intercept=0,slope=1) +
+    ggtitle("QQ plot for uncorrected correlation-batched expression data") + xlab("-log(Expected)") + ylab("-log(Observed)") #+
+
+combatData <- ComBat(data, batchCovariates, prior.plots=T)
+combatDiffExp <- ebayes(lmFit(combatData, design))
+combatLimmaPVals <- combatDiffExp$p.value[,2]
+
+qplot(-log(1:numGenes/numGenes),-log(sort(combatLimmaPVals))) + geom_abline(intercept=0,slope=1) +
+    ggtitle("QQ plot for corrected correlation-batched expression data") + xlab("-log(Expected)") + ylab("-log(Observed)")
+
+```
+
+Again, for differential expression, we see that conventional batch correction methods do a satisfactory job controlling the false positives.
+
+Now we look at how "2nd order batch effects" affect network inference.
+
+```{r, cache=TRUE}
+
+datawgcna <- mat2adj(t(data),method="WGCNA")
+allR <- datawgcna[row(datawgcna)>col(datawgcna)]
+tStats <- sort((allR^(1/6))*sqrt(ncol(data)-2))
+
+qplot(sort(abs(qt(1:length(tStats)/length(tStats),df=98))), tStats)  + geom_abline(intercept=0,slope=1) +
+    ggtitle("QQ plot for corrected correlation-batched data WGCNA") + xlab("-log(Expected)") + ylab("-log(Observed)")
+```
+
+***
+
+# Batch effect in published NI studies
+
+* GTEx uses WGCNA to find common modules across tissues.
+
+* GTEx Consortium attempted to adjust for batch in the following ways
+
+Study design:
+
+> To the extent possible, based on sample availability, batches
+for library construction were designed to include a range of samples from different tissues and to
+span multiple donors, so as to minimise donor and tissue batch effects.
+
+Expression correction:
+
+> the effect of top 3 PEER factors, gender, and 3 genotype PCs were removed.
+
+Neither of these does not address the "second order" batch issue.
+
+# Results
+
+## Demonstrate that different results would have been obtained by accounting for "second order" batch effects.
+
+![WGCNA co-expression networks and module annotation](./GTEx_S30.png)
+
+## Process
+1. Choose two tissue types (Blood and Lung)
+2. Apply batch correction.
+3. Run WGCNA on each tissue
+4. Compute modules based on TOM
+
+![WGCNA modules (Blood)](./dendro_blood.png)
+![WGCNA modules (Lung)](./dendro_lung.png)
+
+5. Compute overlap and significance
+6. Plot edges between modules
+
+![Module Bipartite (Blood vs Lung)](./bipartiteBloodLung.png)
+
+7. Run separately on only one batch (Center)
+
+![Module Bipartite (Blood vs Lung in Center A)](./bipartiteBloodLung_CenterA.png) Center A
+![Module Bipartite (Blood vs Lung in Center B)](./bipartiteBloodLung_CenterB.png) Center B
+![Module Bipartite (Blood vs Lung in Center C)](./bipartiteBloodLung_CenterC.png) Center C
+
+
+## 2nd Order Batch Effect Correction - Solution:  
+Conventional batch correction model:
+$$Y_g=\alpha_g+\beta_gX+\gamma_igZ+\delta_ig\epsilon_ig$$
+
+where X is the exposure (e.g. treatment/control) and Z is the batch (or other covariates).
+In the context of network inference, we often want to find $cor(Y_{g1},Y_{g2})$, independent of $Z$.  
+
+So, in order to model 2nd order batch, what we really want to do is allow for the parameter of interest, $\beta_g$ to vary by batch.  
+So, now we set
+
+$$\beta_g^*=\beta_g+\beta_BgZ$$
+
+Where $\beta_B$ is a new parameter that we need to estimate for each of the ${{p}\choose{2}}$ comparisons.
+
+We can write out a full model for any two genes.  Note that $Y_{g2}$ is another gene in this model.
+
+$$Y_{g2}=\alpha_g+\beta_g^*X+\gamma_igZ+\delta_ig\epsilon_ig$$
+
+or
+
+$$Y_{g2}=\alpha_g+(\beta_g+\beta_BgZ)X+\gamma_igZ+\delta_ig\epsilon_ig$$
+$$Y_{g2}=\alpha_g+\beta_gX+\beta_BgZX+\gamma_igZ+\delta_ig\epsilon_ig$$
+
+There are many ways to approach this, but I believe the best way is the following steps:
+
+1. Apply conventional batch correction.  This will effectively eliminate the $\gamma_igZ$ term and we can proceed with the simpler model - $$Y_{g2}=\alpha_g+\beta_gX+\beta_BZX+\delta_ig\epsilon_ig$$ - on the combat-corrected data.  Further standardize each gene expression (this will not impact the actual results, but will aid in interpretation and computation time)
+
+2. Fit the following models 
+Reduced: $$Y_{g2}=\alpha_g+\beta_gX+\delta_ig\epsilon_ig$$
+Full: $$Y_{g2}=\alpha_g+\beta_gX+\beta_BZX+\delta_ig\epsilon_ig$$
+
+3. Place estimated coefficients into two separate matrices ($S_\beta,S_B$).  We have tons of options for computing these coefficients.  A LASSO-style L1 regularization would probably make the most sense here, but for the purposes of simplicity we will start with OLS.
+
+So, now we have two separate (equal sized) matrices instead of the usual one. $S_\beta$ is the estimated similarity matrix and $S_B$ is the "batch impact".  Intuitively, we can imagine that the expected value of $S_B$ is a zero matrix in the absence of 2nd order batch effects.  This lends itself easily for 2nd order batch effect testing - for example, we can compare the two models via likelihood ratio test (LRT).  This is nice, but we're much more interested in 2nd order batch effect *correction*.
+
+4. Compute the corrected similarity matrix via:
+$$\hat{S_i^*}=\hat{S_\beta}+(\frac{\sum_{j \in{X_i}}Z_j}{n_i})\hat{S_B} $$
+
+## What this means
+This yields a similarity matrix that is **batch-independent**.  In other words, we can now compare networks computed with different proportions of batch membership.  We can think of the adjusted similarity matrix as being the estimated similarity matrix given a *standardized representation of batches*.  This standardization allows us to compare networks which have been inferred with differing batch composition.
+
+Obviously, the usual caveats apply - this correction is most useful when the batches in each exposure are (a) unequal, (b) not too unequal.  Small numbers of samples for batches will result in wild fluctations in terms of estimating batch effect.
+
+##  Trying out the new implemented method on adjusted subset of the ECLIPSE data.
+
+![Correlation of Gene 1 vs all others](./singleGeneCorrection.png) Gene 1 (BLUE=naive, BLACK=Batch_baseline, RED=Batch_difference)
+
+***
+
+## An interesting (IMO) validation approach
+Given the difficulties of validating networks, validation that batch has been properly controlled will be a challenge.
+Rather than compare our results to an unreliable, expensive, or non-existent gold-standard benchmark we can instead focus on the network "stability".  In theory, our approach should control for batch and thus be independent of the batch distribution.  We can examine this by sampling differing proportions from batches and observing the tendency to vary as a function of the batch proportion.
+
+This approach uses the following procedure for a set of $n$ total samples from two distinct batches:
+
+1. Infer an overall network, $G$, from the entire dataset, $n$ samples, using standard methods for batch correction.
+2. Choose some $n^*$, $n^*<n$, to be the subsetted sample size. A reasonable value for $n^*$ would be something like $.5n$
+3. Choose a sequence $s$, to represent a set of batch proportions over which we will sample unbalanced batches.  So, for example, $s$={.10,.11,.12, ..., .90}
+4. For each $s_i\in s$, sample with replacement $n^*$ individuals, such that $s_i$ is the proportion of samples from Batch A (and $1-s_i$ is the proportion belonging to Batch B).  For completeness, this step can be performed many times for each $s_i$
+5. Infer a network, $H_i$, for each $s_i$.
+6. Compute the AUC-ROC for each $H_i$ using the full network $G$ as the benchmark.
+
+The above procedure is performed for both standard uncorrected network inference and also for our corrected version.
+
+## Generating a dataset with known batch effect
+2nd order batch effect in GTEx clearly exists (see above), but it can be subtle.  For the purposes of a proof on concept, we can generate a much stronger batch effect which clearly demonstrates this approach.
+We simply select 5000 genes and 5000 separate genes in the other batch, relabelling them Gene1, Gene2,...,Gene5000.  Basically, we're simply mismatching the genes between the batches!  This, obviously, causes a completely random rewiring of the network from one batch to the other.
+
+![Correlation of n* networks and n network](./validation_cor.png)
+![AUC-ROC of n* networks and n network](./validation_cor.png)
+Benchmark taken as the set of edges>.1, which is roughly 38% of all edges
+
+## Running analysis on real data - GTEx
+Confounder used -  EBV-transformed lymphocytes vs Whole Blood
+This data is comprised of 245 sample, 54 cell lines and 191 Whole Blood, processed via Joe Paulson.
+There are 24369 genes, but I subsetted 2000 genes by highest variance (just to reduce computational burden)
+
+![Correlation of n* networks and n network (GTEx)](./gtex_validation_cor.png)
+![AUC-ROC of n* networks and n network (GTEx)](./gtex_validation_cor.png)
+Benchmark taken as the set of edges>.1, which is roughly 44% of all edges
+
+
+## Model adjustments
+This allows us to evaluate the performance of model tweaking alterations.
+We can impose sparsity constraints, shrinkage or some bayesian prior on the magnitude of the batch effect.
+
+Work in progress - 
+
+1. Design model to impose sparsity on *differential correlation*.  L1 and L2 regularization 
+2. Empirical Bayes approach to address small sample issues (the left part of above plot)
