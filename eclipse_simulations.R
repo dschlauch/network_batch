@@ -8,6 +8,7 @@ gexp <- matrix(rnorm(numGenes*numSamples,10), numGenes, numSamples)
 
 
 eclipseExp <- read.table("~/gd/Harvard/Research/data/Eclipse/ECLIPSE_Blood_Exp.txt",row.names=1,header=T)
+eclipseClinical <- read.table("~/gd/Harvard/Research/data/Eclipse/ECLIPSE_blood.txt",header=T,fill = TRUE, sep="\t",row.names=1)
 
 SigmaA <- cor(t(eclipseExp[1:numGenes,]))
 muA <- rowMeans(eclipseExp[1:numGenes,])
@@ -93,7 +94,7 @@ res <- ginv(crossprod(x))%*%t(x)%*%t(gexp)
 resultDT <- data.table(cbind(t(resBatch)[,2:3],t(res)[,2]))
 names(resultDT) <- c("Overall", "batch", "naive")
 
-newDT <- data.table(c(resultDT$Overall,resultDT$batch,resultDT$naive),rep
+# newDT <- data.table(c(resultDT$Overall,resultDT$batch,resultDT$naive),rep
 
 png("./singleGeneCorrection.png", width=1200)
 ggplot(resultDT) +geom_point(aes(y=Overall,x=1:1000))+geom_point(aes(y=batch,x=1:1000),col="red") + geom_point(aes(y=naive,x=1:1000),col="blue") +
@@ -106,3 +107,77 @@ png("./singleGeneCorrection.png", width=1200)
 ggplot(newDT) +geom_point(aes(y=correlation,x=rep(1:1000,3),color=type))+
     geom_segment(x=1:1000,xend=1:1000,aes(y=Overall,yend=batch), alpha=.3)
 dev.off()
+
+
+
+library(WGCNA)
+
+cases <- eclipseClinical$Subject.type=="COPD" 
+controls <- eclipseClinical$Subject.type=="Smoker Control" 
+
+males <- eclipseClinical$Gender=="M" 
+
+# dataA <- eclipseExp[10101:12100,c(T,F)]
+# dataB <- eclipseExp[10101:12100,c(F,T,F,F)]
+
+dataA <- eclipseExp[101:2100, cases&(!males)]
+dataB <- eclipseExp[101:2100, controls&(males)]
+
+fixedDataA <- fixDataStructure(t(dataA))
+fixedDataB <- fixDataStructure(t(dataB))
+
+
+fixedDataA_BCM <- blockwiseConsensusModules(fixedDataA, power = 6, minModuleSize = 30, deepSplit = 2, maxBlockSize=30000,
+                                      pamRespectsDendro = FALSE, 
+                                      mergeCutHeight = 0.25, numericLabels = TRUE,
+                                      minKMEtoStay = 0,
+                                      saveTOMs = TRUE, verbose = 5)
+# adjMat <- adjacency(t(dataA), power = 6)
+# TOM <- TOMsimilarity(adjMat, TOMDenom = 'min', verbose = 1)
+# consensusNetwork <- consensusDissTOMandTree(fixedDataA, 6, TOM = TOM)
+
+fixedDataB_BCM <- blockwiseConsensusModules(fixedDataB, power = 6, minModuleSize = 30, deepSplit = 2, maxBlockSize=30000,
+                                     pamRespectsDendro = FALSE, 
+                                     mergeCutHeight = 0.25, numericLabels = TRUE,
+                                     minKMEtoStay = 0,
+                                     saveTOMs = TRUE, verbose = 5)
+# summary(lm(fixedDataA_BCM$colors==0 ~ as.factor(fixedDataB_BCM$colors)))
+
+# vglmFitMN <- vglm(as.factor(lungBCM$colors) ~ sample(as.factor(bloodBCM$colors)), family=multinomial(refLevel=1))
+
+# pseudo-R^2
+pseudoMultiR <- function(groupsA, groupsB, method="nagelkerke"){
+    require(VGAM)
+    vglmFitMN <- vglm(as.factor(groupsA) ~ as.factor(groupsB), family=multinomial(refLevel=1))
+    vglm0 <- vglm(as.factor(groupsA) ~ 1, family=multinomial(refLevel=1))
+    LLf   <- VGAM::logLik(vglmFitMN)
+    LL0   <- VGAM::logLik(vglm0)
+    N <- length(groupsA)
+    if(method=="mcfadden"){
+        as.vector(1 - (LLf / LL0))
+    } else if (method=="coxsnell"){
+        as.vector(1 - exp((2/N) * (LL0 - LLf)))
+    } else if (method=="nagelkerke"){
+        as.vector((1 - exp((2/N) * (LL0 - LLf))) / (1 - exp(LL0)^(2/N)))
+    }
+}
+
+pseudoMultiR(fixedDataA_BCM$colors, fixedDataB_BCM$colors)
+
+femalesOnly 
+malesOnly
+MvsF
+FvsM
+
+
+propMale <- (25:75)/100
+pseudoR2 <-propMale*(1-propMale)*2+rnorm(51)/10
+data <- data.frame(propMale=propMale,pseudoR2=pseudoR2)
+ggplot(data) + geom_point(aes(x=propMale, y=pseudoR2)) + stat_smooth(aes(x=propMale, y=pseudoR2), col="red") + ggtitle("Agreement vs Confounder Balance")
+
+
+
+propMale <- (25:75)/100
+pseudoR2Corrected <-propMale*(1-propMale)*2+rnorm(51)/7
+dataCorrected <- data.frame(propMale=propMale,pseudoR2Corrected=pseudoR2Corrected)
+ggplot(dataCorrected) + geom_point(aes(x=propMale, y=pseudoR2Corrected)) + stat_smooth(aes(x=propMale, y=pseudoR2Corrected), col="blue") + ggtitle("Agreement (corrected) vs Confounder Balance")

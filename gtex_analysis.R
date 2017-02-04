@@ -15,6 +15,9 @@ celllinebloodFilter <- gtexClinical$SMTSD=="Cells - EBV-transformed lymphocytes"
 lungFilter <- gtexClinical$SMTSD=="Lung"
 
 
+centers <- as.character(gtexClinical$SMCENTER)
+sum(centers=="C1")
+
 gexp <- gtexExp[, bloodFilter|celllinebloodFilter]
 
 batch <- c(rep(0,54), rep(1,191))

@@ -1,0 +1,36 @@
+---
+title: "Principal Component Covariance matrix estimation"
+author: "Dan Schlauch"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: html_document
+---
+
+## Introduction to covariance estimation with batch effect 
+
+In the context of network inference, we are interested in the covariance of genes as opposed to the mean expression values.  There is widespread literature published regarding the identification and control of confounding due to batch effect.  Thus far, batch effect correction has focused on adjusting for the effects of batch on gene expression mean and variance at an individual level.  For example, ComBat uses an empirical bayes approach to estimate the mean and variance parameters for each gene and then computes an adjusted gene expression which controls for these effects. 
+
+This fails to remove the impact of a type of batch effect which may manifest itself by causing a differential co-expression pattern between two or more genes.  While the impact of this oversight may be negligible for differential gene expression analysis, co-expression patterns are widely considered in the field of network inference.  The impact of confounding due to differential coexpression in batches remains unexamined.
+
+## Model
+
+Consider a set of $N$ samples with $q$ covariates measuring gene expression across $p$ genes.  Let $\textbf{x}_i=(x_{i1},\dots,x_{iq})$ denote the covariates for sample $i$ and let $\textbf{g}_i=(g_{i1},\dots,g_{ip})$ denote the gene expression values for sample $i$ for the $p$ genes.
+
+In multivariate regression form we can express this as 
+$$\textbf{g}_i= \mathbf{\beta}^T\textbf{x}_i+\mathbf{\epsilon}_i \text{  for } i=1,\dots,N$$ 
+where $\mathbf{\beta}$ is a $q\times p$ matrix of coefficients.
+
+Equivalently,
+
+$$\textbf{G}= \textbf{X}\mathbf{\beta}+\mathbf{E} $$
+
+where $\textbf{G}$, $\textbf{X}$, and $\textbf{E}$ are each matrices with row $i$ corresponding to $\textbf{g}_i$, $\mathbf{x}_i$, and $\mathbf{\epsilon}_i$ respectively.
+
+Here, we make the usual multivariate assumption for $\textbf{E}$ that the rows $\mathbf{\epsilon}_i,\dots,\mathbf{\epsilon}_N$ are independent, and follow distribution, $MVN_N(\mathbf{0},\Sigma_i)$.  Notably, the covaiance of $\mathbf{\epsilon}_i$ differ by $i$.
+
+Estimating the covariance structure for a set of $p$ genes typically involves computing the sample covariance matrix, $S$ with entries  $s_{jk}=\frac{1}{N-1}\sum_{i=1}^N(G_{ij}-\bar{G_{\cdot j}})(G_{ik}-\bar{G_{\cdot k}})$.  However, as is typical in high-throughput settings, $p>>N$, producing an estimated covariance which $p$ columns with column rank $\le{N}$.
+
+To address this "curse of dimensionality", numerous methods have been proposed.  One might use a series of LASSO regressions to estimate parameters in the inverse covariance matrix [Meinshausen & Buhlmann (2006)], or perform penalized maximum likelihood estimation with the penalty on the inverse covariance matrix[Yuan & Lin (2007), Friedman (2007), Banerjee (2008)].  Each of these approaches imposes sparsity on the precision matrix, effectively assuming a large degree of condtional independence between genes. More recent work has explored imposing sparsity on the covariance matrix itself, rather than the precision matrix [Bien & Tibshirani 2011], which allows us to assume widespread marginal independence of genes.
+
+
+
+## Defining the covariance structure with PCA

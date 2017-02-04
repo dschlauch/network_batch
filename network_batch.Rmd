@@ -21,17 +21,18 @@ library(sva)
 library(MASS)
 library(ggplot2)
 library(limma)
-gene1 <- c(rnorm(50,7),rnorm(50,9))
-gene2 <- c(rnorm(50,7),rnorm(50,9))
-batch <- c(rep("A",50),rep("B",50))
+numSamples <- 1000
+gene1 <- c(rnorm( numSamples,7),rnorm(numSamples,9))
+gene2 <- c(rnorm(numSamples,7),rnorm(numSamples,9))
+batch <- c(rep("A",numSamples),rep("B",numSamples))
 
 df <- data.frame(gene1,gene2,batch)
 
-ggplot(df, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3) +ggtitle("Raw data")
-correct <- c(rep(0,50),rep(2,50))
+ggplot(df, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3, alpha=.5) +ggtitle("Raw data") +theme_bw() 
+correct <- c(rep(0,numSamples),rep(2,numSamples))
 bc <- data.frame(gene1=gene1-correct,gene2=gene2-correct,batch)
 
-ggplot(bc, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3) +ggtitle("Batch corrected data")
+ggplot(bc, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3, alpha=.5) +ggtitle("Batch corrected data") +theme_bw() 
 
 ```
 
@@ -41,15 +42,15 @@ But what if we can't (won't) assume that batch only affects mean and variance, b
 
 ```{r, cache=TRUE}
 
-genes <- mvrnorm(n = 50, c(7,7), matrix(c(1,.95,.95,1),nrow=2), tol = 1e-6, empirical = FALSE, EISPACK = FALSE)
-gene1 <- c(genes[,1],rnorm(50,9))
-gene2 <- c(genes[,2],rnorm(50,9))
+genes <- mvrnorm(n = numSamples, c(7,7), matrix(c(1,.95,.95,1),nrow=2), tol = 1e-6, empirical = FALSE, EISPACK = FALSE)
+gene1 <- c(genes[,1],rnorm(numSamples,9))
+gene2 <- c(genes[,2],rnorm(numSamples,9))
 
-df <- data.frame(gene1=gene1,gene2=gene2,batch)
-ggplot(df, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3) +ggtitle("Raw data")
+df2 <- data.frame(gene1=gene1,gene2=gene2,batch)
+ggplot(df2, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3, alpha=.5) +ggtitle("Raw data") +theme_bw() 
 
-df <- data.frame(gene1=gene1-correct,gene2=gene2-correct,batch)
-ggplot(df, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3) +ggtitle("Batch corrected data")
+df2 <- data.frame(gene1=gene1-correct,gene2=gene2-correct,batch)
+ggplot(df2, aes(x=gene1,y=gene2)) +geom_point(aes(col=batch),size=3, alpha=.5) +ggtitle("Batch corrected data") +theme_bw() 
 
 ```
 
@@ -57,8 +58,8 @@ Existing methods do not address this "2nd order batch effect"
 
 ```{r, cache=TRUE}
 numGenes <- 1000
-nBatch1 <- 50
-nBatch2 <- 50
+nBatch1 <- numSamples
+nBatch2 <- numSamples
 mvnMean1  <- rexp(numGenes)
 mvnMean2  <- rexp(numGenes)
 mvnSigma1 <- 30*diag(rexp(numGenes))
@@ -190,7 +191,7 @@ Expression correction:
 
 > the effect of top 3 PEER factors, gender, and 3 genotype PCs were removed.
 
-Neither of these does not address the "second order" batch issue.
+Neither of these address the "second order" batch issue.
 
 # Results
 
@@ -268,7 +269,7 @@ Obviously, the usual caveats apply - this correction is most useful when the bat
 
 ***
 
-## An interesting (IMO) validation approach
+## An validation approach
 Given the difficulties of validating networks, validation that batch has been properly controlled will be a challenge.
 Rather than compare our results to an unreliable, expensive, or non-existent gold-standard benchmark we can instead focus on the network "stability".  In theory, our approach should control for batch and thus be independent of the batch distribution.  We can examine this by sampling differing proportions from batches and observing the tendency to vary as a function of the batch proportion.
 
@@ -309,3 +310,221 @@ Work in progress -
 
 1. Design model to impose sparsity on *differential correlation*.  L1 and L2 regularization 
 2. Empirical Bayes approach to address small sample issues (the left part of above plot)
+
+## Real data demonstration of impact of 2nd order confounding
+
+Used Eclipse data.  
+
+Summary:
+In this analysis, we will perform a very common analysis: 
+Build coexpression networks based on **COPD** vs **Smoker control** and identify consensus modules with WGCNA.
+**Gender** is treated as a confounder, but is only corrected using standard batch correction methods...
+
+
+```{r, cache=TRUE}
+eclipseExp <- read.table("~/gd/Harvard/Research/data/Eclipse/ECLIPSE_Blood_Exp.txt",row.names=1,header=T)
+eclipseClinical <- read.table("~/gd/Harvard/Research/data/Eclipse/ECLIPSE_blood.txt",header=T,fill = TRUE, sep="\t",row.names=1)
+```
+
+Data: `r length(eclipseClinical$Gender)` samples with `r sum(eclipseClinical$Gender=='M')` males and `r length(eclipseClinical$Gender=='F')` females. 
+`r sum(eclipseClinical$Subject.type=="COPD")` COPD and `r length(eclipseClinical$Subject.type=="Smoker Control")` Smoker Controls
+
+```{r, cache=TRUE}
+table(eclipseClinical$Subject.type,eclipseClinical$Gender)[c(1,3),]
+```
+
+1. Run ComBat on gene expression data, *including gender as a covariate*.
+2. Sample a set of designs from this study which include varying degrees of gender imbalance.
+3. Evaluate the agreement between cases and controls with pseudo-R^2 from multinomial logisitic regression (can use MCC or any other method here).
+4. Determine the degree to which the agreement between cases and controls depends on the gender distribution.
+
+While this data is reasonably balanced, we can use it to demonstrate how sensitive our results are to confounding that was *supposedly* accounted for already.
+
+
+```{r, eval=F}
+
+cases <- eclipseClinical$Subject.type=="COPD" 
+controls <- eclipseClinical$Subject.type=="Smoker Control" 
+
+males <- eclipseClinical$Gender=="M" 
+
+# dataA <- eclipseExp[10101:12100,c(T,F)]
+# dataB <- eclipseExp[10101:12100,c(F,T,F,F)]
+
+dataA <- eclipseExp[101:2100, cases&(!males)]
+dataB <- eclipseExp[101:2100, controls&(males)]
+
+fixedDataA <- fixDataStructure(t(dataA))
+fixedDataB <- fixDataStructure(t(dataB))
+
+
+fixedDataA_BCM <- blockwiseConsensusModules(fixedDataA, power = 6, minModuleSize = 30, deepSplit = 2, maxBlockSize=30000,
+                                      pamRespectsDendro = FALSE, 
+                                      mergeCutHeight = 0.25, numericLabels = TRUE,
+                                      minKMEtoStay = 0,
+                                      saveTOMs = TRUE, verbose = 5)
+# adjMat <- adjacency(t(dataA), power = 6)
+# TOM <- TOMsimilarity(adjMat, TOMDenom = 'min', verbose = 1)
+# consensusNetwork <- consensusDissTOMandTree(fixedDataA, 6, TOM = TOM)
+
+fixedDataB_BCM <- blockwiseConsensusModules(fixedDataB, power = 6, minModuleSize = 30, deepSplit = 2, maxBlockSize=30000,
+                                     pamRespectsDendro = FALSE, 
+                                     mergeCutHeight = 0.25, numericLabels = TRUE,
+                                     minKMEtoStay = 0,
+                                     saveTOMs = TRUE, verbose = 5)
+# summary(lm(fixedDataA_BCM$colors==0 ~ as.factor(fixedDataB_BCM$colors)))
+
+# vglmFitMN <- vglm(as.factor(lungBCM$colors) ~ sample(as.factor(bloodBCM$colors)), family=multinomial(refLevel=1))
+
+# pseudo-R^2
+pseudoMultiR <- function(groupsA, groupsB, method="nagelkerke"){
+    require(VGAM)
+    vglmFitMN <- vglm(as.factor(groupsA) ~ as.factor(groupsB), family=multinomial(refLevel=1))
+    vglm0 <- vglm(as.factor(groupsA) ~ 1, family=multinomial(refLevel=1))
+    LLf   <- VGAM::logLik(vglmFitMN)
+    LL0   <- VGAM::logLik(vglm0)
+    N <- length(groupsA)
+    if(method=="mcfadden"){
+        as.vector(1 - (LLf / LL0))
+    } else if (method=="coxsnell"){
+        as.vector(1 - exp((2/N) * (LL0 - LLf)))
+    } else if (method=="nagelkerke"){
+        as.vector((1 - exp((2/N) * (LL0 - LLf))) / (1 - exp(LL0)^(2/N)))
+    }
+}
+```
+
+![Agreement vs Balance](./agreement_vs_balance.png)
+
+This is great!  Very clear dependence of agreement between cases and control on the *balance*.  In other words, with a strong lack of balance, we see weaker agreement, indicating that the results we DO see are a function of the confounder and not the case-control partition.
+
+And now the ~~bad~~ **less awesome** news...
+
+![Corrected Agreement vs Balance](./agreement_corrected_vs_balance.png)
+
+Current correction implementation does not appear to help the cause at the moment.
+
+### Why not??
+
+**Likely reason #1**:
+
+Approach is too flexible for 2nd order effects.  
+
+Solutions:
+
+* Argue that our finding that 2nd order batch effect exists is interesting on it's own.
+* Demonstrate that our method works in large (possibly very large) samples.
+* We need stronger assumptions, such as sparsity, to make it more resistant to overfitting 2nd order batch effects.
+
+**Likely reason #2**:
+2nd order effects are not as strong as they are in the demo above (Reminder: we used a *completely* different network for Batch A compared to Batch B)
+
+Solutions:
+
+* Again, incorporating sparsity into the algorithm may work here as it is may be reasonable in more realistic data to assume that networks vary very very little between batches and most edges have difference equal to zero.
+
+## WGCNA
+library(WGCNA)
+
+dissTOMCases=TOMdist(abs(cor(t(dataset$exp[c(T,F),casesFilter]),use="p"))^6)
+dissTOMControls=TOMdist(abs(cor(t(dataset$exp[c(T,F),controlsFilter]),use="p"))^6)
+copdgeneDif <- dissTOMCases-dissTOMControls
+rownames(copdgeneDif) <- rownames(dataset$exp)[c(T,F)]
+colnames(copdgeneDif) <- rownames(dataset$exp)[c(T,F)]
+
+load("~/NI_only_0001/ECLIPSE_JASPAR2014_MONSTER.RData")
+
+dissTOMCases=TOMdist(abs(cor(t(dataset$exp[c(T,F),casesFilter]),use="p"))^6)
+dissTOMControls=TOMdist(abs(cor(t(dataset$exp[c(T,F),controlsFilter]),use="p"))^6)
+eclipseDif <- dissTOMCases-dissTOMControls
+rownames(eclipseDif) <- rownames(dataset$exp)[c(T,F)]
+colnames(eclipseDif) <- rownames(dataset$exp)[c(T,F)]
+
+intersectGenes <- intersect(rownames(eclipseDif),rownames(copdgeneDif))
+eclipseDif <- eclipseDif[intersectGenes,intersectGenes]
+copdgeneDif <- copdgeneDif[intersectGenes,intersectGenes]
+
+
+library(ggplot2)
+df <- data.frame(copdgene=c(copdgeneDif[1:100,1:100]),eclipse=c(eclipseDif[1:100,1:100]))
+ggplot(df,aes(x=copdgene,y=eclipse)) + geom_point(alpha=.1) + theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
+
+## An approach that is probably not going to be sufficient (Regularized implementation)
+
+Model:
+let $X$ be our gene expression matrix, containing $p$ rows and $n$ columns, corresponding to genes and samples, respectively.
+
+and so let $X_{g1},X_{g2}$ be two genes within that matrix
+
+and let $Z$ be a covariate on which we want to apply batch correction.
+
+
+Combat batch correction and standard normalization methods are first applied.  Next each row is standardized, such that
+$$\bar{X}_{g1} = \bar{X}_{g2}=0$$
+
+We can fit the model:
+
+$$X_{g2}=\beta_0+\beta_1X_{g1}+\beta_2Z + \epsilon_{g2}$$
+
+And then immediately ignore the intercept term (because of the standardization)
+
+So we have:
+
+
+$$E[X_{g2}]=\beta_{1,g1,g2}X_{g1}+\beta_{2,g1,g2}Z$$
+
+for 
+
+$$g1,g2\in {1,2,...p}$$
+
+with constraints
+
+$$\sum_{i=1}^{p}\sum_{j=i+1}^{p}\beta_{2,i,j}^2<\lambda$$
+
+We impose no such restriction on the $\beta_1$s
+
+Each one individually can be solved via
+$$X^*=rbind(cbind(X,Z),matrix(0,\lambda,\lambda,0)$$
+$$(X_{g1}^{*T}X_{g1}^*)^{-1}X_{g1}^{*T}X_{g2}$$
+
+But this is completely unfeasible at high throughput scale, where we want computing ${n \choose 2}$ models.
+
+I developed a workaround which involves involves computing the hat matrix for each gene separately, storing those $p$ matrices and computing the associations from there.  This requires *a lot* of memory - since we are storing *p\*n^2* values, but also allows the algorithm to run approximately asymptotically $p/2$ times faster.
+
+**However, this may be moot**, as I have discovered that the sparsity constraint may not be the best idea.  Here's why:
+
+*L2* regularization shrinks all estimates toward zero.  However, for any constraint, we basically "allow" a certain amount of batch to be estimated.  This will result in a similar amound of batch to be controlled for in all scenarios, regardless as to whether batch *actually* exists in the data (bad!).  We will be overfitting too much batch and it will be very hard to identify when we are doing it.
+
+## Better ideas:
+* Assign some bayesian prior.  Compute the results without penalty and apply a bayesian prior to estimate the posterior batch effect.  This is an inelegant solution and I would prefer a different approach if I can design a superior one.
+* Use adjacent information in penalizing.  If Gene A is batch correlated with Gene B and Gene B is batch correlated with Gene C, then we should be more willing to believe that Gene A and Gene C are batch correlated.  In other words, it would be great to relax penalties based on common coexpression.  From last meeting, we decided to explore the idea of using metagenes from PCA...
+
+Inverting a $20,000\times 20,000$ matrix is also not a practical approach (but within reason on cluster).  I will table this approach until I cannot come up with another...
+
+
+## Progress
+Controlling for confounding in network inference.
+Substantial progress has been made in this project in the following areas:
+
+1. Developing a theoretical framework
+2. Demonstrating problems in existing published analyses
+3. Developing a method for addressing
+4. Demonstrating method's efficacy in simulated data
+5. Demonstrating method's efficacy in real data with simulated batch
+
+
+## Manuscript outline
+
+1. Introduction (description of existing methods and why they don't address higher order effects).
+2. Presentation of framework (theory).
+3. Demonstration of problems in simulations (Using true network structure, we show that results are sensitive to batch proportions).
+4. Demonstration of problems in existing literature (Using ENCODE data, we show that results are sensitive to batch proportions).
+5. Describe method for addressing batch effect 
+6. Demonstrate that our method outperforms naive approach in *in silico* data.  We have plots to show that our error is higher when batches are uneven, or we can simply use the usual ROC curve.  Since we have the true network structure, ROC curves are probably best.
+7. **Demonstrate that our method outperforms naive approach in ENCODE data.  We have plots to show that our error is higher when batches are uneven.  We can probably improve on this plot.**
+8. Conclusion & Discussion
+
+
+
+Initial analyses have proved challenging to demonstrate in real data with real batch, 
