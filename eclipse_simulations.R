@@ -181,3 +181,12 @@ propMale <- (25:75)/100
 pseudoR2Corrected <-propMale*(1-propMale)*2+rnorm(51)/7
 dataCorrected <- data.frame(propMale=propMale,pseudoR2Corrected=pseudoR2Corrected)
 ggplot(dataCorrected) + geom_point(aes(x=propMale, y=pseudoR2Corrected)) + stat_smooth(aes(x=propMale, y=pseudoR2Corrected), col="blue") + ggtitle("Agreement (corrected) vs Confounder Balance")
+
+
+
+
+
+
+
+
+########################################
