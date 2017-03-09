@@ -5,6 +5,15 @@ rownames(yeastExp) <- make.unique(yeastExp$Name, sep = ".")
 yeastExp <- yeastExp[,-1]
 dim(yeastExp)
 
+# Subset data
+yeastExp <- yeastExp[c(T,F),]
+
+
+batch1Coex <- cor(t(yeastExp[,c(T,F)]))
+batch2Coex <- cor(t(yeastExp[,c(F,T)]))
+
+diffCoex <- batch1Coex-batch2Coex
+
 plot(as.numeric(yeastExp[6,]))
 plot(as.numeric(yeastExp[6,rep(1:25,each=2) + rep(c(0,25),25)]))
 
