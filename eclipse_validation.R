@@ -1,6 +1,6 @@
 library(gplots)
 # set.seed(1234)
-numSamples <- 200
+numSamples <- 120
 
 batchProp <- .75
 
@@ -11,10 +11,11 @@ samplesB2 <- (numSamples/2+1):(batchProp*numSamples/2 + numSamples/2)
 samplesA2 <- (batchProp*numSamples/2 + numSamples/2+1):(numSamples)
 
 
-numBatchGenes <- 400
-numRealGenes <- 400
-numBackgroundGenes <- 1400
+numBatchGenes <- 300
+numRealGenes <- 300
+numBackgroundGenes <- 1000
 nBackgroundHubs<-4
+
 
 eclipseExp <- read.table("~/gd/Harvard/Research/data/Eclipse/ECLIPSE_Blood_Exp.txt",row.names=1,header=T)
 eclipseExp <- eclipseExp[!is.na(rowSums(eclipseExp)),sample(ncol(eclipseExp))[1:numSamples]]
@@ -71,26 +72,14 @@ batchMat <- batchArr%*%t(batchArr)
 realMat <- realArr%*%t(realArr)
 
 source('~/gd/Harvard/Research/network_batch/algorithm.R')
-eclipseRes <- themethod(X, as.matrix(expressionData), absolute=F)
+eclipseRes <- themethod(X, as.matrix(expressionData), absolute=T, eigen_function = eigs_sym, N=100)
 
 
 
 # Post-estimation analysis ------------------------------------------------
 
 
-par(mfrow=c(3,3))
-plot(eclipseRes$Q[,1])
-plot(eclipseRes$Q[,2])
-plot(eclipseRes$Q[,3])
-plot(eclipseRes$Q[,4])
-plot(eclipseRes$Q[,5])
-plot(eclipseRes$Q[,6])
 
-# par(mfrow=c(1,3))
-plot(eclipseRes$estimates[1,1:20])
-plot(eclipseRes$estimates[2,1:20])
-plot(eclipseRes$estimates[3,1:20])
-par(mfrow=c(1,1))
 
 
 X_bar <- matrix(colMeans(X),nrow=1)
@@ -144,56 +133,5 @@ allCorrelations <- allCorrelations[sample(nrow(allCorrelations)),]
 # ggplot(allCorrelations[1:50000,]) + geom_point(aes(x=naiveMeth,y=newMeth, color=factor(labels)), alpha=.5, size=1) +
 # 2/7/17 note
 
-cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+diagnosticPlots(allCorrelations, "figures/ECLIPSE_findBatch")
 
-ggplot(allCorrelations[allCorrelations$labels!="Background",]) + geom_point(aes(y=newMeth,x=naiveMeth, color=factor(labels)), alpha=.5, size=1) + 
-    ggtitle("Comparison of our method vs naive approach (no background)") + ylab("Our Method") + xlab("Naive Approach") + theme_bw() + scale_colour_manual(values=cbPalette)
-# theme(axis.text.x=element_blank(), axis.text.y=element_blank())  
-ggplot(allCorrelations) + geom_point(aes(y=newMeth,x=naiveMeth, color=factor(labels)), alpha=.5, size=1) + 
-    ggtitle("Comparison of our method vs naive approach") + ylab("Our Method") + xlab("Naive Approach") + theme_bw() + scale_colour_manual(values=cbPalette)
-# theme(axis.text.x=element_blank(), axis.text.y=element_blank())  
-
-# ggplot(allCorrelations[1:20000,]) + geom_point(aes(x=naiveMeth,y=naiveWBatch, color=factor(labels)), alpha=1, size=.5) +
-#     ggtitle("Comparison of our method vs naive approach") + ylab("Naive with Batch") + xlab("Naive Approach")
-
-### Density plots
-
-# ggplot(allCorrelations) + geom_density(aes(naiveMeth, color=factor(labels))) + theme_bw() +
-#     ggtitle("Estimated correlation difference using Naive Method")
-# ggplot(allCorrelations) + geom_density(aes(naiveWBatch, color=factor(labels))) + theme_bw() +
-#     ggtitle("Estimated correlation difference using Naive Method with Batch")
-# ggplot(allCorrelations) + geom_density(aes(newMeth, color=factor(labels))) + theme_bw() +
-#     ggtitle("Estimated correlation difference using Our Method")
-
-
-plotROC <- function(corrDF, plottitle="Title"){
-    library(ROCR)
-    corrDF$newMeth <- abs(corrDF$newMeth)
-    corrDF$naiveMeth <- abs(corrDF$naiveMeth)
-    corrDF$naiveWBatch <- abs(corrDF$naiveWBatch)
-    
-    methodPred  <- prediction(corrDF$newMeth, corrDF$labels=="Real effect")
-    roc.methodPred  <- performance(methodPred, measure = c("tpr","auc"), x.measure = "fpr")
-    auc.methodPred  <- performance(methodPred, "auc")@y.values[[1]]
-    
-    methodPredNaive  <- prediction(corrDF$naiveMeth, corrDF$labels=="Real effect")
-    roc.methodPred.naive  <- performance(methodPredNaive, measure = c("tpr","auc"), x.measure = "fpr")
-    auc.methodPred.naive  <- performance(methodPredNaive, "auc")@y.values[[1]]
-    
-    methodPredNaiveWBatch  <- prediction(corrDF$naiveWBatch, corrDF$labels=="Real effect")
-    roc.methodPred.naive.w.batch  <- performance(methodPredNaiveWBatch, measure = c("tpr","auc"), x.measure = "fpr")
-    auc.methodPred.naive.w.batch  <- performance(methodPredNaiveWBatch, "auc")@y.values[[1]]
-    
-    plot(roc.methodPred, main=plottitle, col = 2, lwd=3)
-    lines(roc.methodPred.naive@x.values[[1]], roc.methodPred.naive@y.values[[1]], col = 4, lwd=3)
-    lines(roc.methodPred.naive.w.batch@x.values[[1]], roc.methodPred.naive.w.batch@y.values[[1]], col = 5, lwd=3)
-    
-    legend("bottomright", c(paste("Our Method",round(auc.methodPred,4)), paste("Naive",round(auc.methodPred.naive,4)), paste("Naive Batch",round(auc.methodPred.naive.w.batch,4))), 
-           lty=1,lwd=1,col=c(2,4,5),title="Area under ROC curve")
-    abline(0,1)
-}
-unique(allCorrelations$labels)
-par(mfrow=c(2,2))
-plotROC(allCorrelations, "Real vs All")
-plotROC(allCorrelations[allCorrelations$labels%in%c("Batch effect","Real effect"),], "Real vs batch")
-par(mfrow=c(1,1))

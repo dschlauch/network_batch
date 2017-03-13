@@ -1,20 +1,21 @@
 library(MASS)
 library(gplots)
 library(ggplot2)
+library(rARPACK)
 
-
-themethod <- function(X, expression, absolute=F){
+themethod <- function(X, expressionData, absolute=F, eigen_function=eigen, N=ncol(expressionData)){
     start <- Sys.time()
-    numSamples <- ncol(expression)
+    numSamples <- ncol(expressionData)
     if(absolute){
         corAdj <- abs
     } else {
         corAdj <- identity
     }
-    G_star <- expression-rowMeans(expression)
+    N <- min(N,nrow(expressionData))
+    G_star <- expressionData-rowMeans(expressionData)
     G_standard <- (G_star/sqrt(rowSums(G_star^2)))
     G_standard <- as.matrix(G_standard)
-    eigenG <- eigen(corAdj(tcrossprod(G_standard)))
+    eigenG <- eigen_function(corAdj(tcrossprod(G_standard)),N)
     Q <- eigenG$vectors
     D <- diag(eigenG$values)
     
@@ -24,7 +25,10 @@ themethod <- function(X, expression, absolute=F){
     
     est <- t(sapply(seq_len(nrow(hatmat)), function(hatmatRow){
         if(absolute){
-            diag(Qinv%*%abs((G_standard)%*%(numSamples*diag(hatmat[hatmatRow,]))%*%t(G_standard))%*%t(Qinv))
+            print(hatmatRow)
+            middle <- Reduce("+",
+                             lapply(seq_len(ncol(G_standard)), function(i){abs(tcrossprod(G_standard[,i]))*hatmat[hatmatRow,i]}))
+            numSamples*diag(Qinv%*%middle%*%t(Qinv))
         } else {
             diag(QinvG%*%(numSamples*diag(hatmat[hatmatRow,]))%*%t(QinvG))
         }
