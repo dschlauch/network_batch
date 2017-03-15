@@ -1,22 +1,27 @@
 
-simulateStudy <- function(numGenes, numSamples, addedError, blockSeq, mu, caseControl, batches){
+simulateStudy <- function(numGenes, numSamples, addedError, blockSeq, mu, caseControl, batches, batchEffectMultiplier=1){
     start <- Sys.time()
     blocks <- sort(rep(blockSeq, length.out=numGenes))
-    blockA <- as.numeric(blocks=="A") # All Samples
-    blockB <- as.numeric(blocks=="B") # Batch 1 only
-    blockC <- as.numeric(blocks=="C") # Batch 2 only
-    blockD <- as.numeric(blocks=="D") # Cases only
-    blockE <- as.numeric(blocks=="E") # Controls only
-    blockF <- as.numeric(blocks=="F") # Cases and negative with D 
-    blockG <- as.numeric(blocks=="G") # No Samples
+    randomUnif <- runif(numGenes,-1,1)
+    randomUnif <- randomUnif + sign(randomUnif)*.5
+    blockA <- as.numeric(blocks=="A")*randomUnif # All Samples
+    blockB <- as.numeric(blocks=="B")*randomUnif # Batch 1 only
+    blockC <- as.numeric(blocks=="C")*randomUnif # Batch 2 only
+    blockD <- as.numeric(blocks=="D")*randomUnif # Cases only
+    blockE <- as.numeric(blocks=="E")*randomUnif # Controls only
+    blockF <- as.numeric(blocks=="F")*randomUnif # Cases and negative with D 
+    blockG <- as.numeric(blocks=="G")*randomUnif # No Samples
+    blockH <- as.numeric(blocks=="H")*randomUnif # All Samples
+    blockI <- as.numeric(blocks=="I")*randomUnif # No Samples
+    blockJ <- as.numeric(blocks=="J")*randomUnif # No Samples
     
-    batch1Effect   <- cbind(blockA, blockB)
-    batch2Effect   <- cbind(blockA, blockC)
+    batch1Effect   <- cbind(blockA, blockB, blockH)
+    batch2Effect   <- cbind(blockA, blockC, blockH)
     casesEffect    <- cbind(blockD - blockF)
     controlsEffect <- cbind(blockE)
     
-    SigmaBatch1 <- 4*tcrossprod(batch1Effect)
-    SigmaBatch2 <- 4*tcrossprod(batch2Effect)
+    SigmaBatch1 <- batchEffectMultiplier*tcrossprod(batch1Effect)
+    SigmaBatch2 <- batchEffectMultiplier*tcrossprod(batch2Effect)
     SigmaCase <- tcrossprod(casesEffect)
     SigmaControl <- tcrossprod(controlsEffect)
     
@@ -41,7 +46,10 @@ simulateStudy <- function(numGenes, numSamples, addedError, blockSeq, mu, caseCo
     data[data<0] <-0
     
     print(paste("Data generation in",round(as.numeric(difftime(Sys.time(), start,units = "secs")),1), "seconds"))
-    list(data=data, blocks=blocks, trueEffects=list(
+    batchEffectedGenes <- (rowSums(batch1Effect)-rowSums(batch2Effect))!=0
+    realEffectedGenes <- (rowSums(casesEffect)-rowSums(controlsEffect))!=0
+    list(data=data, blocks=blocks, realEffectedGenes=realEffectedGenes, batchEffectedGenes=batchEffectedGenes, 
+         trueEffects=list(
         batch1Effect=batch1Effect,
         batch2Effect=batch2Effect,
         casesEffect=casesEffect,

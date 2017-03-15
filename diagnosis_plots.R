@@ -7,9 +7,10 @@ library(grid)
 library(gridExtra)
 library(reshape2)
 
+
 # Creates all the diagnosis plots for a result object
 diagnosticPlots <- function(differentialCorrelationsDF, dir="."){
-    dir.create(dir)
+    dir.create(dir,showWarnings = F)
     
     
     cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
@@ -17,27 +18,27 @@ diagnosticPlots <- function(differentialCorrelationsDF, dir="."){
     plotOursVsNaive <- ggplot(differentialCorrelationsDF[differentialCorrelationsDF$labels!="Background",]) + 
         geom_point(aes(x=naiveMeth,y=newMeth, color=factor(labels)), alpha=.5, size=2) +
         ggtitle("Pairwise Differential Coexpression estimates") + ylab("Our Method") + xlab("Naive Approach") + theme_bw(base_size = 30)+
-        guides(color=guide_legend(title="True Interaction")) + scale_colour_manual(values=cbPalette)
+        guides(color=guide_legend(title="True Interaction")) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
     
     png(paste0(dir,'/OursVsNaive.png'), width = 1600, height = 1200)
     print(plotOursVsNaive)
     dev.off()
     
     naiveDensity <- ggplot(differentialCorrelationsDF) + 
-        geom_density(aes(naiveMeth, color=factor(labels), fill=factor(labels)), alpha=0.3) + 
+        geom_density(aes(naiveMeth, group=factor(labels), color=factor(labels), fill=factor(labels)), alpha=0.3) + 
         theme_bw(base_size = 30) +
-        ggtitle("Estimated Pairwise Differential Coexpression using Naive Method") + xlab("Pairwise Differential Coexpression") +
-        guides(color=guide_legend(title="True Interaction")) + scale_colour_manual(values=cbPalette)
+        ggtitle("Estimated Pairwise Differential Coexpression using Naive Method") + xlab("Absolute Pairwise Differential Coexpression") +
+        guides(fill=guide_legend(title="True Interaction"), color=F) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
     naiveWBatchDensity <- ggplot(differentialCorrelationsDF) + 
         geom_density(aes(naiveWBatch, color=factor(labels), fill=factor(labels)), alpha=0.3) + 
         theme_bw(base_size = 30) +
         ggtitle("Estimated Pairwise Differential Coexpression using Naive Method with Batch") + xlab("Pairwise Differential Coexpression") +
-        guides(color=guide_legend(title="True Interaction")) + scale_colour_manual(values=cbPalette)
+        guides(fill=guide_legend(title="True Interaction"), color=F) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
     ourMethodDensity <- ggplot(differentialCorrelationsDF) + 
         geom_density(aes(newMeth, color=factor(labels), fill=factor(labels)), alpha=0.3) + 
         theme_bw(base_size = 30) +
         ggtitle("Estimated Pairwise Differential Coexpression using Our Method") + xlab("Pairwise Differential Coexpression") +
-        guides(color=guide_legend(title="True Interaction")) + scale_colour_manual(values=cbPalette)
+        guides(fill=guide_legend(title="True Interaction"), color=F) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
     
     png(paste0(dir,'/NaiveDensity.png'), width = 1600, height = 1200)
     print(naiveDensity)
@@ -53,8 +54,6 @@ diagnosticPlots <- function(differentialCorrelationsDF, dir="."){
     
     onlyEffects <- differentialCorrelationsDF[differentialCorrelationsDF$labels!="Background",]
     
-    # Consider absolute correlations
-    # onlyEffects[,1:3] <- abs(onlyEffects[,1:3])
     ########
     
     plotROC <- function(corrDF, positive, plottitle="Title"){
@@ -93,35 +92,31 @@ diagnosticPlots <- function(differentialCorrelationsDF, dir="."){
     
 }
 
-plotEigenvectors <- function(ourMethodResult, trueEffects, dir=".", numEigenvectors=6){
+plotEigenvectors <- function(ourMethodResult, trueLabels, dir=".", numEigenvectors=6){
     cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
     
-    dir.create(dir)
+    dir.create(dir, showWarnings = F)
     numGenes <- nrow(ourMethodResult$G_standard)
-    geneLabels <- rep("Background", numGenes)
-    
-    geneLabels[(rowSums(trueEffects$batch1Effect)-rowSums(trueEffects$batch2Effect))!=0] <- "Batch"
-    geneLabels[(rowSums(trueEffects$casesEffect)-rowSums(trueEffects$controlsEffect))!=0] <- "Real"
     nrows<-nrow(ourMethodResult$estimates)
     
-    plottingDF <- data.frame(ourMethodResult$Q[,seq_len(numEigenvectors)], geneLabels)
+    plottingDF <- data.frame(ourMethodResult$Q[,seq_len(numEigenvectors)], trueLabels)
     names(plottingDF)[seq_len(numEigenvectors)] <- paste("Eigenvector",seq_len(numEigenvectors))
-    plottingDFMelt <- melt(plottingDF, id.vars="geneLabels")
-    plottingDFMelt$geneLabels <- geneLabels
+    plottingDFMelt <- melt(plottingDF, id.vars="trueLabels")
+    plottingDFMelt$trueLabels <- trueLabels
     plottingDFMelt$Gene <- seq_len(numGenes)
     
-    eigenvectorPlots <- ggplot(plottingDFMelt) + geom_point(aes(x=Gene,y=value,color=geneLabels)) +
+    eigenvectorPlots <- ggplot(plottingDFMelt) + geom_point(aes(x=Gene,y=value,color=trueLabels)) +
         facet_wrap(~variable) + theme_bw(base_size = 30) +
-        guides(color=guide_legend(title="Gene Group")) + scale_colour_manual(values=cbPalette)
+        guides(color=guide_legend(title="Gene Group")) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
     
     numVectors <- min(ncol(ourMethodResult$estimates),20)
     est <- t(ourMethodResult$estimates[,1:20])
     colnames(est)[1:3] <- c("Intercept","Batch","Case-Control") 
     eigenvalueDF <- melt(est,value.name = "Eigenvalue")
     
-    eigenvaluePlots <- ggplot(eigenvalueDF) + geom_point(aes(x=Var1,y=Eigenvalue)) + 
+    eigenvaluePlots <- ggplot(eigenvalueDF) + geom_point(aes(x=Var1,y=Eigenvalue),size=4) + 
         facet_wrap(~Var2) + theme_bw(base_size = 30) +
-        ylab("Eigenvalue Coefficent") + xlab("Top 20 Eigenvectors") + scale_colour_manual(values=cbPalette)
+        ylab("Eigenvalue Coefficent") + xlab("Top 20 Eigenvectors") + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
     
     png(paste0(dir,'/EigenvectorPlots.png'), width = 1600, height = 1200)
     multiplot(eigenvectorPlots,eigenvaluePlots)

@@ -1,5 +1,5 @@
 generateMasterDF <- function(ourMethodResult, correlationResult, correlationWBatchResult, trueLabels, maxPoints=1000000){
-    
+
     X_bar <- matrix(colMeans(X),nrow=1)
     fitValues <- c(X_bar%*%ourMethodResult$estimates)
     correctedCorrelation <- ourMethodResult$Q%*%diag(fitValues)%*%t(ourMethodResult$Q)

@@ -3,7 +3,7 @@ library(gplots)
 library(ggplot2)
 library(rARPACK)
 
-themethod <- function(X, expressionData, absolute=F, eigen_function=eigen, N=ncol(expressionData)){
+themethod <- function(X, expressionData, absolute=F, eigen_function=eigs_sym, N=ncol(expressionData), eigenG=NULL){
     start <- Sys.time()
     numSamples <- ncol(expressionData)
     if(absolute){
@@ -15,12 +15,16 @@ themethod <- function(X, expressionData, absolute=F, eigen_function=eigen, N=nco
     G_star <- expressionData-rowMeans(expressionData)
     G_standard <- (G_star/sqrt(rowSums(G_star^2)))
     G_standard <- as.matrix(G_standard)
-    eigenG <- eigen_function(corAdj(tcrossprod(G_standard)),N)
+    if(is.null(eigenG)){
+        eigenG <- eigen_function(corAdj(tcrossprod(G_standard)),N)
+    }
     Q <- eigenG$vectors
     D <- diag(eigenG$values)
     
     hatmat <- ginv(crossprod(X))%*%t(X)
     Qinv <- ginv(Q)
+    
+    #####
     QinvG <- Qinv%*%(G_standard)
     
     est <- t(sapply(seq_len(nrow(hatmat)), function(hatmatRow){
