@@ -7,13 +7,10 @@ library(grid)
 library(gridExtra)
 library(reshape2)
 
-
+cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 # Creates all the diagnosis plots for a result object
 diagnosticPlots <- function(differentialCorrelationsDF, dir="."){
     dir.create(dir,showWarnings = F)
-    
-    
-    cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
     
     plotOursVsNaive <- ggplot(differentialCorrelationsDF[differentialCorrelationsDF$labels!="Background",]) + 
         geom_point(aes(x=naiveMeth,y=newMeth, color=factor(labels)), alpha=.5, size=2) +
@@ -94,9 +91,9 @@ diagnosticPlots <- function(differentialCorrelationsDF, dir="."){
 
 plotEigenvectors <- function(ourMethodResult, trueLabels, dir=".", numEigenvectors=6){
     cbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-    
     dir.create(dir, showWarnings = F)
-    numGenes <- nrow(ourMethodResult$G_standard)
+    numVectors <- min(ncol(ourMethodResult$estimates),20)
+    numGenes <- nrow(ourMethodResult$G)
     nrows<-nrow(ourMethodResult$estimates)
     
     plottingDF <- data.frame(ourMethodResult$Q[,seq_len(numEigenvectors)], trueLabels)
@@ -107,10 +104,9 @@ plotEigenvectors <- function(ourMethodResult, trueLabels, dir=".", numEigenvecto
     
     eigenvectorPlots <- ggplot(plottingDFMelt) + geom_point(aes(x=Gene,y=value,color=trueLabels)) +
         facet_wrap(~variable) + theme_bw(base_size = 30) +
-        guides(color=guide_legend(title="Gene Group")) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
+        guides(color=guide_legend(title="Gene Group")) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette) + xlab("Genes")
     
-    numVectors <- min(ncol(ourMethodResult$estimates),20)
-    est <- t(ourMethodResult$estimates[,1:20])
+    est <- t(ourMethodResult$estimates[,1:numVectors])
     colnames(est)[1:3] <- c("Intercept","Batch","Case-Control") 
     eigenvalueDF <- melt(est,value.name = "Eigenvalue")
     

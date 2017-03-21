@@ -22,7 +22,7 @@ dir.create(outputDir,showWarnings = F)
 
 mu <- rnorm(numGenes,mean = 9)
 batches <- c(rep(0,numSamples/2),rep(1,numSamples/2))
-caseControl <- c(rep(0,numSamples*4/10),rep(1,numSamples/2),rep(0,numSamples*1/10))
+caseControl <- c(rep(0,numSamples*3/8),rep(1,numSamples/2),rep(0,numSamples*1/8))
 X <- cbind(rep(1,numSamples),batches, caseControl)
 # blockSeq <- c("A","B","B","B","B","B","B","C","C","C","D","D","D","D","E","E","F","F","F","F","G","G","G","G","G","G","G")
 blockSeq <- sample(LETTERS[1:10],50,replace=T)
@@ -51,10 +51,10 @@ heatmap.2(coex[c(T,F,F,F),c(T,F,F,F)], Rowv = F, Colv = F, trace = "none",
 dev.off()
 
 insilico_result <- themethod(X, study$data, absolute = F, eigen_function = eigs_sym)
-differentialCorrelationNaive <- cor(t(insilico_result$G_standard[,caseControl==1]))-cor(t(insilico_result$G_standard[,caseControl==0]))
+differentialCorrelationNaive <- cor(t(insilico_result$G[,caseControl==1]))-cor(t(insilico_result$G[,caseControl==0]))
 differentialCorrelationNaivewBatch <- 
-    (cor(t(insilico_result$G_standard[,caseControl==1&batches==1]))-cor(t(insilico_result$G_standard[,caseControl==0&batches==1])) +
-    cor(t(insilico_result$G_standard[,caseControl==1&batches==0]))-cor(t(insilico_result$G_standard[,caseControl==0&batches==0])))/2
+    (cor(t(insilico_result$G[,caseControl==1&batches==1]))-cor(t(insilico_result$G[,caseControl==0&batches==1])) +
+    cor(t(insilico_result$G[,caseControl==1&batches==0]))-cor(t(insilico_result$G[,caseControl==0&batches==0])))/2
 
 insilico_MasterDF <- generateMasterDF(insilico_result, differentialCorrelationNaive, differentialCorrelationNaivewBatch, truePairwiseLabels, maxPoints=800000)
 

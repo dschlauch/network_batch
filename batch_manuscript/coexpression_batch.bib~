@@ -77,3 +77,23 @@
   pages={807},
   year={2011}
 }
+@article{de2010differential,
+  title={From 'differential expression'to 'differential networking'--identification of dysfunctional regulatory networks in diseases},
+  author={de la Fuente, Alberto},
+  journal={Trends in genetics},
+  volume={26},
+  number={7},
+  pages={326--333},
+  year={2010},
+  publisher={Elsevier}
+}
+@article{langmead2009ultrafast,
+  title={Ultrafast and memory-efficient alignment of short DNA sequences to the human genome},
+  author={Langmead, Ben and Trapnell, Cole and Pop, Mihai and Salzberg, Steven L},
+  journal={Genome biology},
+  volume={10},
+  number={3},
+  pages={R25},
+  year={2009},
+  publisher={BioMed Central}
+}

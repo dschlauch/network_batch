@@ -1,0 +1,392 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{cite}
+\usepackage[T1]{fontenc}
+\usepackage{inputenc}
+\usepackage{authblk}
+\usepackage{lmodern}
+\author[1,2]{Daniel Schlauch} 
+\author[1]{Joseph Paulson}
+\author[2,3]{Kimberly Glass} 
+\author[1,3]{John Quackenbush}
+\affil[1]{Department of Biostatistics and Computational Biology, Dana-Farber Cancer Institute and Department of Biostatistics, Harvard TH Chan School of Public Health, Boston, MA 02115}
+\affil[2]{Channing Division of Network Medicine, Brigham and Women's Hospital, Boston, MA 02115}
+\affil[3]{Department of Medicine, Harvard Medical School, Boston, MA 02115}
+\affil[4]{Pulmonary and Critical Care Division, Brigham and Women's Hospital and Harvard Medical School, Boston, USA}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Batch effect on covariance structure confounds gene coexpression studies
+\end_layout
+
+\begin_layout Subsection
+Batch effect in GTEx Project
+\end_layout
+
+\begin_layout Standard
+GTEx uses WGCNA to find common modules across tissues.
+ [Describe GTEx]
+\end_layout
+
+\begin_layout Standard
+GTEx Consortium uses state-of-the-art methods for attempting to adjust for
+ batch including study design and expression value correction.
+\end_layout
+
+\begin_layout Standard
+Study design:
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+\begin_inset Quotes eld
+\end_inset
+
+To the extent possible, based on sample availability, batches for library
+ construction were designed to include a range of samples from different
+ tissues and to span multiple donors, so as to minimise donor and tissue
+ batch effects.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Expression correction:
+\end_layout
+
+\begin_layout Standard
+
+\emph on
+\begin_inset Quotes eld
+\end_inset
+
+the effect of top 3 PEER factors, gender, and 3 genotype PCs were removed.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+However, neither of these address the "second order" batch issue.
+ These corrections inherently assume that batch affects the location-scale
+ distribution of gene expression independently and thus does not consider
+ the scenario where coexpression is the feature impacted by batch.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename figures/gtex_image.png
+
+\end_inset
+
+[GTEx Supplement] [Reproduce this figure or remove it]
+\end_layout
+
+\begin_layout Standard
+To demonstrate that this study is sensitive to batch, we choose two widely
+ available tissue types (Blood and Lung) from the data [YARN normalization].
+\end_layout
+
+\begin_layout Standard
+We then apply batch correction using 
+\begin_inset Quotes eld
+\end_inset
+
+Center
+\begin_inset Quotes erd
+\end_inset
+
+ as the batch of interest.
+ We then ran WGCNA on each tissue separately as described in [GTEx paper]
+ and compute modules based on Topological Overlap Map.
+ 
+\end_layout
+
+\begin_layout Standard
+We then ran the same procedure, but subsetted the data by each of the 3
+ centers.
+ In theory, after correcting for batch, the modules observed should have
+ been independent of the batch used to find them.
+ However, we observe dramatic (notable? clear?) differences in the modules
+ identified.
+ We should really quantify this difference somehow.
+ This may require a clever resampling scheme where we select samples both
+ randomly and by center to measure variability.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/pasted4.png
+	width 40col%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename figures/pasted5.png
+	width 40col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+A
+\begin_inset Graphics
+	filename figures/pasted6.png
+	width 30col%
+
+\end_inset
+
+B
+\begin_inset Graphics
+	filename figures/pasted7.png
+	width 30col%
+
+\end_inset
+
+C
+\begin_inset Graphics
+	filename figures/pasted8.png
+	width 30col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Make these nicer.
+ Combine into single plot? 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Confounding due to sex in ECLIPSE study
+\end_layout
+
+\begin_layout Standard
+In this analysis, we will perform a very common analysis: Build coexpression
+ networks based on 
+\emph on
+COPD
+\emph default
+ vs 
+\emph on
+Smoker control
+\emph default
+ and identify consensus modules with WGCNA.
+ 
+\emph on
+Gender
+\emph default
+ is treated as a confounder, but is only corrected using standard batch
+ correction methods.
+\end_layout
+
+\begin_layout Standard
+1.
+ Run ComBat on gene expression data, *including gender as a covariate*.
+ 
+\end_layout
+
+\begin_layout Standard
+2.
+ Sample a set of designs from this study which include varying degrees of
+ gender imbalance.
+ 
+\end_layout
+
+\begin_layout Standard
+3.
+ Evaluate the agreement between cases and controls with pseudo-R^2 from
+ multinomial logistic regression.
+ 
+\end_layout
+
+\begin_layout Standard
+4.
+ Determine the degree to which the agreement between cases and controls
+ depends on the gender distribution.
+\end_layout
+
+\begin_layout Standard
+While this data is reasonably balanced, we can use it to demonstrate how
+ sensitive our results are to confounding that was 
+\emph on
+supposedly 
+\emph default
+accounted for already.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "AgreementVsConfounder"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename figures/pasted9.png
+	width 100col%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Very clear dependence of agreement between cases and control on the balance.
+ In other words, with a strong lack of balance, we see weaker agreement,
+ indicating that the results we DO see are a function of the confounder
+ and not the case-control partition.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "AgreementVsConfounder"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Discussion
+\end_layout
+
+\begin_layout Standard
+Thoughts about impact on any analysis involving coexpression with batches...
+\end_layout
+
+\begin_layout Standard
+Thoughts about generality of estimating covariance matrices in the context
+ of confounding.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "coexpression_batch"
+options "bibtotoc,abbrvnat"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

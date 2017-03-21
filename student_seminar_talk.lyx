@@ -1,0 +1,1318 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usepackage{listings}
+\usetheme{Warsaw}
+% or ...
+%\usetheme{Antibes}	% tree outline, neat
+%\usetheme{JuanLesPins}	% like Antibes, with shading
+%\usetheme{Bergen}	% outline on side
+%\usetheme{Luebeck}	% like Warsaw, square sides
+%\usetheme{Berkeley}	% interesting left bar outline
+%\usetheme{Madrid}	% clean, nice.  7/12 page numbers
+%\usetheme{Berlin}	% dots show slide number
+%\usetheme{Malmoe}	% OK, plain, unshaded
+%\usetheme{Boadilla}	% nice, white bg, no top bar
+%\usetheme{Marburg}	% nice, outline on right
+%\usetheme{boxes}	% ???
+%\usetheme{Montpellier}	% tree outline on top, plainish white
+%\usetheme{Copenhagen}	% like Warsaw
+%\usetheme{PaloAlto}	% looks good
+%\usetheme{Darmstadt}	% like Warsaw with circle outline
+%\usetheme{Pittsburgh}
+%\usetheme{default}
+%\usetheme{Rochester}	% like boxy, unshaded warsaw
+%\usetheme{Dresden}	% circle outline on top
+%\usetheme{Singapore}	% purple gradient top
+%\usetheme{Frankfurt}	% like Warsaw with circle outline on top
+%\usetheme{Szeged}
+%\usetheme{Goettingen}	% light purple right bar outline
+%\usetheme{Warsaw}
+%\usetheme{Hannover}	% like Goett with bar on left
+%\usetheme{compatibility}
+%\usetheme{Ilmenau}
+
+\setbeamercovered{transparent}
+% or whatever (possibly just delete it)
+
+%\usecolortheme{seahorse}
+%\usecolortheme{rose}
+
+% seems to fix typewriter font in outline header:
+\usepackage{ae,aecompl}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 0
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+A batch correction method for differential gene network analyses
+\end_layout
+
+\begin_layout Author
+Dan Schlauch, PhD Candidate
+\end_layout
+
+\begin_layout Institute
+Department of Biostatistics
+\begin_inset Newline newline
+\end_inset
+
+Harvard School of Public Health
+\end_layout
+
+\begin_layout Date
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+today
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+place handout in layout->document->layout->options to suppress overlays
+ for printing
+\end_layout
+
+\begin_layout Plain Layout
+now, how to eliminate color printing etc.
+ for handout printing? need to do pstricks
+\end_layout
+
+\begin_layout Plain Layout
+why aren't my Lyx Notes or style NoteItems appearing in handout?
+\end_layout
+
+\begin_layout Plain Layout
+place draft in there to (somewhat) reduce amount of stuff printed, like
+ top and bottom border
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+If you have a file called "institution-logo-filename.xxx", where xxx is a
+ graphic format that can be processed by latex or pdflatex, resp., then you
+ can add a logo by uncommenting the following:
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+pgfdeclareimage[height=0.5cm]{institution-logo}{institution-logo-filename}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+logo{
+\backslash
+pgfuseimage{institution-logo}}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% RPD:  can't get this to work on any template.
+  not present in Warsaw any way, it seems
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% hmm, problem seems to be that it isn't copied to the tmp dir, probably
+ becuase it doesn't have the
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% filename extension (which is tacked on by pgf it seems)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+The following causes the table of contents to be shown at the beginning
+ of every subsection.
+ Delete this, if you do not want it.
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+AtBeginSubsection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+tableofcontents[currentsection,currentsubsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+If you wish to uncover everything in a step-wise fashion, uncomment the
+ following command:
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Outline
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Gene Networks
+\end_layout
+
+\begin_layout Subsection
+Gene Network Analysis
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Inferring gene expression networks
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[height=7cm]{Transition_plotLTCOPD.pdf}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Types of Network Inference Approaches
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+noindent
+\backslash
+begin{minipage}{.65
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+Typically, network inference methods fall into two categories:
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{enumerate}   
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Gene Regulatory Networks (GRNs)
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item Directed graph
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item Imply a sort of physical interaction
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Gene Coexpression Networks (GCNs)
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item Undirected graph
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item Imply a more general common pathway or process
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{enumerate}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}%
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{minipage}{.35
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+includegraphics[height=3cm]{student_seminar_networksfig1.pdf}
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+includegraphics[height=3cm]{student_seminar_networksfig2.pdf}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Measuring Association
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Measuring association
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}    
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Pearson Correlation
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+begin{itemize}      
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item  Linearity, outliers, etc.
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Spearman Correlation
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+begin{itemize}      
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item  More robust, less sensitive to outliers
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Euclidean Distance
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Mutual Information
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+begin{itemize}      
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item  Non-linear
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Partial Correlation
+\end_layout
+
+\begin_layout Plain Layout
+
+    
+\backslash
+begin{itemize}      
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item  Direct effects
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Controlling for Batch Effect
+\end_layout
+
+\begin_layout Subsection
+What is Batch Effect?
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Batch Effect
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{minipage}{.55
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[height=6cm]{student_seminar_whatisbatch.pdf}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}%
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{minipage}{.45
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}    
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Laboratory Conditions
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Circadian Rhythm
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Reagents
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Atmospheric Ozone
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Etc.
+ etc.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Batch Effect Methods
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Methods for Controlling Batch Effect
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+COMBAT
+\end_layout
+
+\begin_layout Frame
+- Empirical Bayes approach for location/scale adjustment
+\end_layout
+
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Frame
+Surrogate Variable Analysis (SVA)
+\end_layout
+
+\begin_layout Frame
+- SVD approach for estimating 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Limitations of existing BE correction methods
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+Perfect confounding
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Challenges with batch effect of differential coexpression
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+Curse of dimensionality 
+\end_layout
+
+\begin_layout Frame
+Modularity
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Correcting the coexpression matrix
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Model
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Consider a set of 
+\begin_inset Formula $N$
+\end_inset
+
+ samples with 
+\begin_inset Formula $q$
+\end_inset
+
+ covariates measuring gene expression across 
+\begin_inset Formula $p$
+\end_inset
+
+ genes.
+ Let 
+\begin_inset Formula $\textbf{x}_{i}=(x_{i1},\dots,x_{iq})$
+\end_inset
+
+ denote the covariates for sample 
+\begin_inset Formula $i$
+\end_inset
+
+ and let 
+\begin_inset Formula $\textbf{g}_{i}=(g_{i1},\dots,g_{ip})$
+\end_inset
+
+ denote the gene expression values for sample 
+\begin_inset Formula $i$
+\end_inset
+
+ for the 
+\begin_inset Formula $p$
+\end_inset
+
+ genes.
+\end_layout
+
+\begin_layout Standard
+We can express this as 
+\begin_inset Formula 
+\[
+\textbf{g}_{i}=\mathbf{\beta}^{T}\textbf{x}_{i}+\mathbf{\epsilon}_{i}\text{ for }i=1,\dots,N
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\mathbf{\epsilon}_{i}\sim MVN_{p}(\mathbf{0},\Sigma_{i})$
+\end_inset
+
+.
+ Notably, the covariance of 
+\begin_inset Formula $\mathbf{\epsilon}_{i}$
+\end_inset
+
+ differ according to 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+note[itemize]{ 
+\backslash
+item point 1 
+\backslash
+item point 2 }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Likelihood Function
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mathcal{L}\left(\mu,\Sigma\right)=\prod_{i=1}^{N}\frac{1}{\left(2\pi\right)^{\frac{p}{2}}|\Sigma|^{\frac{1}{2}}}e^{-\frac{1}{2}\left(\mathbf{G}_{i}-\mu\right)^{T}\Sigma_{i}^{-1}\left(\mathbf{G}_{i}-\mu\right)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+Where we define 
+\begin_inset Formula $\Sigma_{i}$
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\Sigma_{i}=\mathbf{Q}\mathbf{\Lambda}_{i}\mathbf{Q}^{T}
+\]
+
+\end_inset
+
+Where 
+\begin_inset Formula $\mathbf{Q}$
+\end_inset
+
+ is a matrix with columns defined as the eigenvectors of the estimated coexpress
+ion matrix, 
+\begin_inset Formula $\mathbf{G}^{*}\mathbf{G}^{*T}/N$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+note[itemize]{ 
+\backslash
+item point 1 
+\backslash
+item point 2 }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Results
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simulations
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Graphics
+	filename figures/InSilico_8Error_2Batch_UniformEffects_200samples_4000genes_8286_testing/coex_heatmap.png
+	lyxscale 40
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Acknowledgements
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Thanks to:
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+John Quackenbush
+\end_layout
+
+\begin_layout Itemize
+Kimbie Glass
+\end_layout
+
+\begin_layout Itemize
+Joe Paulson
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_body
+\end_document

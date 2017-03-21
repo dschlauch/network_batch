@@ -299,7 +299,14 @@ key "furlotte2011mixed"
 \begin_layout Standard
 While the impact of this oversight may be negligible for simple differential
  gene expression analyses, coexpression patterns are widely considered in
- the field of network inference.
+ the field of network inference
+\begin_inset CommandInset citation
+LatexCommand cite
+key "de2010differential"
+
+\end_inset
+
+.
  The impact of confounding due to differential coexpression in batches remains
  unexamined.
 \end_layout
@@ -698,7 +705,7 @@ Consider a set of
 \begin_inset Formula $\textbf{x}_{i}=(x_{i1},\dots,x_{iq})$
 \end_inset
 
- denote the confounding covariates for sample 
+ denote the covariates for sample 
 \begin_inset Formula $i$
 \end_inset
 
@@ -1638,6 +1645,179 @@ on, but the resulting coexpression is a function of the batch membership.
 \begin_inset CommandInset label
 LatexCommand label
 name "simulated_example"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Batch-corrected expression data still contains batch-associated coexpression
+ in ENCODE
+\end_layout
+
+\begin_layout Standard
+Above, we outline a theoretical basis for adjusting for differential coexpressio
+n by batch.
+ In short, we demonstrate how this particular form of batch-effect could,
+ in theory, lead to reduced power and biased results.
+ However, it remains to be seen whether this purported phenomenon actually
+ occurs in real gene expression datasets.
+ One might hope that the impact of batch on gene expression data occurs
+ on each gene independently, altering the distribution of expression within
+ each batch.
+ In that scenario, existing approaches would be sufficient for removal of
+ batch effect and batch-associated differential coexpression would be virtually
+ absent.
+ 
+\end_layout
+
+\begin_layout Standard
+To demonstrate that differential coexpression by batch exists in the wild,
+ we selected publicly available data from the ENCODE project.
+ This dataset (GSE19480) contains 153 RNA-seq samples across 57820 ENSEMBL
+ IDs from lymphoblastoid cell lines obtained from Yoruban HapMap individuals.
+ Reads were aligned using Bowtie 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "langmead2009ultrafast"
+
+\end_inset
+
+, and counts were produced using 
+\emph on
+featureCounts 
+\emph default
+from the 
+\emph on
+Subread
+\emph default
+ program
+\begin_inset CommandInset citation
+LatexCommand cite
+key "liao2014featurecounts"
+
+\end_inset
+
+.
+ Replicates were removed, yielding samples from 63 individuals who were
+ each sequenced at both the Yale University and Argonne National Laboratory
+ (126 samples in total).
+ Both centers used the Illumina Genome Analyzer II, which helps reduce,
+ but is known to not eliminate, batch effect.
+ These two centers represent the two batches to consider for correction.
+ Since each batch contains RNA-seq experiments on the same group of 63 individua
+ls, one would hope that in the absence of batch effect (or in the presence
+ of satisfactory batch correction) that there would be minimal differential
+ expression and coexpression between the batches.
+\end_layout
+
+\begin_layout Standard
+We first ran LIMMA on the uncorrected data between Yale and Argonne and
+ observed 495 significant (FDR<.01) genes (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "ENCODE"
+
+\end_inset
+
+A).
+ We then applied ComBat to the data with Yale/Argonne as the batch.
+ ComBat uses an empirical bayes approach to make location/scale adjustments
+ for each gene, returning a gene expression matrix of corrected values.
+ We then reran LIMMA using the same Center partition and observed 43 (FDR<.01)
+ significant genes.
+ Unsurprisingly, this procedure removed the differential expression across
+ batches which is critical from the removal of confounding effects in differenti
+al expression.
+ 
+\end_layout
+
+\begin_layout Standard
+Next we examined the distribution of differential coexpression between the
+ two batches (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "ENCODE"
+
+\end_inset
+
+B).
+ We also generated null distributions by randomly swapping the two centers
+ for each of the 63 individuals 1000 times.
+ Interestingly, despite the absence of differential expression across batches,
+ differential coexpression persists after batch correction.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\series bold
+A
+\series default
+
+\begin_inset Graphics
+	filename /home/dan/gd/Harvard/Research/network_batch/figures/encode_diffexpress.pdf
+	width 90col%
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\series bold
+B
+\series default
+
+\begin_inset Graphics
+	filename /home/dan/gd/Harvard/Research/network_batch/figures/encode_diff_coex_density.pdf
+	width 90col%
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Differential expression and absolute differential coexpression in ENCODE
+ data with batch correction.
+ ComBat effectively mitigates the differential expression between samples
+ run in two separate centers (
+\series bold
+A
+\series default
+).
+ However, with this same batch correction, differential coexpression continues
+ to be strongly influenced by processing center.
+ The lower plot (
+\series bold
+B
+\series default
+) shows the distribution of differential coexpression when comparing groups
+ that are randomly assigned (grey) compared to assignments based on batch.
+ Despite the fact that ComBat helps mitigate differential expression between
+ batches, these results show that batch-associated differential coexpression
+ remains uncorrected.
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "ENCODE"
 
 \end_inset
 

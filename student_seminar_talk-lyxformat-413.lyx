@@ -1,0 +1,3381 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass beamer
+\begin_preamble
+\usepackage{listings}
+\usetheme{Warsaw}
+% or ...
+%\usetheme{Antibes}	% tree outline, neat
+%\usetheme{JuanLesPins}	% like Antibes, with shading
+%\usetheme{Bergen}	% outline on side
+%\usetheme{Luebeck}	% like Warsaw, square sides
+%\usetheme{Berkeley}	% interesting left bar outline
+%\usetheme{Madrid}	% clean, nice.  7/12 page numbers
+%\usetheme{Berlin}	% dots show slide number
+%\usetheme{Malmoe}	% OK, plain, unshaded
+%\usetheme{Boadilla}	% nice, white bg, no top bar
+%\usetheme{Marburg}	% nice, outline on right
+%\usetheme{boxes}	% ???
+%\usetheme{Montpellier}	% tree outline on top, plainish white
+%\usetheme{Copenhagen}	% like Warsaw
+%\usetheme{PaloAlto}	% looks good
+%\usetheme{Darmstadt}	% like Warsaw with circle outline
+%\usetheme{Pittsburgh}
+%\usetheme{default}
+%\usetheme{Rochester}	% like boxy, unshaded warsaw
+%\usetheme{Dresden}	% circle outline on top
+%\usetheme{Singapore}	% purple gradient top
+%\usetheme{Frankfurt}	% like Warsaw with circle outline on top
+%\usetheme{Szeged}
+%\usetheme{Goettingen}	% light purple right bar outline
+%\usetheme{Warsaw}
+%\usetheme{Hannover}	% like Goett with bar on left
+%\usetheme{compatibility}
+%\usetheme{Ilmenau}
+
+\setbeamercovered{transparent}
+% or whatever (possibly just delete it)
+
+%\usecolortheme{seahorse}
+%\usecolortheme{rose}
+
+% seems to fix typewriter font in outline header:
+\usepackage{ae,aecompl}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 0
+\use_package mathtools 1
+\use_package mhchem 0
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Identifying fine-scale population stratification with rare alleles
+\end_layout
+
+\begin_layout Author
+Dan Schlauch, PhD Candidate
+\end_layout
+
+\begin_layout Institute
+Department of Biostatistics
+\begin_inset Newline newline
+\end_inset
+
+Harvard School of Public Health
+\end_layout
+
+\begin_layout Date
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+today
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+place handout in layout->document->layout->options to suppress overlays
+ for printing
+\end_layout
+
+\begin_layout Plain Layout
+now, how to eliminate color printing etc.
+ for handout printing? need to do pstricks
+\end_layout
+
+\begin_layout Plain Layout
+why aren't my Lyx Notes or style NoteItems appearing in handout?
+\end_layout
+
+\begin_layout Plain Layout
+place draft in there to (somewhat) reduce amount of stuff printed, like
+ top and bottom border
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+If you have a file called "institution-logo-filename.xxx", where xxx is a
+ graphic format that can be processed by latex or pdflatex, resp., then you
+ can add a logo by uncommenting the following:
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+pgfdeclareimage[height=0.5cm]{institution-logo}{institution-logo-filename}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+logo{
+\backslash
+pgfuseimage{institution-logo}}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% RPD:  can't get this to work on any template.
+  not present in Warsaw any way, it seems
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% hmm, problem seems to be that it isn't copied to the tmp dir, probably
+ becuase it doesn't have the
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+% filename extension (which is tacked on by pgf it seems)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Plain Layout
+The following causes the table of contents to be shown at the beginning
+ of every subsection.
+ Delete this, if you do not want it.
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+AtBeginSubsection[]{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  
+\backslash
+frame<beamer>{ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+frametitle{Outline}   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%    
+\backslash
+tableofcontents[currentsection,currentsubsection] 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+%}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+If you wish to uncover everything in a step-wise fashion, uncomment the
+ following command:
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+beamerdefaultoverlayspecification{<+->}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Outline
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Population stratification
+\end_layout
+
+\begin_layout Subsection
+What is population stratification?
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+What is population stratification?
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+noindent
+\backslash
+begin{minipage}{.75
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}   
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Population stratification is the existence of allele frequency differences
+ across population groups due to differing ancestries.
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item PS is typically caused by geographical isolation, leading to non-random
+ mating patterns.
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Direct associations between a genetic variant and a phenotype may be
+ confounded by ancestry.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}%
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{minipage}{.25
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+centering
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\backslash
+includegraphics[height=3cm]{population-clipart-k0309836.jpg}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Confounding due to population stratification
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+For example, in a case-control GWAS we are typically interested in how genetic
+ variants contribute to disease:
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If ancestry is associated with disease and population stratification exists
+\begin_inset Formula 
+\[
+cor\left(Disease,\mathbf{G}\right)\ne cor\left(Disease,\mathbf{G}|\mathbf{C}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+An uncontrolled test will lead to spurious associations and inflation of
+ type I error.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center} 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted20.png
+	width 60col%
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Differential confounding by allele frequency
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Rare allele association inflation
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted1.png
+	width 60page%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+{
+\backslash
+tiny Mathieson, Nature Genetics 2012}
+\end_layout
+
+\end_inset
+
+
+\series default
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+ 
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+QQ plots of p-values separated by allele frequency.
+ Comparing two types of non-genetic risk distributions.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Rare allele association inflation
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status open
+
+\begin_layout Plain Layout
+Differential confounding by allele frequency
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Block
+The magnitude of confounding due to stratification is a function of allele
+ frequency and phenotypic distribution
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+For a gradual phenotypic distribution.
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Greater inflation of 
+\series bold
+common
+\series default
+ alleles
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+For a sharp phenotypic distribution
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Greater inflation of 
+\series bold
+rare
+\series default
+ alleles
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Subsection
+Problems with stratification correction
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Rare allele association inflation
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center} 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted2.png
+	width 60page%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+{
+\backslash
+tiny Mathieson, Nature Genetics 2012}
+\end_layout
+
+\end_inset
+
+
+\series default
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+ 
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Existing methods for correction for population stratification do not work
+ for sharp phenotypes (and are particularly ineffective for rare variants).
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Why do we observe inflation?
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+There are at least 3 problems
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{enumerate}   
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Common stratification correction methods inadequately distinguish the
+ tree-like ancestry.
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item Need better estimates of genetic relatedness.
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Differential genotype/phenotype variances lead to scaling of null test
+ statistic distribution.
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item Need better estimates of test statistic distribution.
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Finite sample sizes lead to overdispersion of the association test
+ statistic.
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item Need improvements over use of asymptotic distributions.
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{enumerate}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Estimating population structure
+\end_layout
+
+\begin_layout Subsection
+Addressing fine-scale stratification
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Addressing fine-scale stratification
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}{Common stratification correction approach}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+begin{itemize}   
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item Build a variance-covariance matrix between all samples using all variants
+ and identify top axes of variation via PCA.
+ (Eigenstrat)
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+item Apply correction using the top  PCs.
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}{Limitations}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+begin{itemize} 
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Assumes populations are linearly structured in space.
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Inherently relies on common variants relative to rare variants.
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+begin{itemize} 
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+item Unable to clearly separate closely related populations, such as Europeans
+ from Spain vs Italy
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Addressing fine-scale stratification
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Consider the following haplotype matrix, with columns as samples and rows
+ as variants:
+\end_layout
+
+\begin_layout Standard
+01110001010101101011 - .5
+\end_layout
+
+\begin_layout Standard
+11100010111001100110 - .5
+\end_layout
+
+\begin_layout Standard
+00000001010110001000 - .25
+\end_layout
+
+\begin_layout Standard
+01010010101000000000 - .25
+\end_layout
+
+\begin_layout Standard
+00010100010101000010 - .25
+\end_layout
+
+\begin_layout Standard
+00000000000000000000 - 0
+\end_layout
+
+\begin_layout Standard
+00000000000011000000 - .1
+\end_layout
+
+\begin_layout Standard
+01100000000000001010 - .2
+\end_layout
+
+\begin_layout Standard
+00000100010010001000 - .2
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Addressing fine-scale stratification
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Consider the following haplotype matrix, with columns as samples and rows
+ as variants:
+\end_layout
+
+\begin_layout Standard
+011100010101
+\series bold
+01
+\series default
+101011 - .5
+\end_layout
+
+\begin_layout Standard
+111000101110
+\series bold
+01
+\series default
+100110 - .5
+\end_layout
+
+\begin_layout Standard
+000000010101
+\series bold
+10
+\series default
+001000 - .25
+\end_layout
+
+\begin_layout Standard
+010100101010
+\series bold
+00
+\series default
+000000 - .25
+\end_layout
+
+\begin_layout Standard
+000101000101
+\series bold
+01
+\series default
+000010 - .25
+\end_layout
+
+\begin_layout Standard
+000000000000
+\series bold
+00
+\series default
+000000 - 0
+\end_layout
+
+\begin_layout Standard
+000000000000
+\series bold
+11
+\series default
+000000 - .1
+\end_layout
+
+\begin_layout Standard
+011000000000
+\series bold
+00
+\series default
+001010 - .2
+\end_layout
+
+\begin_layout Standard
+000001000100
+\series bold
+10
+\series default
+001000 - .2
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Addressing fine-scale stratification
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Rare variants are recent variants.
+\end_layout
+
+\begin_layout Standard
+In the absense of selection, rare variants become fixed at 0% with high
+ probability over a relatively short timeframe.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}Starting MAF: .01 vs .1
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted8.png
+	width 40page%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted12.png
+	width 40page%
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+P[Fixation]=.678 vs P[Fixation]=.017 
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Addressing fine-scale stratification
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}{A simple proposed approach}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+item Utilize the intuition that rare variants are more informative than
+ common variants.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+item Build a genetic similarity matrix based on a weighted variation of
+ the Jaccard Index and perform eigendecomposition.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+item Apply correction using the top PCs.
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\end_inset
+
+Jaccard Index:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+J=\frac{\left|A\cap B\right|}{\left|A\cup B\right|}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Genetic Similarity Measure
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+For a matrix of 
+\begin_inset Formula $n$
+\end_inset
+
+ individuals (
+\begin_inset Formula $2n$
+\end_inset
+
+ haploid genomes), with 
+\begin_inset Formula $N$
+\end_inset
+
+ variants described by the genotype matrix 
+\begin_inset Formula $\mathbf{G}_{2n\times N}$
+\end_inset
+
+, we define the weighted Jaccard similarity between two haploid genomes,
+ 
+\begin_inset Formula $s_{i,j}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+s_{i,j}=\frac{\sum_{k=1}^{N}w_{k}\mathbf{G}_{i,k}\mathbf{G}_{j,k}}{\sum_{k=1}^{N}\mathbf{G}_{i,k}+\sum_{k=1}^{N}\mathbf{G}_{j,k}-\sum_{k=1}^{N}\mathbf{G}_{i,k}\mathbf{G}_{j,k}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula 
+\[
+w_{k,i,j}=\begin{cases}
+\frac{2\left(2n-1\right)}{\sum_{l=1}^{2n}\mathbf{G}_{l,k}-1}-1 & \sum_{l=1}^{2n}\mathbf{G}_{l,k}>1\\
+0 & \sum_{l=1}^{2n}\mathbf{G}_{l,k}\le1
+\end{cases}
+\]
+
+\end_inset
+
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula 
+\begin{align*}
+E\left(s_{i,j}|\mbox{No structure}\right) & =1\\
+\hat{Var}\left(s_{i,j}|\mbox{No structure}\right) & \approx\frac{\sum_{k=1}^{N}\hat{p}_{k}^{2}\left(1-\hat{p}_{k}^{2}\right)w_{k,i,j}^{2}}{\left(\sum_{k=1}^{N}\mathbf{G}_{i,k}+\sum_{k=1}^{N}\mathbf{G}_{j,k}-\sum_{k=1}^{N}\mathbf{G}_{i,k}\mathbf{G}_{j,k}\right)^{2}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Genetic Similarity Measure
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+This measure is particularly sensitive for measuring kinship.
+ 
+\end_layout
+
+\begin_layout Standard
+Given a Coefficient of relatedness, 
+\begin_inset Formula $r>0$
+\end_inset
+
+,
+\begin_inset Formula 
+\begin{align*}
+E\left(s_{i,j}|r,\mbox{No other structure}\right) & =
+\end{align*}
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align*}
+= & \frac{\left(1-r\right)\sum_{i=1}^{N}\left(2p_{i}-p_{i}^{2}\right)+rN}{\left(1-r\right)\sum_{i=1}^{N}\left(2p_{i}-p_{i}^{2}\right)+r\sum_{i=1}^{N}p_{i}}\\
+> & 1
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+e.g.
+ with 
+\begin_inset Formula $MAF\sim Uniform\left(.01,.1\right)$
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+E\left(s_{i,j}|r=.125,\mbox{No other structure}\right)\approx2.9
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Identifying structure in 1000 Genomes Project
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+1000 Genomes Project
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}{1000 Genomes Project dataset}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item 2504 individuals
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item 6 superpopulations (African, Ad-Mixed American, East Asian, European,
+ South Asian)
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item 26 populations
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item 60 million variants
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center} 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted3.png
+	width 50page%
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Separation of all individuals
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\end_inset
+
+Clustered heatmap of GSM based on our method.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted14.png
+	width 80page%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+{
+\backslash
+tiny Clustered heatmap of genetic similarity using our method.} 
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Separation of all individuals
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\end_inset
+
+Clustered heatmap of GSM based on variance-covariance matrix.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted15.png
+	width 80page%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+{
+\backslash
+tiny Clustered heatmap of genetic similarity using PCA.} 
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Separation of all individuals
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+First two principal components using our method vs Var-Cov yield very similar
+ results.
+\end_layout
+
+\begin_layout Standard
+Continental level population structure is not meaningfully affected.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted5.png
+	width 80page%
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Separation as a function of allele frequency
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted13.png
+	width 80page%
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Separation as a function of allele frequency
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted7.png
+	width 80page%
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Separation of recent shared ancestries
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+{
+\backslash
+tiny Example:
+\end_layout
+
+\begin_layout Plain Layout
+
+Indian Telugu from the UK (ITU) 
+\end_layout
+
+\begin_layout Plain Layout
+
+Sri Lankan Tamil from the UK (STU)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/dan/1000GP/plots/hcl_ ITU vs STU/P0-0.4.png
+	width 80page%
+	height 20pheight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/dan/1000GP/plots/hcl_ ITU vs STU/F9-10.png
+	width 80page%
+	height 20pheight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted30.png
+	width 80page%
+	height 20pheight%
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Separation of recent shared ancestries
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+{
+\backslash
+tiny Example:
+\end_layout
+
+\begin_layout Plain Layout
+
+Iberian Population in Spain (IBS)
+\end_layout
+
+\begin_layout Plain Layout
+
+Toscani in Italia (TSI)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/dan/1000GP/plots/hcl_ IBS vs TSI/P0-0.4.png
+	width 80page%
+	height 20pheight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/dan/1000GP/plots/hcl_ IBS vs TSI/F9-10.png
+	width 80page%
+	height 20pheight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted32.png
+	width 80page%
+	height 20pheight%
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Separation of recent shared ancestries
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+{
+\backslash
+tiny Example: ITU vs STU}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted23.png
+	width 60page%
+	height 30pheight%
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+{
+\backslash
+tiny Example: IBS vs TSI}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted21.png
+	width 60page%
+	height 30pheight%
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Separation of recent shared ancestries
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Ratio of within-group mean distance to out-of group mean distance:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Populations
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Our method
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PCA
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TSI-IBS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.417
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.504
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+BEB-PJL
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.748
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.794
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ITU-STU
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.836
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.889
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ITU-BEB
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.905
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.951
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CHB-CHS
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.605
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.681
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LWK-ESN
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.178
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.197
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GIH-ITU
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.513
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.552
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CEU-YRI
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.025
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+.022
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Our method outperformed standard PCA in differentiating groups for 
+\emph on
+\bar under
+every
+\emph default
+\bar default
+ same-continent subpopulation pairing across all continents.
+ (
+\begin_inset Formula $\approx50$
+\end_inset
+
+ comparisons)
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Controlling confounding in 1000 Genomes Project
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simulated non-genetic phenotypes with 1000GP genotypes
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{block}{Phenotype simulation}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Phenotypes were simulated as Bernouli or exponential RV
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Risk was assigned based on 3 separate risk models:
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+item Uniform risk
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+item Super and sub-population differentiated risk (gradual risk)
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\backslash
+item Sub-population alone differentiated risk (sharp risk)
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item 100 phenotypes generated per model (300 total per distribution type)
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item GWAS performed on each phenotype for "LD sampled" set of 100k variants
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Mean rank-ordered p-value taken for each simulated phenotype.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{block}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Does use our method preserve type I error?
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}{
+\backslash
+tiny QQ-plots of p-values for variant association with a non-genetic binary
+ phenotype
+\backslash
+
+\backslash
+Uncorrected}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted28.png
+	width 80page%
+	height 30pheight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+{
+\backslash
+tiny Our method (20 components) association Q-Q plot}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted29.png
+	width 80page%
+	height 30pheight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Corrected association test statistic
+\end_layout
+
+\begin_layout Subsection
+Bias of stratification adjusted tests
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Differential genotype/phenotype variances
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Consider the stratification-adjusted test statistic
+\begin_inset Formula 
+\[
+t_{k}=n\times\left(\frac{\mathbf{r}_{P}\mathbf{r}_{G}^{T}}{\sqrt{\sum_{i}^{n}\mathbf{r}_{P,k,i}^{2}\sum_{i}^{n}\mathbf{r}_{G,k,i}^{2}}}\right)^{2}\sim\chi_{1}^{2}
+\]
+
+\end_inset
+
+Where 
+\begin_inset Formula $\mathbf{r}_{P}$
+\end_inset
+
+ and 
+\begin_inset Formula $\mathbf{r}_{G}$
+\end_inset
+
+ are the residuals for the phenotype and genotype, respectively.
+\end_layout
+
+\begin_layout Standard
+Now consider 
+\begin_inset Formula $P$
+\end_inset
+
+, a binary phenotype with 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $p_{P,i}$
+\end_inset
+
+ and 
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+
+\begin_inset Formula $p_{G,i}$
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ as the mean phenotypes and genotypes given stratification, and 
+\begin_inset Formula $k$
+\end_inset
+
+ be the index of a variant
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $t_{k}$
+\end_inset
+
+ is 
+\bar under
+biased
+\bar default
+
+\begin_inset Formula 
+\begin{align*}
+E\left(t_{k}|H_{0}\right) & =n\frac{\sum_{i=1}^{n}\left[2p_{G,k,i}\left(1-p_{G,k,i}\right)p_{P,i}\left(1-p_{P,i}\right)\right]}{\sum_{i=1}^{n}2p_{G,k,i}\left(1-p_{G,k,i}\right)\sum_{i=1}^{n}p_{P,i}\left(1-p_{P,i}\right)}\\
+ & \ne1
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Differential genotype/phenotype variances
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+The residual correlation estimate of association is biased when there is
+ a mean-variance relationship for phenotype (there is always a mean-variance
+ relationship for genotype)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+cor\left(var\left(\mathbf{r}_{G,k}\right),var\left(\mathbf{r}_{P}\right)\right) & >0\rightarrow E\left(t_{k}\right)>1\\
+cor\left(var\left(\mathbf{r}_{G,k}\right),var\left(\mathbf{r}_{P}\right)\right) & <0\rightarrow E\left(t_{k}\right)<1
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Correcting biased estimator
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Consistent estimator for stratification adjusted association with mean-variance:
+\begin_inset Formula 
+\begin{align*}
+s_{k} & =w\times n\times\left(\frac{\mathbf{r}_{P}\mathbf{r}_{G}^{T}}{\sqrt{\sum_{i}^{n}\mathbf{r}_{P,k,i}^{2}\sum_{i}^{n}\mathbf{r}_{G,k,i}^{2}}}\right)^{2}\sim\chi_{1}^{2}
+\end{align*}
+
+\end_inset
+
+Where
+\begin_inset Formula 
+\begin{align*}
+w & =\left(\frac{\sum_{i=1}^{n}\hat{\sigma}_{P,k,i}^{2}\sum_{i=1}^{n}\hat{\sigma}_{G,k,i}^{2}}{\sum_{i=1}^{n}\left[\hat{\sigma}_{P,k,i}^{2}\hat{\sigma}_{G,k,i}^{2}\right]}\right)\\
+E\left[s_{k}|H_{0}\right] & =1
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Applying corrected estimator to 1000GP data
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Applying corrected estimator to 1000GP data
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}{
+\backslash
+tiny QQ-plots of p-values for variant association with a non-genetic binary
+ phenotype across TSI-IBS
+\backslash
+
+\backslash
+PCA (2 components)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted27.png
+	width 80page%
+	height 30theight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}{
+\backslash
+tiny Our method (2 components)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename ../R_workspace/Slides/pasted26.png
+	width 80page%
+	height 30pheight%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Acknowledgements
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Block
+\begin_inset Argument 2
+status collapsed
+
+\begin_layout Plain Layout
+Thanks to:
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Prof.
+ Christoph Lange
+\end_layout
+
+\begin_layout Itemize
+Matt Goodman
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_body
+\end_document
