@@ -3,18 +3,35 @@
 \@writefile{toc}{\select@language{english}}
 \@writefile{lof}{\select@language{english}}
 \@writefile{lot}{\select@language{english}}
+\citation{chen2011removing,benito2004adjustment,leek2007capturing,johnson2007adjusting,nygaard2016methods}
+\citation{johnson2007adjusting}
+\citation{furlotte2011mixed}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}}
+\citation{de2010differential}
+\citation{bien2011sparse}
+\citation{friedman2008sparse}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Methods}{3}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Approach}{3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Model}{4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Likelihood function}{5}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Simulated Demonstration}{6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Batch effect in GTEx Project}{7}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Example of what works and doesn't work for batch effect}}{8}}
-\newlabel{simulated_example}{{1}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces QQ plots for simulated data without differential covariance (A) and with differential covariance (B).}}{8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Confounding due to sex in ECLIPSE study}{9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Make these nicer. Combine into single plot? }}{10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Very clear dependence of agreement between cases and control on the balance. In other words, with a strong lack of balance, we see weaker agreement, indicating that the results we DO see are a function of the confounder and not the case-control partition.}}{11}}
-\newlabel{AgreementVsConfounder}{{4}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Model}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Workflow of \textbf  {METHODNAME}. }}{4}}
+\newlabel{eq:Lambda_diag}{{1}{6}}
+\newlabel{eq:Lambda}{{2}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Likelihood function}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Estimator}{6}}
+\newlabel{eq:least_squares_zero}{{3}{7}}
+\newlabel{eq:estimator}{{4}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Properties of this estimator}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Corrected covariance matrix}{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Simulated Demonstration}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Separation of rewired ECLIPSE data}}{9}}
+\citation{langmead2009ultrafast}
+\citation{liao2014featurecounts}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Batch-corrected expression data still contains batch-associated coexpression in ENCODE}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces In this toy example, we demonstrate which artifacts standard batch correction is capable of correcting and which artifacts will remain. In A-D, we show plots of two example genes before (left) and after (right) correction, colored by their batch. In the top row (A,B), we show a comparison of two genes which are conditionally independent, and illustrate that batch correction appropriately removes the marginal dependence between the genes. In the bottom row (C,D), we show two genes that are conditionally coexpressed and demonstrate that batch correction may help mitigate the measured coexpression, but the resulting coexpression is a function of the batch membership. Importantly when comparing coexpression matrices, differing batch proportions will bias the differential coexpression. In simulations (See Supp) we demonstrate that in the absence of batched differential coexpression, ComBat sufficiently controls the type I error. However, when coexpression differs by batch, our false positive rate increases above the expectation of the null model.}}{11}}
+\newlabel{simulated_example}{{3}{11}}
+\bibstyle{abbrvnat}
+\bibdata{coexpression_batch}
+\@writefile{toc}{\contentsline {section}{References}{12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Differential expression and absolute differential coexpression in ENCODE data with batch correction. ComBat effectively mitigates the differential expression between samples run in two separate centers (\textbf  {A}). However, with this same batch correction, differential coexpression continues to be strongly influenced by processing center. The lower plot (\textbf  {B}) shows the distribution of differential coexpression when comparing groups that are randomly assigned (grey) compared to assignments based on batch. Despite the fact that ComBat helps mitigate differential expression between batches, these results show that batch-associated differential coexpression remains uncorrected.}}{13}}
+\newlabel{ENCODE}{{4}{13}}

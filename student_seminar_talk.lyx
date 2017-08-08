@@ -841,6 +841,17 @@ textwidth}
 
 \backslash
 includegraphics[height=6cm]{student_seminar_whatisbatch.pdf}
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+tiny{Johnson et al.(Biostatistics 2007)}
 \end_layout
 
 \begin_layout Plain Layout
@@ -877,7 +888,7 @@ item Laboratory Conditions
 
 	
 \backslash
-item Circadian Rhythm
+item Circadian Rhythm / cell cycle
 \end_layout
 
 \begin_layout Plain Layout
@@ -946,25 +957,201 @@ Methods for Controlling Batch Effect
 \end_layout
 
 \begin_layout Frame
-COMBAT
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
 \end_layout
 
-\begin_layout Frame
+\begin_layout Plain Layout
+
+	
+\backslash
+item COMBAT
+\end_layout
+
+\begin_layout Plain Layout
+
 - Empirical Bayes approach for location/scale adjustment
 \end_layout
 
-\begin_layout Frame
+\begin_layout Plain Layout
 
 \end_layout
 
-\begin_layout Frame
-Surrogate Variable Analysis (SVA)
+\begin_layout Plain Layout
+
+	
+\backslash
+item Surrogate Variable Analysis (SVA)
 \end_layout
 
-\begin_layout Frame
+\begin_layout Plain Layout
+
 - SVD approach for estimating 
 \end_layout
 
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Reference based (RATIO-G) methods
+\end_layout
+
+\begin_layout Plain Layout
+
+-Scales sample measurements by the geometric mean of a group of reference
+ measurements
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Distance Weighted Discrimination (DWD)
+\end_layout
+
+\begin_layout Plain Layout
+
+-Based on SVM
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Many more...
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Limitations
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Limitations of existing batch effect correction methods
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}    
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Perfect confounding
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Location/scale assumptions
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Independent effects
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Batches must be known or
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Batches must be estimated (SVA)
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item 
+\backslash
+em{Differential coexpression}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Batch effect removal methods typically return a corrected gene expression
+ matrix.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Standard
 \begin_inset Separator parbreak
 \end_inset
@@ -977,7 +1164,115 @@ Surrogate Variable Analysis (SVA)
 status open
 
 \begin_layout Plain Layout
-Limitations of existing BE correction methods
+Limitations to existing batch effect correction methods
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{minipage}{.60
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+center{ 
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename batch_manuscript/figures/simulated_example.png
+	lyxscale 25
+	width 80col%
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+f\left[Gene1|BatchA\right]=f\left[Gene1|BatchB\right]
+\]
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}%
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{minipage}{.40
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Protocol induced coexpression?
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Differential biological variation
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}
 \end_layout
 
 \end_inset
@@ -985,10 +1280,7 @@ Limitations of existing BE correction methods
 
 \end_layout
 
-\begin_layout Frame
-Perfect confounding
-\end_layout
-
+\end_deeper
 \begin_layout Standard
 \begin_inset Separator parbreak
 \end_inset
@@ -1001,7 +1293,138 @@ Perfect confounding
 status open
 
 \begin_layout Plain Layout
-Challenges with batch effect of differential coexpression
+Limitations to existing batch effect correction methods
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{minipage}{.70
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+center{
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename /home/dan/gd/Harvard/Research/network_batch/figures/encode_diffexpress.pdf
+	lyxscale 25
+	width 90col%
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/dan/gd/Harvard/Research/network_batch/figures/encode_diff_coex_density.pdf
+	lyxscale 25
+	width 90col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}%
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{minipage}{.30
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+tiny{ENCODE Project:
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+50k genes
+\backslash
+
+\backslash
+ 126 samples (63 patients RNA-seq'ed at 2 centers)}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Challenges with batch effect on differential coexpression
 \end_layout
 
 \end_inset
@@ -1010,11 +1433,91 @@ Challenges with batch effect of differential coexpression
 \end_layout
 
 \begin_layout Frame
-Curse of dimensionality 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{minipage}{.55
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[height=6cm]{all_studies_WGCNA_edgeweight_difference_comparison.pn
+g}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}%
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{minipage}{.45
+\backslash
+textwidth}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{itemize}    
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Ultra-high dimensionality
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Differential coexpression
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+item Modularity
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{itemize}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{minipage}
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Frame
-Modularity
+
 \end_layout
 
 \begin_layout Standard
@@ -1026,6 +1529,81 @@ Modularity
 
 \begin_layout Section
 Correcting the coexpression matrix
+\end_layout
+
+\begin_layout Subsection
+General Idea
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Estimating the conditional coexpression matrix
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Motivating concepts:
+\end_layout
+
+\begin_layout Standard
+1.) Provide a regression framework for for the coexpression matrix.
+\end_layout
+
+\begin_layout Standard
+2.) Estimate a reduced number of parameters.
+\end_layout
+
+\begin_layout Standard
+3.) Exploit modular nature of gene expression patterns.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace*{.2in}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Our proposal:
+\end_layout
+
+\begin_layout Standard
+Define our parameters as functions of components of variation.
+\end_layout
+
+\begin_layout Standard
+Estimate the eigenvalue contribution of each eigenvector.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
 \end_layout
 
 \begin_layout Frame
@@ -1069,7 +1647,7 @@ Consider a set of
 \end_inset
 
  and let 
-\begin_inset Formula $\textbf{g}_{i}=(g_{i1},\dots,g_{ip})$
+\begin_inset Formula $\textbf{g}_{i}=(g_{i1},\dots,g_{ip})^{T}$
 \end_inset
 
  denote the gene expression values for sample 
@@ -1084,10 +1662,10 @@ Consider a set of
 \end_layout
 
 \begin_layout Standard
-We can express this as 
+We can express a model for the gene expression as 
 \begin_inset Formula 
 \[
-\textbf{g}_{i}=\mathbf{\beta}^{T}\textbf{x}_{i}+\mathbf{\epsilon}_{i}\text{ for }i=1,\dots,N
+\textbf{g}_{i}=\mathbf{\mathbf{\beta}}^{T}\textbf{x}_{i}+\mathbf{\epsilon}_{i}\text{ for }i=1,\dots,N
 \]
 
 \end_inset
@@ -1110,9 +1688,29 @@ where
 \end_inset
 
 .
+\begin_inset Formula 
+\[
+\Sigma_{i}=\mathbf{Q}\mathbf{D}_{i}\mathbf{Q}^{T}
+\]
+
+\end_inset
+
+ where 
+\begin_inset Formula $\mathbf{D}_{i}$
+\end_inset
+
+ is a diagonal matrix with diagonal defined as 
+\begin_inset Formula $\mathbf{X}_{i}\Psi_{q\times p}$
+\end_inset
+
+
 \end_layout
 
 \end_deeper
+\begin_layout Frame
+
+\end_layout
+
 \begin_layout Standard
 \begin_inset Separator parbreak
 \end_inset
@@ -1138,6 +1736,10 @@ item point 2 }
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection
+Coexpression Correction Method
 \end_layout
 
 \begin_layout Frame
@@ -1161,16 +1763,11 @@ Likelihood Function
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\mathcal{L}\left(\mu,\Sigma\right)=\prod_{i=1}^{N}\frac{1}{\left(2\pi\right)^{\frac{p}{2}}|\Sigma|^{\frac{1}{2}}}e^{-\frac{1}{2}\left(\mathbf{G}_{i}-\mu\right)^{T}\Sigma_{i}^{-1}\left(\mathbf{G}_{i}-\mu\right)}
+\mathcal{L}\left(\mu,\Sigma\right)=\prod_{i=1}^{N}\frac{1}{\left(2\pi\right)^{\frac{p}{2}}|\Sigma_{i}|^{\frac{1}{2}}}e^{-\frac{1}{2}\left(\mathbf{G}_{i}-\mu\right)^{T}\Sigma_{i}^{-1}\left(\mathbf{G}_{i}-\mu\right)}
 \]
 
 \end_inset
 
-
-\end_layout
-
-\end_deeper
-\begin_layout Frame
 Where we define 
 \begin_inset Formula $\Sigma_{i}$
 \end_inset
@@ -1178,7 +1775,7 @@ Where we define
 
 \begin_inset Formula 
 \[
-\Sigma_{i}=\mathbf{Q}\mathbf{\Lambda}_{i}\mathbf{Q}^{T}
+\Sigma_{i}=\mathbf{Q}\mathbf{D}_{i}\mathbf{Q}^{T}
 \]
 
 \end_inset
@@ -1194,6 +1791,11 @@ ion matrix,
 
 .
  
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
 \end_layout
 
 \begin_layout Standard
@@ -1223,8 +1825,241 @@ item point 2 }
 
 \end_layout
 
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Least Squares Estimator
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+tiny{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Formula 
+\begin{align}
+\mathbf{0}_{q} & =\sum_{i=1}^{N}\mathbf{X}_{i}^{T}\left[\mathbf{Q}_{h}^{T}\left[\mathbf{G}_{i}\mathbf{G}_{i}^{T}-\mathbf{Q}_{h}\mathbf{X}_{i}\hat{\Psi}_{h}\mathbf{Q}_{h}^{T}\right]\mathbf{Q}_{h}\right]\label{eq:least_squares_zero}\\
+\mathbf{0}_{q} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}-\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{Q}_{h}\mathbf{X}_{i}\hat{\Psi}_{h}\mathbf{Q}_{h}^{T}\mathbf{Q}_{h}\right]\nonumber \\
+\mathbf{0}_{q} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}-\mathbf{X}_{i}^{T}\mathbf{X}_{i}\hat{\Psi}_{h}\right]\nonumber \\
+\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{X}_{i}\right]\hat{\Psi}_{h} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}\right]\nonumber \\
+\mathbf{X}^{T}\mathbf{X}\hat{\Psi}_{h} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}\right]\nonumber \\
+\hat{\Psi}_{h} & =\left(\mathbf{X}^{T}\mathbf{X}\right)^{-1}\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}\right]\label{eq:estimator}\\
+\hat{\Psi} & =\left(\mathbf{X}^{T}\mathbf{X}\right)^{-1}\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}\right]\nonumber 
+\end{align}
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+note[itemize]{ 
+\backslash
+item point 1 
+\backslash
+item point 2 }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+The Corrected Coexpression Matrix
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+With the estimates obtained with our method, it is straightforward to see
+ how fitted values for the coexpression matrix for each sample or experimental
+ condition can be obtained.
+ Given an estimate for 
+\begin_inset Formula $\Psi$
+\end_inset
+
+, 
+\begin_inset Formula $\hat{\Psi}$
+\end_inset
+
+, we can now estimate the batch-independent coexpression structure as 
+\begin_inset Formula 
+\[
+\hat{\mathbf{S}}=\mathbf{Q}diag\left(\bar{\mathbf{X}}\hat{\Psi}\right)\mathbf{Q}^{T}\text{ or }\hat{\mathbf{S}}=\sum_{i=1}^{p}\bar{\mathbf{X}}\hat{\Psi}_{i}\mathbf{Q}_{i}\mathbf{Q}_{i}^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The differential coexpression matrix between two conditions, defined in
+ binary as column 2 of 
+\begin_inset Formula $\mathbf{X}$
+\end_inset
+
+, is computed
+\begin_inset Formula 
+\[
+\hat{\mathbf{W}}=\mathbf{Q}diag\left(\hat{\Psi}_{2,\cdot}\right)\mathbf{Q}^{T}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Frame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+note[itemize]{ 
+\backslash
+item point 1 
+\backslash
+item point 2 }
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Example Workflow
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename /home/dan/gd/Harvard/Research/network_batch/overview2.pdf
+	lyxscale 30
+	height 60pheight%
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Results
+\end_layout
+
+\begin_layout Subsection
+Simulation Results
 \end_layout
 
 \begin_layout Frame
@@ -1246,10 +2081,221 @@ Simulations
 
 \begin_deeper
 \begin_layout Standard
-\begin_inset Graphics
-	filename figures/InSilico_8Error_2Batch_UniformEffects_200samples_4000genes_8286_testing/coex_heatmap.png
-	lyxscale 40
-	width 100col%
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[height=7cm]{./figures/InSilico_8Error_2Batch_UniformEffects_400sa
+mples_4000genes_5955_repeated/coex_heatmap.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simulations
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[height=7cm]{./figures/InSilico_8Error_2Batch_UniformEffects_400sa
+mples_4000genes_5955_repeated/EigenvectorPlots.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Simulations
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{center}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[height=3cm]{./figures/InSilico_8Error_2Batch_UniformEffects_400sa
+mples_4000genes_5955_repeated/NaiveDensity.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[height=3cm]{./figures/InSilico_8Error_2Batch_UniformEffects_400sa
+mples_4000genes_5955_repeated/ourMethodDensity.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+
+\backslash
+
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[height=3cm]{./figures/InSilico_8Error_2Batch_UniformEffects_400sa
+mples_4000genes_5955_repeated/OursVsNaive.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[height=3cm]{./figures/InSilico_8Error_2Batch_UniformEffects_400sa
+mples_4000genes_5955_repeated/OursVsOthersROC.png}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{center}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Separator parbreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Real Data Results
+\end_layout
+
+\begin_layout Frame
+\begin_inset Argument 4
+status open
+
+\begin_layout Plain Layout
+Immuno-navigator
+\end_layout
+
+\end_inset
+
+
+\begin_inset Separator latexpar
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+Soon...
+\end_layout
 
 \end_inset
 

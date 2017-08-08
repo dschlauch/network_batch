@@ -27,182 +27,285 @@
 \usepackage{babel}
 \begin{document}
 
-\title{Batch effect on covariance structure confounds network analyses in
-gene expression studies}
+\title{Batch effect on covariance structure confounds gene coexpression}
 \maketitle
 \begin{abstract}
 Systemic biases associated with multiple batches of gene expression
 experiments have been known to confound results in differential gene
-expression analyses. Numerous methods have been developed over the
-past 10 years which address this phenomenon. Commonly, these approaches
-correct expression values such that the mean and variance of each
-gene is conditionally independent of a set of batch covariates. However,
-methods published to date have not addressed potential differential
-covariance across batches. While this is of lesser concern in the
+expression analyses and numerous methods have been developed over
+the past 10 years that address this phenomenon. Commonly, these approaches
+adjust expression values such that the mean and variance of each gene
+is conditionally independent of a set of batch covariates. However,
+methods published to date have not addressed the potential for differential
+coexpression across batches. While this is of lesser concern in the
 context of standard differential gene expression, analyses that utilize
-a gene co-expression or a correlation matrix will continue to see
-confounding due to batch effect even after application of standard
-batch-correction methods. In this article, we demonstrate the persistence
+a gene coexpression or correlation matrix will continue to see confounding
+due to batch effect even when applied to a properly batch-corrected
+gene expression matrix. In this article, we demonstrate the persistence
 of confounding at the covariance level after standard batch correction
-using simulation studies and real world examples. Finally, we present
+using simulation studies and real biological examples. We present
 an approach for computing a corrected gene expression coexpression
-matrix, called {[}NAME{]}, based on a maximum likelihood estimation
-of the conditional covariance matrix.
+matrix, called {[}NAME{]}, based on estimation of the conditional
+covariance matrix. {[}NAME{]} estimates a reduced set of parameters
+that express the coexpression as a function of the sample covariates
+and can be used to control for continuous and categorical confounders.
+The method is computationally fast, and makes use of the inherently
+modular structure of features commonly found in genomic analyses.
 \end{abstract}
 
 \section{Introduction}
 
-While the accessibility of high-throughput assays has increases, so
-too has the ability to investigate numerous hypotheses simultaneously. 
+High-throughput data generation, including RNA-sequencing and microarrays,
+have revolutionized molecular biology. These technological advancements
+allow for the measurement of tens of thousands of gene expression
+patterns at once, giving us a window into the molecular activity of
+living cells. But as promising as these data generation methods are,
+the deluge of data that has arisen from these tools has revealed an
+extraordinarily level of complexity in linking the information at
+the gene level to the higher level observations of phenotypes.
 
-\textbf{{[}Continue babbling about basic experimental design of gene
-expression studies...{]}}
+Plummeting costs have lead to increased accessibility of high-throughput
+genomic assays and with that we gain ability to investigate numerous
+hypotheses simultaneously. At the heart of most genomic studies is
+the analysis of the manner in which the biological variability of
+genomic features, such as RNA expression, differs in the context of
+phenotypes and/or other genomic features. We hope that understanding
+the joint distribution of gene expression, conditional on phenotypes,
+will lead to an understanding of the core biology. However, it can
+be difficult to distinguish which associations are driven by real
+biological mechanisms and which associations are observed because
+of confounding by undesirable batch effects or other extraneous experimental
+variables. It is critical to address this confounding in order to
+reduce the probability of false positive results.
 
-Biological sources of variation are typically of interest, but observed
-variation is often the result of technical artifacts which may confound
-associations between experimental groups and gene expression. We can
-assume the model $G_{ij}=\alpha_{j}+X\beta_{j}+B\gamma_{ij}+\delta_{ij}\epsilon_{ij}$,
+In the context of gene expression studies, the measurement of biological
+sources of variation RNA abundance are typically of interest. Commonly,
+observed variation is often the result of technical artifacts that
+may confound associations between experimental groups and gene expression
+\cite{leek2010tackling,lander1999array}. 
+
+Batch effects are known to come from many sources. Some sources are
+obvious, such as the array platform or the experimental reagents used,
+but others may be more unexpected. Timing, ozone\cite{fare2003effects},
+technician and lab humidity have all been identified as sources of
+unwanted variation and undoubtedly many other sources remain undiscovered\cite{scherer2009batch}.
+In other words, variation attributed to batch is unavoidable. Ideally,
+experimental design will allow for single-batch experiments to be
+performed, but experiments may be too large for this to be practical.
+Randomized batch assignment is recommended as an experimental design\cite{conesa2016survey},
+but many investigations involve the use of publicly available data
+(e.g. Gene Expression Omnibus, Genomics Data Commons) for which no
+randomization is possible.
+
+A common way to approach the batch correction problem is to consider
+the model $G_{ij}=\alpha_{j}+X\beta_{j}+B\gamma_{ij}+\delta_{ij}\epsilon_{ij}$,
 where $G_{ij}$ is the gene expression of gene $j$ for sample $i$,
 $X$ is the design matrix, $\beta_{j}$ is a vector of regression
 coefficients for gene $j$ for the columns of $X$. The next two terms
 specify the additive and multiplicative impacts of batch. \textbf{$B$}
 is an matrix of indicators for each of the batches, and $\gamma_{j}$
 is a vector of additive batch effects on gene $j$. $\epsilon_{ij}$
-is the $N\left(0,\sigma_{j}^{2}\right)$ error term and $\delta_{ij}$
-is the multiplier of that error term. Controlling for batch necessarily
-involves estimating the impact of batch on the mean expression and
-the variance of that expression, specifically $\gamma_{ij}$ and $\delta_{ij}$,
-for each gene. Many steps of experimental protocols have been shown
-to lead to batch effects, but it is generally not known what mechanism
-is at fault for a particular study. Therefore it is typical to estimate
-$\gamma_{ij}$ and $\delta_{ij}$ for each gene in a study., \textbf{{[}Continue
-to describe general batch effect...{]}}
+is the error term and $\delta_{ij}$ is the multiplier of that error
+term. Controlling for batch necessarily involves estimating the impact
+of batch on the mean expression and the variance of that expression,
+specifically $\gamma_{ij}$ and $\delta_{ij}$, for each gene. It
+is generally not known what mechanism for batch effect is at fault
+for a particular study and consequently, it is unknown which set of
+genes and the magnitude of the effect on those genes. Therefore, without
+knowing which features are susceptible to batch effect, it is typical
+to estimate $\gamma_{ij}$ and $\delta_{ij}$ for each separately
+gene in a study. 
 
 Despite widespread literature published regarding the identification
-and control of confounding due to batch effect {[}citations{]}, batch
-effect correction has focused on adjusting for the effects of batch
-on gene expression mean and variance at an individual level. For example,
-ComBat uses an empirical bayes approach to estimate the mean and variance
-parameters for each gene and then computes an adjusted gene expression
-which controls for these effects. However, in the context of network
-inference, we are often interested in the covariance of genes as opposed
-to marginal distribution of each gene. Essentially, we assume that
-genes which are functionally related will exhibit a correlated expression
-pattern across a set of experimental conditions or samples. 
+and control of confounding due to batch effect \cite{chen2011removing,benito2004adjustment,leek2007capturing,johnson2007adjusting,nygaard2016methods},
+batch effect correction has focused on adjusting for the effects of
+batch on gene expression mean and variance at an individual level.
+For example, ComBat \cite{johnson2007adjusting} uses an empirical
+bayes approach to estimate the mean and variance parameters for each
+gene and then computes an adjusted gene expression that controls for
+these effects. Another approach, Surrogate Variable Analysis \cite{leek2007capturing},
+uses a combination of measured covariates and singular value decomposition
+to identify unknown sources of variation. These variables are estimated
+and their effects regressed out of the gene expression matrix. These
+approaches amount to a location-scale adjustment that is critical
+for promoting the conditional independence of gene expression. For
+the purposes of differential gene expression analysis, this approach
+is effective for both microarrays and RNA-seq data \cite{conesa2016survey}.
 
-Standard batch correction approaches fail to remove the impact of
-a type of batch effect which may manifest itself by causing a differential
-co-expression patterns between two or more genes. Removing the impact
-of differential means and variances across batches is critical to
-removing differential covariance across batch, but will be insufficient
-if the covariance itself is associated with batch. While the impact
-of this oversight may be negligible for differential gene expression
-analysis, co-expression patterns are widely considered in the field
-of network inference. The impact of confounding due to differential
-coexpression in batches remains unexamined.
+However, as our understanding of genomics grows, we recognize that
+finding differentially expressed genes do not give a complete picture
+of relationship between the transcriptome and phenotype. Cellular
+states involve the complex combination of numerous biological processes
+that are characterized by the behavior of large sets of interacting
+genes. This understanding has lead to increased interest measuring
+gene coexpression, the degree to which the expression between two
+gene is correlated, to gain an understanding of the network biology
+where simple differential gene expression falls short. Analogous to
+differential expression and complementary to network inference, we
+are naturally interested in differential coexpression - the difference
+in gene correlation across experimental conditions.
 
-\textbf{{[}Describe recent work with sparse covariance estimation...{]}}
+The difference between differential coexpression analysis and differential
+expression is that we focus on the pairwise joint distribution of
+genes as opposed to the marginal distribution of each gene. Essentially,
+we assume that genes that are functionally related will exhibit a
+correlated expression pattern across a set of experimental conditions
+or samples. A significant association may indicate a potential functional
+interaction. With this in mind, a natural goal is the identification
+of those genes that are differentially correlated. Gene pairs or gene
+sets that gain or lose a common expression pattern in differing experimental
+conditions may implicate the biological pathways or functional mechanisms
+that drive a particular phenotypic change.
+
+Many methods have been proposed in for differential coexpression analysis,
+most commonly in the field of gene network inference. Many of these
+proposed algorithms start with the computation of a correlation matrix
+from the gene expression data\cite{tesson2010diffcoex,wgcna1,wgcna2,glass2013passing,southworth2009aging,choi2005differential,siska2017differential}.
+There is an assumption, often implicit, that the gene expression data
+lacks heterogeneity or has heterogeneity sufficiently corrected. The
+biases that persist in the coexpression matrix when homogeneity is
+violated are rarely discussed or considered in the literature. Each
+of the methods in the field would benefit from an estimated coexpression
+matrix that has had the impact of batch effect reduced compared to
+a standard Pearson correlation matrix.
+
+In estimating coexpression matrices, standard batch correction is
+critical \cite{furlotte2011mixed}, but not sufficient. Location-scale
+confounding on gene expression will reduce power and bias results.
+This will inevitably lead to highly significant, but biologically
+meaningless associations between large volumes of genes. Though the
+common batch correction practices help mitigate this problem, they
+fail to remove the impact of the type of batch effect that causes
+differential coexpression patterns among gene. Current methods treat
+batch effect as acting on the marginal distribution of each gene and
+ignore the possibility of changes to joint distributions. While some
+impact on the joint distribution is addressed by removing the impact
+of differential means and variances across batches it is insufficient
+if the covariance itself is associated with batch. 
+
+It is easy to conceive of scenarios where this phenomenon plays out.
+For example, different experimental protocols across batches may induce
+a coexpression difference by preferentially sampling cells with certain
+active biological pathways for cell cycle or stress response. But
+even simpler, batch effect for coexpression may be introduced merely
+by differential biological variability. To illustrate this, recognize
+that correlation is roughly interpreted as the square root of proportion
+of variability explained by true expression (as opposed to other sources
+of error). Then two genes which are functionally related will only
+be detected as such if the biological variability is equal between
+batches. Subtle differences in protocol that lead to differences in
+biological variability can not be removed with standard batch correction
+methods.
+
+The demonstration in Figure \ref{simulated_example} shows two examples
+of uncorrected batch effect (left) impacting two genes in a study.
+In the top row, batch effect alters the means and variances of the
+two genes (location-scale model). In the bottom row, the means, variances
+\emph{and} coexpression is impacted. Upon application of ComBat (Right)
+to the uncorrelated genes, the two genes become independent as desired.
+However, when applied to the conditionally coexpressed case (Bottom
+row) we continue to observe differential coexpression across batches.
+
+\begin{figure}
+\includegraphics[width=1\columnwidth]{figures/simulated_example}\caption{In this toy example, we demonstrate which artifacts standard batch
+correction is capable of correcting and which artifacts will remain.
+In A-D, we show plots of two example genes before (left) and after
+(right) correction, colored by their batch. In the top row (A,B),
+we show a comparison of two genes which are conditionally independent
+and demonstrate that location-scale batch correction appropriately
+removes the marginal dependence between the genes. In the bottom row
+(C,D), we show two genes that are conditionally coexpressed and illustrate
+that batch correction may help mitigate the measured coexpression,
+but the resulting coexpression is still a function of the batch membership.
+Importantly, when comparing coexpression matrices, differing batch
+proportions will bias the differential coexpression. In simulations
+we demonstrate that in the absence of batched differential coexpression,
+ComBat sufficiently controls the type I error. However, when coexpression
+differs by batch, our false positive rate increases above the expectation
+of the null model.}
+\label{simulated_example}
+\end{figure}
+
+Though methods exist to consider the correlation of genes in the presence
+of location-scale batch effect, no method exists that further allows
+for the coexpression itself to be a function of batch. Similarly,
+no method currently available returns a corrected coexpression matrix
+rather than a corrected expression matrix.
+
+While the impact of ignoring pairwise interactions may be negligible
+for simple differential gene expression analyses, coexpression patterns
+are widely considered in the field of network inference\cite{de2010differential,chen2011removing,fukushima2013diffcorr}.
+The impact of confounding due to differential coexpression in batches
+remains unexamined.
+
+In order to solve this problem, we need to create a model that describes
+the coexpression matrix as a function of the experimental conditions
+and batches. Classical regression models predict the expectation of
+a response variable, but in coexpression analyses, we are interested
+in the covariance. Some work has recently been published on this subject\cite{hoff2012covariance},
+but little has been studied in high dimensional or biological settings. 
+
+This problem faces at least two major challenges. The first problem
+is that it requires the estimation of a very large number of parameters.
+Given $p$ genes, there are ${p \choose 2}$ pairwise correlations,
+and each of these must be a function of the number of covariates.
+For most high throughput gene expression studies where $N\ll p$,
+we want to limit this parameter space in some way. Previous work has
+shown the increased difficulty in reproducing coexpression across
+studies\cite{schlauch2016estimating} likely owing to the high number
+of parameters to estimate in noisy data. Recent work has allowed for
+the imposition of sparsity on the gene covariance matrix \cite{bien2011sparse}
+or precision matrix \cite{friedman2008sparse}, but the complexity
+of biological systems make sparsity an imperfect choice and computationally
+burdensome to implement. Second, in the case of numerous batches or
+continuous covariates, it may not be possible to estimate a coexpression
+matrix using the sample covariance matrix form, $\frac{1}{n}\sum_{i=1}^{n}\left(X_{i}-\bar{X}\right)\left(X_{i}-\bar{X}\right)^{T}$,
+where $X_{i}$ is the set of all gene expression values for sample
+$i$. 
+
+In the method we describe here, {[}NAME{]}, we reduce the parameter
+space by exploiting the modular nature of gene expression, estimating
+only $N$ variables for each covariate, with each weight corresponding
+to a eigenvector. This collects the information from many similarly
+expressed genes by effectively borrowing information from similarly
+patterned features. This allows us to estimate gene coexpression matrix
+as a function of sample covariates. Our method is presented in a regression
+framework that allows for the inclusion of continuous and categorical
+covariates into the adjustment model.
 
 \section{Methods}
 
 \subsection{Approach}
 
-The conventional batch correction model is typically given as
-\[
-Y_{g}=\alpha_{g}+\beta_{g}X+\gamma_{i}gZ+\delta_{i}g\epsilon_{i}g
-\]
+In this manuscript we present a method for estimating the coexpression
+matrix by modeling the matrix as a function of the largest components
+of variation. Critical to our approach is the idea that although there
+are ${p \choose 2}$ pairwise gene-gene relationships, the true biology
+can be predominantly explained by a much smaller set of variance components.
+One way to identify these components is to compute the eigendecomposition
+of the gene correlation matrix. We can then write the coexpression
+matrix as a function of the experimental covariates and these eigenvectors.
+Solving this formulation by minimizing the squared error will yield
+a set of parameter estimates from which we can compute corrected coexpression
+estimates.
 
-where $X$ is the exposure (e.g. treatment/control) and $Z$ is the
-batch (or other covariates). In the context of network inference,
-we often want to find $cor(Y_{g1},Y_{g2})$, independent of $Z$. 
-
-So, in order to model 2nd order batch, what we really want to do is
-allow for the parameter of interest, $\beta_{g}$ to vary by batch.
-So, now we set
-
-$\beta_{g}^{*}=\beta_{g}+\beta_{B}gZ$
-
-Where $\beta_{B}$ is a new parameter that we need to estimate for
-each of the ${p \choose 2}$ comparisons.
-
-We can write out a full model for any two genes. Note that $Y_{g2}$
-is another gene in this model.
-
-\[
-Y_{g2}=\alpha_{g}+\beta_{g}^{*}X+\gamma_{i}gZ+\delta_{i}g\epsilon_{i}g
-\]
-
-or
-
-\[
-Y_{g2}=\alpha_{g}+(\beta_{g}+\beta_{B}gZ)X+\gamma_{i}gZ+\delta_{i}g\epsilon_{i}g
-\]
- 
-\[
-Y_{g2}=\alpha_{g}+\beta_{g}X+\beta_{B}gZX+\gamma_{i}gZ+\delta_{i}g\epsilon_{i}g
-\]
-
-There are many ways to approach this, but I believe the best way is
-the following steps:
-
-1. Apply conventional batch correction. This will effectively eliminate
-the $\gamma_{i}gZ$ term and we can proceed with the simpler model
-- 
-\[
-Y_{g2}=\alpha_{g}+\beta_{g}X+\beta_{B}ZX+\delta_{i}g\epsilon_{i}g
-\]
- - on the combat-corrected data. Further standardize each gene expression
-(this will not impact the actual results, but will aid in interpretation
-and computation time)
-
-2. Fit the following models Reduced: 
-\[
-Y_{g2}=\alpha_{g}+\beta_{g}X+\delta_{i}g\epsilon_{i}g
-\]
- Full: 
-\[
-Y_{g2}=\alpha_{g}+\beta_{g}X+\beta_{B}ZX+\delta_{i}g\epsilon_{i}g
-\]
-
-3. Place estimated coefficients into two separate matrices (
-\[
-S_{\beta},S_{B}
-\]
-). We have tons of options for computing these coefficients. A LASSO-style
-L1 regularization would probably make the most sense here, but for
-the purposes of simplicity we will start with OLS.
-
-So, now we have two separate (equal sized) matrices instead of the
-usual one. $S_{\beta}$ is the estimated similarity matrix and $S_{B}$
-is the \textquotedbl{}batch impact\textquotedbl{}. Intuitively, we
-can imagine that the expected value of $S_{B}$ is a zero matrix in
-the absence of 2nd order batch effects. This lends itself easily for
-2nd order batch effect testing - for example, we can compare the two
-models via likelihood ratio test (LRT). This is nice, but we're much
-more interested in 2nd order batch effect {*}correction{*}.
-
-4. Compute the corrected similarity matrix via: 
-\[
-\hat{S_{i}^{*}}=\hat{S_{\beta}}+(\frac{\sum_{j\in X_{i}}Z_{j}}{n_{i}})\hat{S_{B}}
-\]
-
-This yields a similarity matrix that is {*}{*}batch-independent{*}{*}.
-In other words, we can now compare networks computed with different
-proportions of batch membership. We can think of the adjusted similarity
-matrix as being the estimated similarity matrix given a {*}standardized
-representation of batches{*}. This standardization allows us to compare
-networks which have been inferred with differing batch composition.
-
-Obviously, the usual caveats apply - this correction is most useful
-when the batches in each exposure are (a) unequal, (b) not too unequal.
-Small numbers of samples for batches will result in wild fluctuations
-in terms of estimating batch effect. 
-
-\subsection{Model}
+\begin{figure}
+\includegraphics[width=1\columnwidth]{/home/dan/gd/Harvard/Research/network_batch/overview2}\caption{\textbf{Workflow of {[}NAME{]}}. {[}NAME{]} begins with a raw or normalized
+gene expression dataset. (1) Standard batch correction (ComBat) is
+applied to remove location-scale batch effect. (2) The overall coexpression
+matrix is calculated. (3) An eigendecomposition of the overall coexpression
+matrix is computed. The eigenvectors from this decomposition are then
+used to re-estimate ``pseudo-eigenvalues'' that minimize the coexpression
+error from the batch corrected expression data. (4) Fitted values
+obtained from this estimation, in combination with the eigenvector
+matrix, $\mathbf{Q}$, are used to estimated covariate-dependent coexpression
+matrices such as for batch corrected network inference or differential
+coexpression analysis.}
+\end{figure}
 
 Consider a set of $N$ samples with $q$ covariates measuring gene
 expression across $p$ genes. Let $\textbf{x}_{i}=(x_{i1},\dots,x_{iq})$
-denote the confounding covariates for sample $i$ and let $\textbf{g}_{i}=(g_{i1},\dots,g_{ip})$
+denote the covariates for sample $i$ and let $\textbf{g}_{i}=(g_{i1},\dots,g_{ip})$
 denote the gene expression values for sample $i$ for the $p$ genes.
 
 In multivariate regression form we can express this as 
@@ -223,7 +326,7 @@ and $\mathbf{\epsilon}_{i}$ respectively.
 
 Here, we make the usual multivariate assumption for $\textbf{E}$
 that the rows $\mathbf{\epsilon}_{i},\dots,\mathbf{\epsilon}_{N}$
-are independent, and follow distribution, $MVN_{p}(\mathbf{0},\Sigma_{i})$.
+are conditionally independent, and follow distribution, $MVN_{p}(\mathbf{0}_{p},\Sigma_{i})$.
 Notably in this paper, the covariance of $\mathbf{\epsilon}_{i}$
 differ according to $i$.
 
@@ -236,281 +339,457 @@ an estimated covariance matrix $p\times p$ with column rank $\le N$.
 To address this \textquotedbl{}curse of dimensionality\textquotedbl{},
 numerous methods have been proposed. One might use a series of LASSO
 regressions to estimate parameters in the inverse covariance matrix
-{[}Meinshausen \& Buhlmann (2006){]}, or perform penalized maximum
-likelihood estimation with the penalty on the inverse covariance matrix{[}Yuan
-\& Lin (2007), Friedman (2007), Banerjee (2008){]}. Each of these
-approaches imposes sparsity on the precision matrix, effectively assuming
-a large degree of conditional independence between genes. More recent
-work has explored imposing sparsity on the covariance matrix itself,
-rather than the precision matrix {[}Bien \& Tibshirani 2011{]}, which
-allows us to assume widespread marginal independence of genes. 
+\cite{meinshausen2006high}, or perform penalized maximum likelihood
+estimation with the penalty on the inverse covariance matrix \cite{banerjee2008model,yuan2007model,friedman2008sparse}.
+Each of these approaches imposes sparsity on the precision matrix,
+effectively assuming a large degree of conditional independence between
+genes. More recent work has explored imposing sparsity on the covariance
+matrix itself, rather than the precision matrix \cite{bien2011sparse},
+which allows us to assume widespread marginal independence of genes. 
 
 The approach we take here involves estimating a covariance matrix
 $\Sigma_{i}$ which depends on the batch and experimental design features
-of sample $i$. An estimate of $\Sigma_{i}$ which allows all elements
+of sample $i$. An estimate of $\Sigma_{i}$ that allows all elements
 of the matrix to vary freely can be obtained by separately estimating
 the covariance matrix for each unique row of $\mathbf{X}$. However,
 this approach in impractical for a large number of categorical covariates
-or any continuous covariates. Given that genes often behave in distinct
-patterns, it is inefficient to estimate coexpression values for every
-pairwise combination of genes.
+or any continuous covariates. Additionally, it neglects the information
+in other samples and other genes which can be used to gain a better
+estimate of the coexpression. Given that groups of genes often behave
+in distinct patterns, it is inefficient to estimate coexpression values
+for every pairwise combination of genes.
 
 Instead, we approach the problem by making use of the fact that genes
 commonly behave in coexpressed modules, and that the dimensional space
 is effectively much smaller than $p^{2}$. To do this, we decompose
 the gene expression correlation matrix and find a set of eigenvectors
 which explain the variation. We then attempt to infer a diagonal matrix
-of pseudo-eigenvalues, which maximize the likelihood function below.
-This procedure allows us to reduce the parameter space from $p^{2}$
-to $p$ or less while still considering the bulk of the variability
-in the data.
+of ``pseudo-eigenvalues'', which minimize the square error. This
+procedure allows us to reduce the parameter space from $p^{2}$ to
+$p$ or less while still considering the bulk of the variability in
+the data. Furthermore, in the application to the gene expression data,
+the column rank of the coexpression matrix will be $N-1$, and the
+number of non-zero eigenvalues will also be only $N-1$. Therefore,
+we need only estimate the parameters corresponding to eigenvectors
+with non-zero eigenvalues substantially reducing the parameter space
+from $p$ to $N-1$.
 
-Instead of estimating all entries in the covariance matrix, $\Sigma_{i}$,
-we instead estimate $\hat{\Sigma_{i}}=\mathbf{Q}\mathbf{\Lambda}^{\left(i\right)}\mathbf{Q}^{T}$,
+Formally, for $\Sigma_{i}$ we estimate $\Sigma_{i}=\mathbf{Q}\mathbf{\Lambda}_{i}\mathbf{Q}^{T}$,
 where $\mathbf{Q}$ is held constant as the set of eigenvectors from
-the full covariance matrix. In this formulation,$\mathbf{\Lambda}$
+the full coexpression matrix. In this formulation,$\mathbf{\Lambda}_{i}$
 is a diagonal matrix with entries 
 \begin{equation}
-\mathbf{\Lambda}_{kk}^{\left(i\right)}=\mathbf{X}_{i}\mathbf{\gamma}_{\cdot k}\label{eq:Lambda_diag}
+\mathbf{\Lambda}_{i,kk}=\mathbf{x}_{i}\mathbf{\Psi}_{\cdot k}\label{eq:Lambda_diag}
 \end{equation}
- where $\mathbf{X}$ is the covariate matrix and$\mathbf{\gamma}$
-is a $q\times p$ matrix of coefficients. 
+ where $\mathbf{x}_{i}$ is the predictors for sample $i$ and$\mathbf{\Psi}$
+is a $p\times q$ matrix of coefficients. 
 
-Let $M_{j}$ be a $p\times p$ matrix with $1$ at position $\left(j,j\right)$
-and 0 at all other positions and let $\mathbf{v}_{j}$ be a $p-vector$
-of 0s except for a 1 at position $j$. Also, let $q$ be a positive
-integer with $q\le p$. We can express $\mathbf{\Lambda}^{\left(i\right)}$
-as
-\begin{equation}
-\mathbf{\Lambda}^{\left(i\right)}=\sum_{j=1}^{q}M_{j}\mathbf{X}_{i}\mathbf{\gamma}\mathbf{v}_{j}^{T}\label{eq:Lambda}
-\end{equation}
-The value taken with $q$ specifies the number of pseudo-eigenvalues
-which are to be estimated. It is straightforward to show that in the
-case of a single batch, where $\mathbf{X}=\mathbf{1}_{N}$, and with
-$q=p$,$\mathbf{\gamma}$ becomes the vector of eigenvalues from the
-original covariance matrix.
+Because we don't estimate the pseudo-eigenvalues after $k=N-1$, we
+set $\mathbf{\Psi}_{\cdot k}=\text{\ensuremath{\mathbf{0}}}_{q}$
+for all $k\ge N$. 
+
+Intuitively, we can think of the parameter matrix $\mathbf{\Psi}$
+as adjusting the eigenvalues as a function of the covariates to minimize
+the coexpression error. It is straightforward to show that in the
+case of a single batch and no experimental conditions, i.e. $\mathbf{x}_{i}=1$
+for all $i\in N$, then$\mathbf{\Psi}$ becomes identical to the vector
+of eigenvalues from the original covariance matrix.
 
 \subsection{Likelihood function}
 
-The likelihood function is 
+The likelihood function for a multivariate normal with mean $\mathbf{\mu}$
+and variance-covariance $\Sigma$ is 
 \[
 \mathcal{L}\left(\mu,\Sigma\right)=\prod_{i=1}^{N}\frac{1}{\left(2\pi\right)^{\frac{p}{2}}|\Sigma_{i}|^{\frac{1}{2}}}e^{-\frac{1}{2}\left(\mathbf{G}_{i}-\mu\right)^{T}\Sigma_{i}^{-1}\left(\mathbf{G}_{i}-\mu\right)}
 \]
 
 The maximum likelihood estimation of $\mathbf{\mu}$ is simply the
-vector $\mathbf{\bar{g}}=\frac{\sum_{i=1}^{N}\mathbf{g}_{i}}{N}$,
-so we can plug in that estimate into the likelihood
+vector $\mathbf{\bar{g}}=\frac{\sum_{i=1}^{N}\mathbf{g}_{i}}{N}$
+and since $\mathbf{\mu}$ is independent of $\Sigma$ we can subtract
+off the row means, yielding $\mathbf{G}_{i}^{*}=\mathbf{G}_{i}-\mathbf{\bar{g}}$.
+And plugging in our index dependent covariance matrix from equation
+\ref{eq:Lambda_diag} we have
 
 \[
-\mathcal{L}\left(\Sigma\right)=\prod_{i=1}^{N}\frac{1}{\left(2\pi\right)^{\frac{p}{2}}|\Sigma_{i}|^{\frac{1}{2}}}e^{-\frac{1}{2}\left(\mathbf{G}_{i}-\mathbf{\bar{g}}\right)^{T}\Sigma_{i}^{-1}\left(\mathbf{G}_{i}-\mathbf{\bar{g}}\right)}
+\mathcal{L}\left(\mathbf{\gamma}\right)=\prod_{i=1}^{N}\frac{1}{\left(2\pi\right)^{\frac{p}{2}}|\mathbf{Q}\text{diag}\left(\mathbf{x}_{i}\Psi\right)\mathbf{Q}^{T}|^{\frac{1}{2}}}e^{-\frac{1}{2}\left(\mathbf{G}_{i}^{*}\right)^{T}\left(\mathbf{Q}\text{diag}\left(\mathbf{x}_{i}\Psi\right)\mathbf{Q}^{T}\right)^{-1}\left(\mathbf{G}_{i}^{*}\right)}
 \]
-and the log-likelihood is:
-\[
-log\mathcal{L}\left(\Sigma\right)\propto\sum_{i=1}^{N}log\left(det\left(\Sigma_{i}\right)^{\frac{-1}{2}}\right)+\sum_{i=1}^{N}-\frac{1}{2}\left(\mathbf{G}_{i}-\mathbf{\bar{g}}\right)^{T}\Sigma^{-1}\left(\mathbf{G}_{i}-\mathbf{\bar{g}}\right)
-\]
+where $\text{diag}\left(\mathbf{x}_{i}\Psi\right)$ is defined as
+a matrix with 0's in all off-diagonal entries and diagonal equal to
+$\mathbf{x}_{i}\Psi$.
 
-Without loss of generality, we may center the expression matrix, $\mathbf{G}$,
-by subtracting off the means, such that $\mathbf{G}_{i}^{*}=\mathbf{G}_{i}-\mathbf{\bar{g}}$.
-And substituting the expanded version of $\mathbf{Q}\mathbf{\Lambda}^{\left(i\right)}\mathbf{Q}^{T}$
+\subsection{Estimator}
 
-\begin{align*}
-log\mathcal{L}\left(\mathbf{\gamma}\right) & \propto\frac{-1}{2}\sum_{i=1}^{N}log\left(det\left(\mathbf{Q}\sum_{j=1}^{q}\left[M_{j}\mathbf{X}_{i}\mathbf{\gamma}\mathbf{v}_{j}^{T}\right]\mathbf{Q}^{T}\right)\right)\\
- & -\frac{1}{2}tr\left[\left(\mathbf{Q}\sum_{j=1}^{q}\left[M_{j}\mathbf{X}_{i}\mathbf{\gamma}\mathbf{v}_{j}^{T}\right]\mathbf{Q}^{T}\right)^{-1}\sum_{i=1}^{N}\mathbf{G}_{i}^{*T}\mathbf{G}_{i}^{*}\right]
-\end{align*}
+In estimating the parameters in the matrix $\Psi$, we may consider
+that each row, $i$, of $\Psi$ corresponds to the vector of contributions
+from the $i^{th}$ eigenvector of $\mathbf{Q}$. With $\mathbf{Q}_{i}$
+specifying the $i^{th}$ column of $\mathbf{Q}$ we have that $\mathbf{Q}_{i}^{T}\mathbf{Q}_{j}=0$
+for all $i\ne j$ and $\mathbf{Q}_{i}^{T}\mathbf{Q}_{i}=1$ for all
+$i,j\in1,2,\dots p$.
 
-Differentiating with respect to $\gamma$ yields
-\begin{align*}
-d\,log\mathcal{L}\left(\mathbf{\gamma}\right) & =\frac{-1}{2}\sum_{i=1}^{N}tr\left(\mathbf{Q}\sum_{j=1}^{q}\left[M_{j}\mathbf{X}_{i}\mathbf{\gamma}\mathbf{v}_{j}^{T}\right]\mathbf{Q}^{T}\right)^{-1}d\gamma\\
- & -\frac{1}{2}tr\left[-\sum_{i=1}^{N}\left(\mathbf{Q}\sum_{j=1}^{q}\left[M_{j}\mathbf{X}_{i}\mathbf{\gamma}\mathbf{v}_{j}^{T}\right]\mathbf{Q}^{T}\right)^{-1}d\gamma\left(\mathbf{Q}\sum_{j=1}^{q}\left[M_{j}\mathbf{X}_{i}\mathbf{\gamma}\mathbf{v}_{j}^{T}\right]\mathbf{Q}^{T}\right)^{-1}\mathbf{G}_{i}^{*T}\mathbf{G}_{i}^{*}\right]\\
-\end{align*}
- To find the maximum, we set $d\,log\mathcal{L}\left(\mathbf{\gamma}\right)=0$.
-This is satisfied when
-\begin{align*}
-0 & =-\frac{1}{2}tr\left(\sum_{i=1}^{N}\left(\mathbf{Q}\sum_{j=1}^{q}\left[M_{j}\mathbf{X}_{i}\mathbf{\gamma}\mathbf{v}_{j}^{T}\right]\mathbf{Q}^{T}\right)^{-1}d\gamma\left(I_{p}-\sum_{i=1}^{N}\left(\mathbf{Q}\sum_{j=1}^{q}\left[M_{j}\mathbf{X}_{i}\mathbf{\gamma}\mathbf{v}_{j}^{T}\right]\mathbf{Q}^{T}\right)^{-1}\sum_{i=1}^{N}\mathbf{G}_{i}^{*T}\mathbf{G}_{i}^{*}\right)\right)\\
-\end{align*}
-This is satisfied when the right term is 0, or when 
-\[
-\sum_{i=1}^{N}\left(\mathbf{Q}\sum_{j=1}^{q}\left[M_{j}\mathbf{X}_{i}\mathbf{\gamma}\mathbf{v}_{j}^{T}\right]\mathbf{Q}^{T}\right)=\sum_{i=1}^{N}\mathbf{G}_{i}^{*}\mathbf{G}_{i}^{*T}
-\]
+For some $h\in1,2,\dots p$, we seek to find the estimates $\hat{\Psi}_{h}$
+which minimize the squared error of the estimated correlation matrices
+defined as $\mathbf{G}_{i}\mathbf{G}_{i}^{T}$ for each sample $i\in1,2,\dots,N$.
+By the Orthogonal Decomposition Theorem, the ``error residuals''
+$\mathbf{Q}_{h}^{T}\left[\mathbf{G}_{i}\mathbf{G}_{i}^{T}-\mathbf{Q}_{h}\mathbf{X}_{i}\hat{\Psi}_{h}\mathbf{Q}_{h}^{T}\right]\mathbf{Q}_{h}$
+will be minimized when they are orthogonal to the hyperplane spanned
+by $\mathbf{X}$. Therefore, we can set the product below (Equation
+\ref{eq:least_squares_zero}) equal to the zero vector to solve for
+our estimator $\hat{\Psi}$.
 
+\begin{align}
+\mathbf{0}_{q} & =\sum_{i=1}^{N}\mathbf{X}_{i}^{T}\left[\mathbf{Q}_{h}^{T}\left[\mathbf{G}_{i}\mathbf{G}_{i}^{T}-\mathbf{Q}_{h}\mathbf{X}_{i}\hat{\Psi}_{h}\mathbf{Q}_{h}^{T}\right]\mathbf{Q}_{h}\right]\label{eq:least_squares_zero}\\
+\mathbf{0}_{q} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}-\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{Q}_{h}\mathbf{X}_{i}\hat{\Psi}_{h}\mathbf{Q}_{h}^{T}\mathbf{Q}_{h}\right]\nonumber \\
+\mathbf{0}_{q} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}-\mathbf{X}_{i}^{T}\mathbf{X}_{i}\hat{\Psi}_{h}\right]\nonumber \\
+\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{X}_{i}\right]\hat{\Psi}_{h} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}\right]\nonumber \\
+\mathbf{X}^{T}\mathbf{X}\hat{\Psi}_{h} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}\right]\nonumber \\
+\hat{\Psi}_{h} & =\left(\mathbf{X}^{T}\mathbf{X}\right)^{-1}\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}\right]\label{eq:estimator}\\
+\hat{\Psi} & =\left(\mathbf{X}^{T}\mathbf{X}\right)^{-1}\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}\right]\nonumber 
+\end{align}
+Equation \ref{eq:estimator} provides an estimate for $\Psi_{h}$,
+a $q$-vector specifying the contribution of eigenvector $h$ and
+the $q$ covariates to the correlation structure in the $N$ samples.
+
+The estimate $\hat{\Psi}$ represents the least squares estimate for
+$\Psi$, which is equivalent to the maximum likelihood estimate under
+normal error. Given the generous assumption of a properly specified
+model, this estimate will be the most efficient estimator and will
+asymptotically converge to the true parameter $\Psi$.
+
+This provides a closed form solution to our problem. Given that the
+computationally intensive steps involve matrix inversion, the computational
+complexity is $\mathcal{O}(n^{3})$ or less, depending on the specific
+implementation. This allows for relatively fast computation of corrected
+coexpression matrix that is comparable to the simple Pearson correlation
+computation, which has similar complexity. Using a computer with Intel(R)
+Core(TM) i7-3630QM CPU @ 2.40GHz, and Microsoft R Open 3.2.5 linked
+with multi-threaded BLAS/LAPACK libraries, the R implementation of
+this method finished in 8.8 seconds on a dataset of 4000 genes, 400
+samples and 2 covariates. 
 
 \subsection{Corrected covariance matrix}
 
-Given an estimate for $\gamma$, $\hat{\gamma}$, we can now estimate
+With the estimates obtained with our method, it is straightforward
+to see how fitted values for the covariance matrix for each sample
+or experimental condition can be obtained. Using the usual interpretations
+of . Given an estimate for $\Psi$, $\hat{\Psi}$, we can now estimate
 the batch-independent covariance structure as 
+\begin{equation}
+\hat{\mathbf{S}}=\mathbf{Q}diag\left(\bar{\mathbf{x}}\hat{\Psi}\right)\mathbf{Q}^{T}\text{ or }\hat{\mathbf{S}}=\sum_{i=1}^{p}\bar{\mathbf{x}}\hat{\Psi}_{i}\mathbf{Q}_{i}\mathbf{Q}_{i}^{T}\label{eq:corrected_coexpression}
+\end{equation}
+ where $\bar{\mathbf{x}}$ is a $q$-vector specifying the column
+means of $\bar{\mathbf{x}}$,
 \[
-\hat{\mathbf{S}}=\bar{\mathbf{X}}\hat{\gamma}
-\]
- where $\bar{\mathbf{X}}$ is a $q$-vector specifying the column
-means of $\bar{\mathbf{X}}$,
-\[
-\bar{\mathbf{X}}=\frac{\sum_{i=1}^{N}\mathbf{x}_{i}}{N}
+\bar{\mathbf{x}}=\frac{\sum_{i=1}^{N}\mathbf{x}_{i}}{N}
 \]
 
-Computing the differential covariance matrix between two conditions,
-defined as column 2 of $\mathbf{X}$, can be performed via 
-\[
-\hat{\mathbf{W}}=\mathbf{y}\hat{\gamma}
-\]
-where $\mathbf{y}=\left(0,1,0,\dots0\right)$
+The differential coexpression matrix between two conditions, defined
+in binary as column 2 of $\mathbf{X}$, is computed
+\begin{equation}
+\hat{\mathbf{W}}=\mathbf{Q}diag\left(\mathbf{v}\hat{\Psi}\right)\mathbf{Q}^{T}\label{eq:parameter_interpretation}
+\end{equation}
+where $\mathbf{v}=\left(0,1,0,\dots0\right)_{q}$
 
 \section{Results}
 
-\subsection{Simulated Demonstration}
+\subsection{Simulations demonstrate residual coexpression batch effect after
+ComBat}
 
-Consider a set of samples from a study involving two batches. Let
-the expression data be distributed as a set of MVN with mean vector
-$\mu$ and covariance structure $\Sigma$.
+To illustrate the presence of batch effect in purportedly corrected
+gene expression data, we performed an extremely simple simulation
+to capture the effect. We simply took a gene expression dataset of
+100 samples and selected 1000 genes at random to be in batch 1 and
+labeled them $SimulatedGene1,\dots,SimulatedGene1000$. We sampled
+another set of 1000 genes and assigned them to batch 2, and added
+that data to $SimulatedGene1,\dots,SimulatedGene1000$. In essence,
+for each ``simulated'' gene, there were 200 total expression observations
+- 100 from one gene and 100 from a separate gene. Naturally, there
+was substantial association with batch across the dataset. This is
+seen in the highly significant differential expression across batches.
+We also compared the differential coexpression across batches by plotting
+the distribution of differential coexpression estimates between batch1
+and batch 2. We compared this distribution to that of two randomly
+assigned groups to show that the absolute differential coexpression
+was much greater across batches.
 
-Existing batch correction methods are designed to identify differentially
-expressed genes and thus focus on $\mu$ and the diagonal of $\Sigma$.
-
-For network inference, however, we are less interested in these values
-and more interesting in the off-diagonal of $\Sigma$. Mechanisms
-for batch effect which act on the covariance structure rather than
-the mean and variance structure will not be corrected for using existing
-batch correction methods.
-
-In Figure \ref{simulated_example}, we see two examples of uncorrected
-batch effect (Left) impacting two genes in a study. In the top row,
-batch effect alters the means and variances of the two genes. In the
-bottom row, the means, variances \emph{and} coexpression is impacted.
-Upon application of ComBat (Right) to the uncorrelated genes, the
-two genes become independent as desired. However, when applied to
-the conditionally coexpressed case (Bottom row) we continue to observe
-differential coexpression across batches.
-
-To demonstrate the general concept of how differential coexpression
-leads to inflated test statistics, we simulated two studies, each
-of 200 individuals across 10,000 genes. Each sample was a realization
-of a multivariate normal distribution with $\mathbf{\mu}=\mathbf{0}_{p},$
-and borrowed a coexpression matrix of 10,000 genes from an existing
-dataset (ECLIPSE) to be $\mathbf{\Sigma}$. For Study 1, we sampled
-200 times from this distribution. For Study 2, we sampled 150 times
-using $\Sigma$, and then estimated a new $\Sigma^{*}$ using 9000
-of the same genes from the ECLIPSE study, but with 1000 new genes.
-This procedure was intended to mimic the introduction of newly active
-biological pathways in a subset of the samples as we might expect
-with batch effect. Our goal was to observe how the distribution of
-the estimated coexpression matrix differed according to the different
-covariance approaches. The results are seen in Figure 2, showing an
-inflation of significant results... \textbf{{[}describe this in more
-detail{]}}
-
-Second order batch effect in GTEx clearly exists (see above), but
-it can be subtle. For the purposes of a proof on concept, we can generate
-a much stronger batch effect which clearly demonstrates this approach.
-We simply select 5000 genes and 5000 separate genes in the other batch,
-relabeling them Gene1, Gene2,\dots , Gene5000. Basically, we\textquoteright re
-simply mismatching the genes between the batches! This, obviously,
-causes a completely random rewiring of the network from one batch
-to the other.
+We then applied ComBat to the data, removing the effect of the batch
+assignment and performed the above assessments again. As expected,
+the differentially expressed genes virtually disappeared. Interestingly,
+the differential coexpression was only mildly reduced. Substantially
+more gene-pairs were highly coexpressed across batch-groups than across
+random-groups. This simple demonstration illustrates both the value
+of ComBat in addressing location-scale batch effect and the need for
+methods which address batch structure.
 
 \begin{figure}
-\includegraphics[width=1\columnwidth]{figures/simulated_example}\caption{Example of what works and doesn't work for batch effect}
-\label{simulated_example}
-\end{figure}
+\textbf{A}\includegraphics[width=0.9\columnwidth]{/home/dan/gd/Harvard/Research/network_batch/figures/demo_diffexpress}
 
-\begin{figure}
-A\includegraphics[width=0.4\columnwidth]{figures/pasted2}B\includegraphics[width=0.4\columnwidth]{figures/pasted1}
+\textbf{B}\includegraphics[width=0.9\columnwidth]{/home/dan/gd/Harvard/Research/network_batch/figures/demo_diff_coex_density}
+\caption[Simulations demonstrate ComBat on differential expression and coexpression]{Simulations demonstrate ComBat on differential expression and coexpression.
+The impact of ComBat on differential expression relative to differential
+coexpression was evaluated using an illustrative example. A dataset
+was generated for 1000 genes using real data, but with batch effect
+induced via the replacement of half of each gene's expression values.
+This rewiring created substantial differential expression and coexpression,
+but only the differential expression was addressed completely with
+ComBat, highlighting the need for additional methods to address this
+problem. }
 
-\caption{QQ plots for simulated data without differential covariance (A) and
-with differential covariance (B).}
+\label{demo_plots}
+
 \end{figure}
 
 
-\subsection{Batch effect in GTEx Project}
+\subsection{\emph{In Silico} analysis}
 
-GTEx uses WGCNA to find common modules across tissues. {[}Describe
-GTEx{]}
+We performed a simulation study to determine the relative performance
+of our method in identifying differential coexpression in the presence
+of coexpression batch effect. Gene expression for 400 samples were
+simulated across 4,000 genes. The simulation study contained a balance
+Cases/Control design with 200 samples per group. Similarly, ``Batch
+A'' and ``Batch B'' were each assigned 200 samples. To generate
+an unbalanced batch effect, 150/200 samples in Batch A were control
+group samples, whereas 150/200 samples in Batch B were cases. 
 
-GTEx Consortium uses state-of-the-art methods for attempting to adjust
-for batch including study design and expression value correction.
+Each gene was randomly assigned to one of 10 distinct modules, labeled
+A-J. Modules A,B were labeled as background modules with the coexpression
+pattern present in all samples, Module C was present in all Batch
+A samples, Module D was present in all Batch B samples, Module E was
+present in controls, Module F and G were present in cases. The coexpression
+pattern of all other modules were present in no samples. Within each
+module each gene was assigned a continuous value, $\gamma_{i}$, uniformly
+random between $-a$ and $a$. For case/control modules, $a$ was
+chosen to be $\sqrt{0.1}$ and for all other modules $a$ was set
+at $\sqrt{0.2}$. The true coexpression between any two genes was
+defined as $\rho_{i,j}=\gamma_{i}\gamma_{j}$. This yielded within
+module correlation values in the range $\left(-0.1,0.1\right)$ for
+cases/controls and $\left(-0.2,0.2\right)$ for batch and background
+modules. The average absolute correlation between two case-control
+coexpressed genes was $\rho=0.025$ with $R^{2}=0.000625$. The average
+absolute correlation between two batch or background coexpressed genes
+was $\rho=0.05$ with $R^{2}=0.0025$. 
 
-Study design:
+The simulated study was run by generating 400 samples from a multivariate
+normal distribution with 0-vector mean and covariance equal to the
+correlation matrix described above for each sample.
 
-\emph{``To the extent possible, based on sample availability, batches
-for library construction were designed to include a range of samples
-from different tissues and to span multiple donors, so as to minimise
-donor and tissue batch effects.''}
+The eigenvectors obtained demonstrate the tendency to isolate distinct
+gene modules. Figure \ref{fig:Eigenvector_plots} shows this feature
+along with the pseudo-eigenvalue contribution of each covariate. It
+is important to note that the top eigenvectors do not necessarily
+identify genes of interest in the case/control context. The estimate
+$\hat{\Psi}$ is a $3\times p$ matrix with the first 20 columns plotted
+in (Figure \ref{fig:Eigenvector_plots}B). The $i^{th}$ column and
+$j^{th}$ row can be interpreted as the additional contribution of
+the $i^{th}$ eigenvector for a 1 unit increase in the value of the
+$j^{th}$ variable. This is analogous to standard regression, where
+we can identify the estimated mean differences associated with a change
+in a predictor. To identify differential coexpression for the $j^{th}$
+variable, such as case/control, controlling for batch we need only
+examine the values that deviate significantly from zero. The parameter
+corresponding to the case/control variable successfully finds the
+eigenvectors which best describe the genes differentially coexpressed
+across cases/controls.
 
-Expression correction:
-
-\emph{``the effect of top 3 PEER factors, gender, and 3 genotype
-PCs were removed.''}
-
-However, neither of these address the \textquotedbl{}second order\textquotedbl{}
-batch issue. These corrections inherently assume that batch affects
-the location-scale distribution of gene expression independently and
-thus does not consider the scenario where coexpression is the feature
-impacted by batch.
-
-\includegraphics{figures/gtex_image}{[}GTEx Supplement{]} {[}Reproduce
-this figure or remove it{]}
-
-To demonstrate that this study is sensitive to batch, we choose two
-widely available tissue types (Blood and Lung) from the data {[}YARN
-normalization{]}.
-
-We then apply batch correction using ``Center'' as the batch of
-interest. We then ran WGCNA on each tissue separately as described
-in {[}GTEx paper{]} and compute modules based on Topological Overlap
-Map. 
-
-We then ran the same procedure, but subsetted the data by each of
-the 3 centers. In theory, after correcting for batch, the modules
-observed should have been independent of the batch used to find them.
-However, we observe dramatic (notable? clear?) differences in the
-modules identified. We should really quantify this difference somehow.
-This may require a clever resampling scheme where we select samples
-both randomly and by center to measure variability.
+We evaluated the ability of {[}NAME{]} to capture case/control differential
+coexpression relative to batch coexpression and background coexpression
+(Figure \ref{fig:insilico_results}). For 4,000 genes there are 7,998,000
+pairwise coexpression estimates of which 319,600 (4\%) are considered
+case/control gene-pairs, and 159,600 (2\%) are considered batch
 
 \begin{figure}
-\includegraphics[width=0.4\columnwidth]{figures/pasted4}\includegraphics[width=0.4\columnwidth]{figures/pasted5}
-
-A\includegraphics[width=0.3\columnwidth]{figures/pasted6}B\includegraphics[width=0.3\columnwidth]{figures/pasted7}C\includegraphics[width=0.3\columnwidth]{figures/pasted8}
-
-\caption{Make these nicer. Combine into single plot? }
+\begin{center}
+\includegraphics[height=8cm]{../figures/InSilico_8Error_2Batch_UniformEffects_400samples_4000genes_5955_repeated/EigenvectorPlots.png}
+\end{center}\caption{Eigenvector plots. {[}NAME{]} is designed to estimate sample specific
+coexpression as a function of the sample covariates and the overall
+coexpression eigenvectors. \textbf{(A)} Here we see the top six eigenvectors
+plotted for all 4000 genes. Each point is colored according to that
+gene's membership in a batch, case/control or background module. We
+see that the eigenvectors tend to separate along with coexpression
+modules. \textbf{(B)} Pseudo-eigenvalues for the top 20 eigenvectors
+corresponding to the three covariates (intercept, batch, case/control).
+Deviations from zero on the y-axis are indications of an unequal contribution
+of the corresponding eigenvector to the fitted coexpression estimate.
+Note that eigenvectors 5 and 6 have notable non-zero pseudo-eigenvalues
+corresponding to case/control parameter.}
+\label{fig:Eigenvector_plots}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includegraphics[height=4cm]{../figures/InSilico_8Error_2Batch_UniformEffects_400samples_4000genes_5955_repeated/NaiveDensity.png}
+\includegraphics[height=4cm]{../figures/InSilico_8Error_2Batch_UniformEffects_400samples_4000genes_5955_repeated/ourMethodDensity.png}
+\\
+\includegraphics[height=3cm]{../figures/InSilico_8Error_2Batch_UniformEffects_400samples_4000genes_5955_repeated/OursVsNaive.png}
+\includegraphics[height=3cm]{../figures/InSilico_8Error_2Batch_UniformEffects_400samples_4000genes_5955_repeated/OursVsOthersROC.png}
+\end{center}\caption{\emph{In Silico} Results. Fitted differential coexpression scores
+for standard differential coexpression (upper left) vs {[}NAME{]}
+(upper right) separated by true relationship. Pearson difference failed
+to generate much power to predict true coexpression compared to background
+and found batch effect at approximately the same rate as true effect.
+{[}NAME{]} found true effects at vastly superior rates compared to
+both background and batch effect. The predicted scores of non-background
+genes for Pearson difference (x-axis) vs {[}NAME{]} (y-axis) demonstrate
+improved ability to separate case/control effects (orange) from batch
+effects (black). ROC curves show the relative performance in identifying
+case/control genes compared to background genes (left) and batch genes
+(right).}
+\label{fig:insilico_results}
 \end{figure}
 
 
-\subsection{Confounding due to sex in ECLIPSE study}
+\subsection{ComBat-corrected expression data still contains batch-associated
+coexpression in ENCODE}
 
-In this analysis, we will perform a very common analysis: Build coexpression
-networks based on \emph{COPD} vs \emph{Smoker control} and identify
-consensus modules with WGCNA. \emph{Gender} is treated as a confounder,
-but is only corrected using standard batch correction methods.
+Above, we outline a theoretical basis for adjusting for differential
+coexpression by batch. In short, we demonstrate how this particular
+form of batch-effect could, in theory, lead to reduced power and biased
+results. However, it remains to be seen whether this purported phenomenon
+actually occurs in real gene expression datasets. One might hope that
+the impact of batch on gene expression data occurs on each gene independently,
+altering the distribution of expression within each batch. In that
+scenario, existing approaches would be sufficient for removal of batch
+effect and batch-associated differential coexpression would be virtually
+absent. 
 
-1. Run ComBat on gene expression data, {*}including gender as a covariate{*}. 
+To demonstrate that differential coexpression by batch exists in the
+wild, we selected publicly available data from the ENCODE project.
+This dataset (GSE19480) contains 153 RNA-seq samples across 57820
+ENSEMBL IDs from lymphoblastoid cell lines obtained from Yoruban HapMap
+individuals. Reads were aligned using Bowtie \cite{langmead2009ultrafast},
+and counts were produced using \emph{featureCounts }from the \emph{Subread}
+program\cite{liao2014featurecounts}. Replicates were removed, yielding
+samples from 63 individuals who were each sequenced at both the Yale
+University and Argonne National Laboratory (126 samples in total).
+Both centers used the Illumina Genome Analyzer II, which helps reduce,
+but is known to not eliminate, batch effect. These two centers represent
+the two batches to consider for correction. Since each batch contains
+RNA-seq experiments on the same group of 63 individuals, one would
+hope that in the absence of batch effect (or in the presence of satisfactory
+batch correction) that there would be minimal differential expression
+and coexpression between the batches.
 
-2. Sample a set of designs from this study which include varying degrees
-of gender imbalance. 
+We first ran LIMMA on the uncorrected data between Yale and Argonne
+and observed 495 significant (FDR<.01) genes (Figure \ref{ENCODE}A).
+We then applied ComBat to the data with Yale/Argonne as the batch.
+ComBat uses an empirical bayes approach to make location/scale adjustments
+for each gene, returning a gene expression matrix of corrected values.
+We then reran LIMMA using the same Center partition and observed 43
+(FDR<.01) significant genes. Unsurprisingly, this procedure removed
+the differential expression across batches which is critical from
+the removal of confounding effects in differential expression. 
 
-3. Evaluate the agreement between cases and controls with pseudo-R\textasciicircum{}2
-from multinomial logistic regression. 
-
-4. Determine the degree to which the agreement between cases and controls
-depends on the gender distribution.
-
-While this data is reasonably balanced, we can use it to demonstrate
-how sensitive our results are to confounding that was \emph{supposedly
-}accounted for already. Figure \ref{AgreementVsConfounder}
+Next we examined the distribution of differential coexpression between
+the two batches (Figure \ref{ENCODE}B). We also generated null distributions
+by randomly swapping the two centers for each of the 63 individuals
+1000 times. Interestingly, despite the absence of differential expression
+across batches, differential coexpression persists after batch correction.
 
 \begin{figure}
-\includegraphics[width=1\columnwidth]{figures/pasted9}\caption{Very clear dependence of agreement between cases and control on the
-balance. In other words, with a strong lack of balance, we see weaker
-agreement, indicating that the results we DO see are a function of
-the confounder and not the case-control partition.}
-
-\label{AgreementVsConfounder}
+\textbf{A}\includegraphics[width=0.9\columnwidth]{/home/dan/gd/Harvard/Research/network_batch/figures/encode_diffexpress}\\
+\textbf{B}\includegraphics[width=0.9\columnwidth]{/home/dan/gd/Harvard/Research/network_batch/figures/encode_diff_coex_density}\caption{Differential expression and absolute differential coexpression in
+ENCODE data with batch correction. ComBat effectively mitigates the
+differential expression between samples run in two separate centers
+(\textbf{A}). However, with this same batch correction, differential
+coexpression continues to be strongly influenced by processing center.
+The lower plot (\textbf{B}) shows the distribution of differential
+coexpression when comparing groups that are randomly assigned (grey)
+compared to assignments based on batch. Despite the fact that ComBat
+helps mitigate differential expression between batches, these results
+show that batch-associated differential coexpression remains uncorrected.}
+\label{ENCODE}
 \end{figure}
 
+
+\subsection{{[}NAME{]} allows for separation of covariate specific modules with
+WGCNA in COPDGene study}
+
+Weighted Gene Coexpression Network Analysis (WGCNA) is one of the
+most popular network reconstruction methods in use today \cite{wgcna1},
+with 1730 citations as of March 31, 2017. It's use continues to grow
+with 140 citations in the first 3 months of 2017. Like many other
+methods in the field, WGCNA begins with a standard Pearson correlation
+matrix of gene expression data. We were interested in whether the
+use of {[}NAME{]} could provide covariate-specific differential coexpression
+estimates that could integrate with WGCNA to find functionally relevant
+coexpression modules. While our method is motivated by the idea of
+removing batch, it is general enough to be applied to any confounding
+variable. In this application, we chose to treat sex as a confounder
+because it is clearly labeled, dichotomous, and likely to impart some
+coexpression bias on the study due to sexual dimorphism.
+
+Gene expression data from the ECLIPSE study (GSE54837)\cite{singh2014altered}
+was collected using blood samples from 226 subjects classified as
+non-smokers (6), smoker controls (84) or COPD (136). Blood samples
+from each individual were profiled using Affymetrix Human Genome U133
+Plus 2.0 microarrays. CEL data files from these assays were RMA-normalized\cite{irizarry2003exploration}
+in R using the BioConductor package 'affy' \cite{gautier2004affy}.
+Array probes were collapsed to 19,765 Entrez-gene IDs using a custom
+CDF\cite{dai2005evolving} and the 220 samples for COPD or smoker
+control subjects were retained for analysis. 
+
+Previous work applying WGCNA to this data has identified network modules
+associated with COPD diagnosis\cite{morrow2015identifying,morrow2017functional}.
+These studies involved applying topological overlap to an overall
+similarity score (e.g. Pearson, Euclidean, biweight midcorrelation)
+after standard batch correction (Surrogate Variable Analysis\cite{leek2007capturing}).
+The similarity matrix typically does not consider sample covariates
+and consequently yields a collection of modules which are generally
+coexpressed, not necessarily differentially coexpressed. To identify
+which modules might be relevant to phenotypes of interest, an eigendecomposition
+by samples of each module is performed and the top eigenvector (eigengene)
+is regressed against the phenotypes and other covariates. This approach,
+while effective at identifying associated modules has limitations.
+The eigengene obtained through this method will capture the greatest
+axis of variation across the samples, not the greatest axis of covariation.
+By design, the eigengene will only be associated with a phenotype
+of interest if there is differential expression within the module
+across phenotypes. Given the wide availability of methods for differential
+expression analysis, the greatest value coming from the investigation
+of coexpression necessarily focuses on discovery of genes and modules
+which are not differentially expressed. In any scenario where we wish
+to consider differential coexpression as a potential driver of disease
+needs to consider these concepts.
+
+We applied {[}NAME{]} to the COPDGene data and included Sex as a covariate
+in the model. 
+
+The sex distribution for cases and controls in this study were uneven,
+potentially leading to confounded results. Using Equation \ref{eq:parameter_interpretation}
+we generated $p\times p$ matrix interpreted as the differential correlation
+for the case-control partition, holding sex constant. We applied a
+soft thresholding power of 6 and computed the topological overlap
+matrix, as described in \cite{wgcna1}. Modules generated were analyzed
+for functional enrichment using DAVID\cite{huang2009bioinformatics,huang2009systematic}. 
+
+{[}Edit this after new results come in{]} The top module was found
+to be enriched for mitochondrial translational elongation $\left(\text{adjusted }p=7\times10^{-7}\right)$.
+Recent work has identified several mitochondrial mechanisms for disease
+progression\cite{cloonan2016mitochondrial,cloonan2016mitochondria}.
 
 \section*{Discussion}
 
-Thoughts about impact on any analysis involving coexpression with
-batches...
+This manuscript makes two important contributions to gene correlation
+networks. First, we identify the problem of confounding by differential
+coexpression, provide a theoretical basis for that artifact and demonstrate
+its presence in real data. Second, we propose a method for estimating
+coexpression matrices in the context of covariates which serve as
+coexpression confounders. 
 
-Thoughts about generality of estimating covariance matrices in the
-context of confounding.
+Incremental improvements in high-throughput data collection have vastly
+increased the availability of large scale gene expression data. As
+we dive deeper into this data, we recognize that cellular states are
+rarely driven by the additive impacts of sets of suspect genes. Rather,
+it is the relationships, pairwise and higher, that these genes have
+with each other and their environment that leads to the phenotypes
+we seek to explain. Technological and methodological advancements
+in genomics allow us unprecedented ability to study these interactions.
+But with this new data come new statistical challenges that were not
+as impactful in differential expression analyses. 
+
+We argue that the batch correction methods that are designed for and
+are ubiquitous in differential expression are important, but not sufficient,
+for removing unwanted variation from the data in gene coexpression.
+
+\bibliographystyle{apalike}
+\addcontentsline{toc}{section}{\refname}\bibliography{coexpression_batch}
+
 \end{document}

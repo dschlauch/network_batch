@@ -9,7 +9,7 @@ library(dplyr)
 set.seed(123)
 nperm <- 50
 plotSubset <- c(T,rep(F,100))
-topNgenes <- 1000
+topNgenes <- 30000
 
 load("~/gd/Harvard/Research/data/ENCODE/encode_lcl_rnaseq_counts.RData")
 dat <- dat[rowSums(dat!=0)>152,]
@@ -37,8 +37,8 @@ makeDiffCoexDF <- function(exprData){
     as.data.frame(diffCoex)[plotSubset,]
 }
 
-diffCoexSubsetRaw    <- cbind(makeDiffCoexDF(expr),type="Pre-ComBat")
-diffCoexSubsetComBat <- cbind(makeDiffCoexDF(expr_combat),type="ComBat")
+diffCoexSubsetRaw    <- cbind(makeDiffCoexDF(expr),type="Uncorrected")
+diffCoexSubsetComBat <- cbind(makeDiffCoexDF(expr_combat),type="After Batch Correction")
 
 diffCoexSubset <- rbind(diffCoexSubsetRaw,diffCoexSubsetComBat)
 
@@ -63,6 +63,8 @@ dev.off()
 
 # Do all genes for LIMMA
 expr <- unfactor(dat)
+# Remove strange outlier gene
+expr <- expr[-which(rownames(expr)=="ENSG00000075624.9"),]
 expr <- expr[,!grepl("_2_",colnames(dat))]
 yaleBatch <- grepl(pattern = "yale",colnames(expr))
 expr_combat = ComBat(dat=expr, batch=yaleBatch, par.prior=TRUE, prior.plots=FALSE)
@@ -79,14 +81,14 @@ sum(output$adj.P.Val<.001)
 sum(output_combat$adj.P.Val<.001)
 
 rawDF <- data.frame(pvalues=output$P.Value, 
-                logFC=output$logFC, type="Pre-ComBat")
+                logFC=output$logFC, type="Uncorrected")
 combatDF <- data.frame(pvalues=output_combat$P.Value,
-                logFC=output_combat$logFC, type="ComBat") 
+                logFC=output_combat$logFC, type="After Batch Correction") 
 df <- rbind(rawDF,combatDF)
 
 pdf(paste0("./figures/encode_diffexpress.pdf"), width=12, height=6)
 diffexpressPlot <- ggplot(df) + 
-    geom_point(aes(x=logFC,y=-log(pvalues)), shape=3) + 
+    geom_point(aes(x=logFC,y=-log10(pvalues)), shape=3) + 
     facet_wrap(~type) + 
     theme_bw(base_size = 20) + theme(plot.title = element_text(hjust = 0.5)) + 
     ggtitle("Differential Expression") + xlab("Log Fold Change") + ylab("-Log p-values")

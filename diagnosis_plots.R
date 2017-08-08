@@ -14,28 +14,42 @@ diagnosticPlots <- function(differentialCorrelationsDF, dir="."){
     
     plotOursVsNaive <- ggplot(differentialCorrelationsDF[differentialCorrelationsDF$labels!="Background",]) + 
         geom_point(aes(x=naiveMeth,y=newMeth, color=factor(labels)), alpha=.5, size=2) +
-        ggtitle("Pairwise Differential Coexpression estimates") + ylab("Our Method") + xlab("Naive Approach") + theme_bw(base_size = 30)+
-        guides(color=guide_legend(title="True Interaction")) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
+        ggtitle("Pairwise Differential Coexpression Estimates") + ylab("Our Method") + xlab("Naive Approach") + theme_bw(base_size = 60) +
+        guides(color=guide_legend(title="True Interaction", override.aes = list(size=10), keyheight=1, keywidth=1, default.unit="inch")) + 
+        scale_colour_manual(values=cbPalette[-1]) 
     
     png(paste0(dir,'/OursVsNaive.png'), width = 1600, height = 1200)
     print(plotOursVsNaive)
     dev.off()
     
+    plotOursVsNaive <- ggplot(differentialCorrelationsDF[differentialCorrelationsDF$labels!="Background",]) + 
+        geom_point(aes(x=naiveWBatch,y=newMeth, color=factor(labels)), alpha=.5, size=2) +
+        ggtitle("Pairwise Differential Coexpression Estimates") + ylab("Our Method") + xlab("Naive with Batch Approach") + theme_bw(base_size = 60) +
+        guides(color=guide_legend(title="True Interaction", override.aes = list(size=10), keyheight=1, keywidth=1, default.unit="inch")) + 
+        scale_colour_manual(values=cbPalette[-1]) 
+    
+    png(paste0(dir,'/OursVsNaiveWBatch.png'), width = 1600, height = 1200)
+    print(plotOursVsNaive)
+    dev.off()
+    
     naiveDensity <- ggplot(differentialCorrelationsDF) + 
         geom_density(aes(naiveMeth, group=factor(labels), color=factor(labels), fill=factor(labels)), alpha=0.3) + 
-        theme_bw(base_size = 30) +
+        theme_bw(base_size = 60) + theme(legend.title=element_text(size=30), legend.text=element_text(size=30)) +
         ggtitle("Estimated Pairwise Differential Coexpression using Naive Method") + xlab("Absolute Pairwise Differential Coexpression") +
-        guides(fill=guide_legend(title="True Interaction"), color=F) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
+        guides(fill=guide_legend(title="True Interaction", keyheight=1, keywidth=1, default.unit="inch"), color=F) + 
+        scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
     naiveWBatchDensity <- ggplot(differentialCorrelationsDF) + 
         geom_density(aes(naiveWBatch, color=factor(labels), fill=factor(labels)), alpha=0.3) + 
-        theme_bw(base_size = 30) +
+        theme_bw(base_size = 60) + theme(legend.title=element_text(size=30), legend.text=element_text(size=30)) +
         ggtitle("Estimated Pairwise Differential Coexpression using Naive Method with Batch") + xlab("Pairwise Differential Coexpression") +
-        guides(fill=guide_legend(title="True Interaction"), color=F) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
+        guides(fill=guide_legend(title="True Interaction", keyheight=1, keywidth=1, default.unit="inch"), color=F) + 
+        scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
     ourMethodDensity <- ggplot(differentialCorrelationsDF) + 
         geom_density(aes(newMeth, color=factor(labels), fill=factor(labels)), alpha=0.3) + 
-        theme_bw(base_size = 30) +
+        theme_bw(base_size = 60) + theme(legend.title=element_text(size=30), legend.text=element_text(size=30)) +
         ggtitle("Estimated Pairwise Differential Coexpression using Our Method") + xlab("Pairwise Differential Coexpression") +
-        guides(fill=guide_legend(title="True Interaction"), color=F) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
+        guides(fill=guide_legend(title="True Interaction", keyheight=1, keywidth=1, default.unit="inch"), color=F) + 
+        scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette)
     
     png(paste0(dir,'/NaiveDensity.png'), width = 1600, height = 1200)
     print(naiveDensity)
@@ -85,7 +99,6 @@ diagnosticPlots <- function(differentialCorrelationsDF, dir="."){
     plotROC(differentialCorrelationsDF, positive=c("Real effect","Negative effect"), "Real Effects vs All Pairs")
     plotROC(onlyEffects, positive=c("Real effect","Negative effect"), "Real Effects vs Batch Effects")
     dev.off()
-    par(mfrow=c(1,1))
     
 }
 
@@ -103,8 +116,9 @@ plotEigenvectors <- function(ourMethodResult, trueLabels, dir=".", numEigenvecto
     plottingDFMelt$Gene <- seq_len(numGenes)
     
     eigenvectorPlots <- ggplot(plottingDFMelt) + geom_point(aes(x=Gene,y=value,color=trueLabels)) +
-        facet_wrap(~variable) + theme_bw(base_size = 30) +
-        guides(color=guide_legend(title="Gene Group")) + scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette) + xlab("Genes")
+        facet_wrap(~variable) + theme_bw(base_size = 30) + theme(legend.position="right") +
+        guides(color=guide_legend(title="Gene Group:",override.aes = list(size=10)), title.position="top", title.hjust =0.5) + 
+        scale_colour_manual(values=cbPalette) + scale_fill_manual(values=cbPalette) + xlab("Genes")
     
     est <- t(ourMethodResult$estimates[,1:numVectors])
     colnames(est)[1:3] <- c("Intercept","Batch","Case-Control") 

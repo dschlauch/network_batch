@@ -58,16 +58,6 @@
   year={2011},
   publisher={Oxford Univ Press}
 }
-@article{friedman2008sparse,
-  title={Sparse inverse covariance estimation with the graphical lasso},
-  author={Friedman, Jerome and Hastie, Trevor and Tibshirani, Robert},
-  journal={Biostatistics},
-  volume={9},
-  number={3},
-  pages={432--441},
-  year={2008},
-  publisher={Biometrika Trust}
-}
 @article{bien2011sparse,
   title={Sparse estimation of a covariance matrix},
   author={Bien, Jacob and Tibshirani, Robert J and others},
@@ -96,4 +86,288 @@
   pages={R25},
   year={2009},
   publisher={BioMed Central}
+}
+@article{liao2014featurecounts,
+  title={featureCounts: an efficient general purpose program for assigning sequence reads to genomic features},
+  author={Liao, Yang and Smyth, Gordon K and Shi, Wei},
+  journal={Bioinformatics},
+  volume={30},
+  number={7},
+  pages={923--930},
+  year={2014},
+  publisher={Oxford Univ Press}
+}
+@article{nygaard2016methods,
+  title={Methods that remove batch effects while retaining group differences may lead to exaggerated confidence in downstream analyses},
+  author={Nygaard, Vegard and R{\o}dland, Einar Andreas and Hovig, Eivind},
+  journal={Biostatistics},
+  volume={17},
+  number={1},
+  pages={29--39},
+  year={2016},
+  publisher={Biometrika Trust}
+}
+@article{luo2010comparison,
+  title={A comparison of batch effect removal methods for enhancement of prediction performance using MAQC-II microarray gene expression data},
+  author={Luo, J and Schumacher, M and Scherer, A and Sanoudou, D and Megherbi, D and Davison, T and Shi, T and Tong, W and Shi, L and Hong, H and others},
+  journal={The pharmacogenomics journal},
+  volume={10},
+  number={4},
+  pages={278--291},
+  year={2010},
+  publisher={Nature Publishing Group}
+}
+@article{leek2010tackling,
+  title={Tackling the widespread and critical impact of batch effects in high-throughput data},
+  author={Leek, Jeffrey T and Scharpf, Robert B and Bravo, H{\'e}ctor Corrada and Simcha, David and Langmead, Benjamin and Johnson, W Evan and Geman, Donald and Baggerly, Keith and Irizarry, Rafael A},
+  journal={Nature Reviews Genetics},
+  volume={11},
+  number={10},
+  pages={733--739},
+  year={2010},
+  publisher={Nature Publishing Group}
+}
+@article{lander1999array,
+  title={Array of hope},
+  author={Lander, Eric S},
+  journal={Nature genetics},
+  volume={21},
+  pages={3--4},
+  year={1999},
+  publisher={Nature Publishing Group}
+}
+@article{conesa2016survey,
+  title={A survey of best practices for RNA-seq data analysis},
+  author={Conesa, Ana and Madrigal, Pedro and Tarazona, Sonia and Gomez-Cabrero, David and Cervera, Alejandra and McPherson, Andrew and Szcze{\'s}niak, Micha{\l} Wojciech and Gaffney, Daniel J and Elo, Laura L and Zhang, Xuegong and others},
+  journal={Genome biology},
+  volume={17},
+  number={1},
+  pages={13},
+  year={2016},
+  publisher={BioMed Central}
+}
+@article{fare2003effects,
+  title={Effects of atmospheric ozone on microarray data quality},
+  author={Fare, Thomas L and Coffey, Ernest M and Dai, Hongyue and He, Yudong D and Kessler, Deborah A and Kilian, Kristopher A and Koch, John E and LeProust, Eric and Marton, Matthew J and Meyer, Michael R and others},
+  journal={ANALYTICAL CHEMISTRY-WASHINGTON DC-},
+  volume={75},
+  number={17},
+  pages={4672--4675},
+  year={2003},
+  publisher={ACS AMERICAN CHEMICAL SOCIETY}
+}
+@book{scherer2009batch,
+  title={Batch effects and noise in microarray experiments: sources and solutions},
+  author={Scherer, Andreas},
+  volume={868},
+  year={2009},
+  publisher={John Wiley \& Sons}
+}
+@article{choi2005differential,
+  title={Differential coexpression analysis using microarray data and its application to human cancer},
+  author={Choi, Jung Kyoon and Yu, Ungsik and Yoo, Ook Joon and Kim, Sangsoo},
+  journal={Bioinformatics},
+  volume={21},
+  number={24},
+  pages={4348--4355},
+  year={2005},
+  publisher={Oxford Univ Press}
+}
+@article{fukushima2013diffcorr,
+  title={DiffCorr: an R package to analyze and visualize differential correlations in biological networks},
+  author={Fukushima, Atsushi},
+  journal={Gene},
+  volume={518},
+  number={1},
+  pages={209--214},
+  year={2013},
+  publisher={Elsevier}
+}
+@article{tesson2010diffcoex,
+  title={DiffCoEx: a simple and sensitive method to find differentially coexpressed gene modules},
+  author={Tesson, Bruno M and Breitling, Rainer and Jansen, Ritsert C},
+  journal={BMC bioinformatics},
+  volume={11},
+  number={1},
+  pages={497},
+  year={2010},
+  publisher={BioMed Central}
+}
+@Article{wgcna1,
+	author = {Peter Langfelder and Steve Horvath},
+	title = {WGCNA: an R package for weighted correlation network
+	analysis},
+	journal = {BMC Bioinformatics},
+	year = {2008},
+	number = {1},
+	pages = {559},
+	pubmedid = {19114008},
+}
+@Article{wgcna2,
+	title = {Fast {R} Functions for Robust Correlations and
+	Hierarchical Clustering},
+	author = {Peter Langfelder and Steve Horvath},
+	journal = {Journal of Statistical Software},
+	year = {2012},
+	volume = {46},
+	number = {11},
+	pages = {1--17},
+	url = {http://www.jstatsoft.org/v46/i11/},
+}
+@article{glass2013passing,
+  title={Passing messages between biological networks to refine predicted interactions},
+  author={Glass, Kimberly and Huttenhower, Curtis and Quackenbush, John and Yuan, Guo-Cheng},
+  journal={PloS one},
+  volume={8},
+  number={5},
+  pages={e64832},
+  year={2013},
+  publisher={Public Library of Science}
+}
+@article{southworth2009aging,
+  title={Aging mice show a decreasing correlation of gene expression within genetic modules},
+  author={Southworth, Lucinda K and Owen, Art B and Kim, Stuart K},
+  journal={PLoS Genet},
+  volume={5},
+  number={12},
+  pages={e1000776},
+  year={2009},
+  publisher={Public Library of Science}
+}
+@article{hoff2012covariance,
+  title={A covariance regression model},
+  author={Hoff, Peter D and Niu, Xiaoyue},
+  journal={Statistica Sinica},
+  pages={729--753},
+  year={2012},
+  publisher={JSTOR}
+}
+@article{meinshausen2006high,
+  title={High-dimensional graphs and variable selection with the lasso},
+  author={Meinshausen, Nicolai and B{\"u}hlmann, Peter},
+  journal={The annals of statistics},
+  pages={1436--1462},
+  year={2006},
+  publisher={JSTOR}
+}
+@article{banerjee2008model,
+  title={Model selection through sparse maximum likelihood estimation for multivariate gaussian or binary data},
+  author={Banerjee, Onureena and Ghaoui, Laurent El and d'Aspremont, Alexandre},
+  journal={Journal of Machine learning research},
+  volume={9},
+  number={Mar},
+  pages={485--516},
+  year={2008}
+}
+@article{friedman2008sparse,
+  title={Sparse inverse covariance estimation with the graphical lasso},
+  author={Friedman, Jerome and Hastie, Trevor and Tibshirani, Robert},
+  journal={Biostatistics},
+  volume={9},
+  number={3},
+  pages={432--441},
+  year={2008},
+  publisher={Biometrika Trust}
+}
+@article{yuan2007model,
+  title={Model selection and estimation in the Gaussian graphical model},
+  author={Yuan, Ming and Lin, Yi},
+  journal={Biometrika},
+  pages={19--35},
+  year={2007},
+  publisher={JSTOR}
+}
+@article{schlauch2016estimating,
+  title={Estimating Drivers of Cell State Transitions Using Gene Regulatory Network Models},
+  author={Schlauch, Daniel and Glass, Kimberly and Hersh, Craig P and Silverman, Edwin K and Quackenbush, John},
+  journal={bioRxiv},
+  pages={089003},
+  year={2016},
+  publisher={Cold Spring Harbor Labs Journals}
+}
+@article{singh2014altered,
+  title={Altered gene expression in blood and sputum in COPD frequent exacerbators in the ECLIPSE cohort},
+  author={Singh, Dave and Fox, Steven M and Tal-Singer, Ruth and Bates, Stewart and Riley, John H and Celli, Bartolome},
+  journal={PloS one},
+  volume={9},
+  number={9},
+  pages={e107381},
+  year={2014},
+  publisher={Public Library of Science}
+}
+@article{gautier2004affy,
+  title={affy-analysis of Affymetrix GeneChip data at the probe level},
+  author={Gautier, Laurent and Cope, Leslie and Bolstad, Benjamin M and Irizarry, Rafael A},
+  journal={Bioinformatics},
+  volume={20},
+  number={3},
+  pages={307--315},
+  year={2004},
+  publisher={Oxford Univ Press}
+}
+@article{dai2005evolving,
+  title={Evolving gene/transcript definitions significantly alter the interpretation of GeneChip data},
+  author={Dai, Manhong and Wang, Pinglang and Boyd, Andrew D and Kostov, Georgi and Athey, Brian and Jones, Edward G and Bunney, William E and Myers, Richard M and Speed, Terry P and Akil, Huda and others},
+  journal={Nucleic acids research},
+  volume={33},
+  number={20},
+  pages={e175--e175},
+  year={2005},
+  publisher={Oxford Univ Press}
+}
+
+@article{irizarry2003exploration,
+  title={Exploration, normalization, and summaries of high density oligonucleotide array probe level data},
+  author={Irizarry, Rafael A and Hobbs, Bridget and Collin, Francois and Beazer-Barclay, Yasmin D and Antonellis, Kristen J and Scherf, Uwe and Speed, Terence P},
+  journal={Biostatistics},
+  volume={4},
+  number={2},
+  pages={249--264},
+  year={2003},
+  publisher={Biometrika Trust}
+}
+@article{morrow2015identifying,
+  title={Identifying a gene expression signature of frequent COPD exacerbations in peripheral blood using network methods},
+  author={Morrow, Jarrett D and Qiu, Weiliang and Chhabra, Divya and Rennard, Stephen I and Belloni, Paula and Belousov, Anton and Pillai, Sreekumar G and Hersh, Craig P},
+  journal={BMC medical genomics},
+  volume={8},
+  number={1},
+  pages={1},
+  year={2015},
+  publisher={BioMed Central}
+}
+@article{morrow2017functional,
+  title={Functional interactors of three genome-wide association study genes are differentially expressed in severe chronic obstructive pulmonary disease lung tissue},
+  author={Morrow, Jarrett D and Zhou, Xiaobo and Lao, Taotao and Jiang, Zhiqiang and DeMeo, Dawn L and Cho, Michael H and Qiu, Weiliang and Cloonan, Suzanne and Pinto-Plata, Victor and Celli, Bartholome and others},
+  journal={Scientific Reports},
+  volume={7},
+  year={2017},
+  publisher={Nature Publishing Group}
+}
+@article{huang2009systematic,
+  title={Systematic and integrative analysis of large gene lists using DAVID bioinformatics resources},
+  author={Huang, Da Wei and Sherman, Brad T and Lempicki, Richard A},
+  journal={Nature protocols},
+  volume={4},
+  number={1},
+  pages={44--57},
+  year={2009},
+  publisher={Nature Publishing Group}
+}
+@article{huang2009bioinformatics,
+  title={Bioinformatics enrichment tools: paths toward the comprehensive functional analysis of large gene lists},
+  author={Huang, Da Wei and Sherman, Brad T and Lempicki, Richard A},
+  journal={Nucleic acids research},
+  volume={37},
+  number={1},
+  pages={1--13},
+  year={2009},
+  publisher={Oxford Univ Press}
+}
+@article{cloonan2016mitochondrial,
+  title={Mitochondrial iron chelation ameliorates cigarette smoke-induced bronchitis and emphysema in mice},
+  author={Cloonan, Suzanne M and Glass, Kimberly and Laucho-Contreras, Maria E and Bhashyam, Abhiram R and Cervo, Morgan and Pab{\'o}n, Maria A and Konrad, Csaba and Polverino, Francesca and Siempos, Ilias I and Perez, Elizabeth and others},
+  journal={Nature medicine},
+  year={2016},
+  publisher={Nature Publishing Group}
 }

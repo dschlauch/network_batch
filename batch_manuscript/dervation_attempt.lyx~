@@ -1,0 +1,259 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+E_{h}=\sum_{i=1}^{N}\left(\mathbf{G}_{i}\mathbf{G}_{i}^{T}-\mathbf{Q}_{h}\left[\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\right]\mathbf{Q}_{h}^{T}\right)^{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+E_{h} & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}-\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)^{2}\\
+ & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\right)^{2}-2\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\right)\left(\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}+\left(\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\right)^{2}\left(\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)^{2}\right)\\
+\frac{\partial}{\partial\gamma_{\cdot h}}E_{h} & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(-2\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\right)\left(\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\mathbf{X}_{i,\cdot}^{T}+2\left(\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)^{2}\left(\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{X}_{i,\cdot}^{T}\right)\right)\\
+0 & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(-2\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\right)\left(\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\mathbf{X}_{i,\cdot}^{T}\right)+\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(2\left(\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)^{2}\left(\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{X}_{i,\cdot}^{T}\right)\right)\\
+\left(\sum_{j=1,k>j}^{p}\left(\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)^{2}\right)^{-1}\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\right)\left(\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\mathbf{X}_{i,\cdot}^{T} & =\sum_{i=1}^{N}\left(\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{X}_{i,\cdot}^{T}\right)
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+zzxczxczxczxc
+\end_layout
+
+\begin_layout Standard
+zxczxc
+\end_layout
+
+\begin_layout Standard
+zxc
+\end_layout
+
+\begin_layout Standard
+zxc
+\end_layout
+
+\begin_layout Standard
+zxc
+\end_layout
+
+\begin_layout Standard
+zxc
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\mathbf{q}^{T}\mathbf{X}\left(\mathbf{G}-\mathbf{q}\hat{\Psi}^{T}\mathbf{X}^{T}\right) & =0\\
+\mathbf{q}^{T}\hat{\Psi}^{T}\mathbf{X}^{T} & =\mathbf{q}^{T}\mathbf{G}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+zxc
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+\mathbf{0}_{q} & =\sum_{i=1}^{N}\mathbf{X}_{i}^{T}\left[\mathbf{Q}_{h}^{T}\left[\mathbf{G}_{i}\mathbf{G}_{i}^{T}-\mathbf{Q}_{h}\mathbf{X}_{i}\hat{\Psi}_{h}\mathbf{Q}_{h}^{T}\right]\mathbf{Q}_{h}\right]\\
+\mathbf{0}_{q} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}-\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{Q}_{h}\mathbf{X}_{i}\hat{\Psi}_{h}\mathbf{Q}_{h}^{T}\mathbf{Q}_{h}\right]\\
+\mathbf{0}_{q} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}-\mathbf{X}_{i}^{T}\mathbf{X}_{i}\hat{\Psi}_{h}\right]\\
+\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{X}_{i}\right]\hat{\Psi}_{h} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}\right]\\
+\mathbf{X}^{T}\mathbf{X}\hat{\Psi}_{h} & =\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}\right]\\
+\hat{\Psi}_{h} & =\left(\mathbf{X}^{T}\mathbf{X}\right)^{-1}\sum_{i=1}^{N}\left[\mathbf{X}_{i}^{T}\mathbf{Q}_{h}^{T}\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}\right]\\
+\\
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $\mathbf{Y}$
+\end_inset
+
+ be a vector of matrices, where 
+\begin_inset Formula $\mathbf{Y}_{i}=\mathbf{G}_{i}\mathbf{G}_{i}^{T}$
+\end_inset
+
+ and let 
+\begin_inset Formula $\mathbf{D}=f\left(\mathbf{X}\hat{\Psi}\right)$
+\end_inset
+
+ be a 4D matrix with dimensions 
+\begin_inset Formula $p\times p\times N\times q$
+\end_inset
+
+ where 
+\begin_inset Formula $\mathbf{X}\hat{\Psi}$
+\end_inset
+
+ is a 
+\begin_inset Formula $p\times N$
+\end_inset
+
+ matrix on the diagonal of 
+\begin_inset Formula $\mathbf{D}$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{align*}
+0 & =\left[\mathbf{Q}\mathbf{X}\mathbf{Q}^{T}\right]^{T}\left(\mathbf{Y}-\left[\mathbf{Q}\left[\mathbf{D}\right]\mathbf{Q}^{T}\right]\right)\\
+0 & =\left[\mathbf{Q}\mathbf{X}\mathbf{Q}^{T}\right]^{T}\mathbf{Q}\mathbf{Y}\mathbf{Q}^{T}-\left[\mathbf{Q}\mathbf{X}\mathbf{Q}^{T}\right]^{T}\mathbf{Q}\left[\mathbf{X}\hat{\Psi}\right]\mathbf{Q}^{T}\\
+0 & =\mathbf{Q}\mathbf{X}^{T}\mathbf{Q}^{T}\mathbf{Y}-\mathbf{Q}\mathbf{X}^{T}\mathbf{Q}^{T}\mathbf{Q}\left[\mathbf{X}\hat{\Psi}\right]\mathbf{Q}^{T}\\
+\mathbf{Q}\mathbf{X}^{T}\mathbf{Q}^{T}\mathbf{Q}\left[\mathbf{X}\hat{\Psi}\right]\mathbf{Q}^{T} & =\mathbf{Q}\mathbf{X}^{T}\mathbf{Q}^{T}\mathbf{Q}\mathbf{Y}\mathbf{Q}^{T}\\
+\mathbf{Q}\mathbf{X}^{T}\left[\mathbf{X}\hat{\Psi}\right]\mathbf{Q}^{T} & =\mathbf{Q}\mathbf{X}^{T}\mathbf{Y}\mathbf{Q}^{T}\\
+\mathbf{X}^{T}\mathbf{X}\hat{\Psi}\mathbf{Q}^{T} & =\mathbf{X}^{T}\mathbf{Q}^{T}\mathbf{Y}\\
+\hat{\Psi} & =\left(\mathbf{X}^{T}\mathbf{X}\right)^{-1}\mathbf{X}^{T}\mathbf{Q}^{T}\mathbf{Y}\mathbf{Q}^{-T}\\
+\\
+\mathbf{Q}_{h}^{T}\left[\mathbf{X}\gamma_{\cdot,h}\right]^{T}\mathbf{Q}_{h}\mathbf{Q}_{h}^{T}\mathbf{X}^{T}\mathbf{Q}_{h} & =Y\mathbf{Q}_{h}^{T}\mathbf{X}^{T}\mathbf{Q}_{h}\\
+\mathbf{Q}_{h}\mathbf{Q}_{h}^{T}\gamma_{\cdot,h}^{T}\mathbf{X}\mathbf{X}^{T} & =Y\mathbf{X}^{T}\\
+\gamma_{\cdot,h}^{T} & =Y\mathbf{X}^{T}\left(\mathbf{X}\mathbf{X}^{T}\right)^{-1}\left(\mathbf{Q}_{h}\mathbf{Q}_{h}^{T}\right)^{-1}\\
+\gamma_{\cdot,h} & =\left(\mathbf{Q}_{h}\mathbf{Q}_{h}^{T}\right)^{-1}\left(\mathbf{X}\mathbf{X}^{T}\right)^{-1}\mathbf{X}^{T}Y\\
+\\
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+E_{h} & =\sum_{i=1}^{N}\left(\mathbf{G}_{i}\mathbf{G}_{i}^{T}-\mathbf{Q}_{h}\left[\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\right]\mathbf{Q}_{h}^{T}\right)^{2}\\
+\frac{\partial}{\partial\gamma_{\cdot h}}E_{h} & =-2\sum_{i=1}^{N}\left(\mathbf{G}_{i}\mathbf{G}_{i}^{T}-\mathbf{Q}_{h}\left[\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\right]\mathbf{Q}_{h}^{T}\right)\mathbf{Q}_{h}\left[\sum_{j=1}^{q}\mathbf{X}_{i,j}^{T}\right]\mathbf{Q}_{h}^{T}\\
+0 & =2\sum_{i=1}^{N}\left(\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}\left[\sum_{j=1}^{q}\mathbf{X}_{i,j}^{T}\right]\mathbf{Q}_{h}^{T}-\mathbf{Q}_{h}\left[\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\right]\mathbf{Q}_{h}^{T}\mathbf{Q}_{h}\left[\sum_{j=1}^{q}\mathbf{X}_{i,j}^{T}\right]\mathbf{Q}_{h}^{T}\right)\\
+\sum_{i=1}^{N}\left(\mathbf{G}_{i}\mathbf{G}_{i}^{T}\mathbf{Q}_{h}\left[\sum_{j=1}^{q}\mathbf{X}_{i,j}^{T}\right]\mathbf{Q}_{h}^{T}\right) & =\sum_{i=1}^{N}\left(\mathbf{Q}_{h}\left[\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\right]\mathbf{Q}_{h}^{T}\mathbf{Q}_{h}\left[\sum_{j=1}^{q}\mathbf{X}_{i,j}^{T}\right]\mathbf{Q}_{h}^{T}\right)\\
+\\
+\\
+\\
+\\
+0 & =\mathbf{Q}_{h}\mathbf{Q}_{h}^{T}\mathbf{X}^{T}\left(\mathbf{G}\mathbf{G}^{T}-\mathbf{Q}_{h}\left[\mathbf{X}\gamma_{\cdot,h}\right]\mathbf{Q}_{h}^{T}\right)\\
+0 & =\mathbf{Q}_{h}\mathbf{Q}_{h}^{T}\mathbf{X}^{T}\mathbf{G}\mathbf{G}^{T}-\mathbf{Q}_{h}\mathbf{Q}_{h}^{T}\mathbf{Q}_{h}\left[\mathbf{X}\gamma_{\cdot,h}\right]\mathbf{Q}_{h}^{T}\\
+\mathbf{Q}_{h}\mathbf{Q}_{h}^{T}\mathbf{X}^{T}\mathbf{X}\gamma_{\cdot,h}\mathbf{Q}_{h}^{T}\mathbf{Q}_{h} & =\mathbf{Q}_{h}\mathbf{Q}_{h}^{T}\mathbf{X}^{T}\mathbf{G}\mathbf{G}^{T}\\
+\mathbf{X}^{T}\mathbf{X}\gamma_{\cdot,h}\mathbf{Q}_{h}^{T}\mathbf{Q}_{h} & =\mathbf{X}^{T}\mathbf{G}\mathbf{G}^{T}\\
+\gamma_{\cdot,h} & =\left(\mathbf{X}^{T}\mathbf{X}\right)^{-1}\mathbf{X}^{T}\mathbf{G}\mathbf{G}^{T}\\
+\left[\mathbf{X}\gamma_{\cdot,h}\right]\mathbf{Q}_{h}^{T}\mathbf{X}^{T}\mathbf{Q}_{h}\mathbf{Q}_{h}^{T}\mathbf{Q}_{h} & =\mathbf{Q}\mathbf{X}_{i,\cdot}\mathbf{Q}^{T}\mathbf{G}\mathbf{G}^{T}
+\end{align*}
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+E_{h} & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}-\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)^{2}\\
+ & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\mathbf{G}_{i,j}\mathbf{G}_{i,k}-\mathbf{G}_{i,j}\mathbf{G}_{i,k}\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}-\mathbf{G}_{i,j}\mathbf{G}_{i,k}\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}+\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\\
+\frac{\partial}{\partial\gamma_{\cdot h}}E_{h} & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(-2\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\right)\left(\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\mathbf{X}_{i,\cdot}+2\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{X}_{i,\cdot}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\\
+0 & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(-2\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\right)\left(\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\mathbf{X}_{i,\cdot}+2\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{X}_{i,\cdot}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\\
+0 & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(-\mathbf{G}_{i,j}\mathbf{G}_{i,k}\mathbf{X}_{i,\cdot}+\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{X}_{i,\cdot}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\\
+\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\mathbf{X}_{i,\cdot}\right) & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{X}_{i,\cdot}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\\
+\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{X}_{i,\cdot}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right) & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\mathbf{X}_{i,\cdot}\right)\\
+\\
+\\
+\\
+\frac{\partial}{\partial\gamma_{\cdot h}}E_{h} & =\sum_{i=1}^{N}\sum_{j=1,k>j}^{p}-2\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}-\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\gamma_{\cdot,h}\mathbf{X}_{i,\cdot}^{T}\right)\mathbf{X}_{i,\cdot}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\\
+0 & =-2\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}-\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)\mathbf{X}_{i,\cdot}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\\
+\mathbf{X}_{i,\cdot}\gamma_{\cdot,h}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k} & =\mathbf{G}_{i,j}\mathbf{G}_{i,k}\\
+\mathbf{X}_{i,\cdot}\gamma_{\cdot,h} & =\mathbf{G}_{i,j}\mathbf{G}_{i,k}\left(\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\right)^{-1}\\
+\gamma_{\cdot,h}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}\mathbf{X}_{i,\cdot}^{T}\mathbf{X}_{i,\cdot} & =\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\right)\mathbf{X}_{i,\cdot}\\
+\gamma_{\cdot,h} & =\left(\mathbf{G}_{i,j}\mathbf{G}_{i,k}\right)\mathbf{X}_{i,\cdot}\left(\mathbf{X}_{i,\cdot}^{T}\mathbf{X}_{i,\cdot}\right)^{-1}\mathbf{Q}_{h,j}\mathbf{Q}_{h,k}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

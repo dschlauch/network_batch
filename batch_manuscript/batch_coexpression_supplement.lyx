@@ -90,6 +90,233 @@
 Batch effect on covariance structure confounds gene coexpression studies
 \end_layout
 
+\begin_layout Section
+Old Approach section
+\end_layout
+
+\begin_layout Standard
+The conventional batch correction model is typically given as
+\begin_inset Formula 
+\[
+Y_{g}=\alpha_{g}+\beta_{g}X+\gamma_{i}gZ+\delta_{i}g\epsilon_{i}g
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $X$
+\end_inset
+
+ is the exposure (e.g.
+ treatment/control) and 
+\begin_inset Formula $Z$
+\end_inset
+
+ is the batch (or other covariates).
+ In the context of network inference, we often want to find 
+\begin_inset Formula $cor(Y_{g1},Y_{g2})$
+\end_inset
+
+, independent of 
+\begin_inset Formula $Z$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+So, in order to model 2nd order batch, what we really want to do is allow
+ for the parameter of interest, 
+\begin_inset Formula $\beta_{g}$
+\end_inset
+
+ to vary by batch.
+ So, now we set
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\beta_{g}^{*}=\beta_{g}+\beta_{B}gZ$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $\beta_{B}$
+\end_inset
+
+ is a new parameter that we need to estimate for each of the 
+\begin_inset Formula ${p \choose 2}$
+\end_inset
+
+ comparisons.
+\end_layout
+
+\begin_layout Standard
+We can write out a full model for any two genes.
+ Note that 
+\begin_inset Formula $Y_{g2}$
+\end_inset
+
+ is another gene in this model.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y_{g2}=\alpha_{g}+\beta_{g}^{*}X+\gamma_{i}gZ+\delta_{i}g\epsilon_{i}g
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+or
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y_{g2}=\alpha_{g}+(\beta_{g}+\beta_{B}gZ)X+\gamma_{i}gZ+\delta_{i}g\epsilon_{i}g
+\]
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+Y_{g2}=\alpha_{g}+\beta_{g}X+\beta_{B}gZX+\gamma_{i}gZ+\delta_{i}g\epsilon_{i}g
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There are many ways to approach this, but I believe the best way is the
+ following steps:
+\end_layout
+
+\begin_layout Standard
+1.
+ Apply conventional batch correction.
+ This will effectively eliminate the 
+\begin_inset Formula $\gamma_{i}gZ$
+\end_inset
+
+ term and we can proceed with the simpler model - 
+\begin_inset Formula 
+\[
+Y_{g2}=\alpha_{g}+\beta_{g}X+\beta_{B}ZX+\delta_{i}g\epsilon_{i}g
+\]
+
+\end_inset
+
+ - on the combat-corrected data.
+ Further standardize each gene expression (this will not impact the actual
+ results, but will aid in interpretation and computation time)
+\end_layout
+
+\begin_layout Standard
+2.
+ Fit the following models Reduced: 
+\begin_inset Formula 
+\[
+Y_{g2}=\alpha_{g}+\beta_{g}X+\delta_{i}g\epsilon_{i}g
+\]
+
+\end_inset
+
+ Full: 
+\begin_inset Formula 
+\[
+Y_{g2}=\alpha_{g}+\beta_{g}X+\beta_{B}ZX+\delta_{i}g\epsilon_{i}g
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+3.
+ Place estimated coefficients into two separate matrices (
+\begin_inset Formula 
+\[
+S_{\beta},S_{B}
+\]
+
+\end_inset
+
+).
+ We have tons of options for computing these coefficients.
+ A LASSO-style L1 regularization would probably make the most sense here,
+ but for the purposes of simplicity we will start with OLS.
+\end_layout
+
+\begin_layout Standard
+So, now we have two separate (equal sized) matrices instead of the usual
+ one.
+ 
+\begin_inset Formula $S_{\beta}$
+\end_inset
+
+ is the estimated similarity matrix and 
+\begin_inset Formula $S_{B}$
+\end_inset
+
+ is the "batch impact".
+ Intuitively, we can imagine that the expected value of 
+\begin_inset Formula $S_{B}$
+\end_inset
+
+ is a zero matrix in the absence of 2nd order batch effects.
+ This lends itself easily for 2nd order batch effect testing - for example,
+ we can compare the two models via likelihood ratio test (LRT).
+ This is nice, but we're much more interested in 2nd order batch effect
+ *correction*.
+\end_layout
+
+\begin_layout Standard
+4.
+ Compute the corrected similarity matrix via: 
+\begin_inset Formula 
+\[
+\hat{S_{i}^{*}}=\hat{S_{\beta}}+(\frac{\sum_{j\in X_{i}}Z_{j}}{n_{i}})\hat{S_{B}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This yields a similarity matrix that is **batch-independent**.
+ In other words, we can now compare networks computed with different proportions
+ of batch membership.
+ We can think of the adjusted similarity matrix as being the estimated similarit
+y matrix given a *standardized representation of batches*.
+ This standardization allows us to compare networks which have been inferred
+ with differing batch composition.
+\end_layout
+
+\begin_layout Standard
+Obviously, the usual caveats apply - this correction is most useful when
+ the batches in each exposure are (a) unequal, (b) not too unequal.
+ Small numbers of samples for batches will result in wild fluctuations in
+ terms of estimating batch effect.
+ 
+\end_layout
+
 \begin_layout Subsection
 Batch effect in GTEx Project
 \end_layout
@@ -315,6 +542,25 @@ accounted for already.
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "AgreementVsConfounder"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename figures/pasted2.png
+	lyxscale 25
+	width 40col%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename figures/pasted1.png
+	lyxscale 25
+	width 40col%
 
 \end_inset
 

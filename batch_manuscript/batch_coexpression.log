@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.28)  23 JAN 2017 09:17
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2017.2.23)  30 MAR 2017 13:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **batch_coexpression.tex
 (./batch_coexpression.tex
 LaTeX2e <2011/06/27>
-Babel <3.9h> and hyphenation patterns for 4 languages loaded.
+Babel <3.9h> and hyphenation patterns for 78 languages loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
@@ -198,7 +198,7 @@ File: babel.def 2013/12/03 3.9h Babel common definitions
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
 ))
-No file batch_coexpression.aux.
+(./batch_coexpression.aux)
 \openout1 = `batch_coexpression.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
@@ -214,7 +214,7 @@ LaTeX Font Info:    ... okay on input line 28.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
 LaTeX Font Info:    ... okay on input line 28.
 LaTeX Font Info:    Try loading font information for T1+lmr on input line 28.
-(/usr/share/texmf/tex/latex/lm/t1lmr.fd
+ (/usr/share/texmf/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
@@ -310,113 +310,165 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 64.
+(Font)              <10> on input line 72.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 64.
+(Font)              <7> on input line 72.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 64.
- [2]
+(Font)              <5> on input line 72.
+
+
+LaTeX Warning: Citation `chen2011removing' on page 2 undefined on input line 90
+.
+
+
+LaTeX Warning: Citation `benito2004adjustment' on page 2 undefined on input lin
+e 90.
+
+
+LaTeX Warning: Citation `leek2007capturing' on page 2 undefined on input line 9
+0.
+
+
+LaTeX Warning: Citation `johnson2007adjusting' on page 2 undefined on input lin
+e 90.
+
+
+LaTeX Warning: Citation `nygaard2016methods' on page 2 undefined on input line 
+90.
+
+
+LaTeX Warning: Citation `johnson2007adjusting' on page 2 undefined on input lin
+e 93.
+
+
+LaTeX Warning: Citation `furlotte2011mixed' on page 2 undefined on input line 1
+13.
+
+[2]
+
+LaTeX Warning: Citation `de2010differential' on page 3 undefined on input line 
+130.
+
 
 Package amsmath Warning: Foreign command \atopwithdelims;
 (amsmath)                \frac or \genfrac should be used instead
-(amsmath)                 on input line 126.
+(amsmath)                 on input line 140.
 
-[3]
-Overfull \hbox (6.03139pt too wide) in paragraph at lines 224--229
+
+LaTeX Warning: Citation `bien2011sparse' on page 3 undefined on input line 143.
+
+
+
+LaTeX Warning: Citation `friedman2008sparse' on page 3 undefined on input line 
+143.
+
+
+</home/dan/gd/Harvard/Research/network_batch/overview2.png, id=22, 867.24pt x 9
+57.40543pt>
+File: /home/dan/gd/Harvard/Research/network_batch/overview2.png Graphic file (t
+ype png)
+ <use /home/dan/gd/Harvard/Research/network_batch/overview2.png>
+Package pdftex.def Info: /home/dan/gd/Harvard/Research/network_batch/overview2.
+png used on input line 166.
+(pdftex.def)             Requested size: 345.0pt x 380.86632pt.
+
+[3] [4 </home/dan/gd/Harvard/Research/network_batch/overview2.png>]
+Overfull \hbox (6.03139pt too wide) in paragraph at lines 193--198
 []\T1/lmr/m/n/10 Here, we make the usual mul-ti-vari-ate as-sump-tion for $[]$ 
 that the rows $\OML/lmm/m/it/10 ^^O[]; [] ; ^^O[]$
  []
 
-[4]
-Overfull \hbox (31.1589pt too wide) detected at line 293
-\OML/lmm/m/it/10 log\OMS/lmsy/m/n/10 L [] / [] [] \OML/lmm/m/it/10 log [] \OMS/
-lmsy/m/n/10 ^^@ []\OML/lmm/m/it/10 tr []
- []
-
 [5]
-Overfull \hbox (27.31361pt too wide) in paragraph at lines 304--304
-[] 
+
+LaTeX Warning: Reference `eq:Lambda' on page 6 undefined on input line 275.
+
+
+LaTeX Warning: Reference `eq:least_squares_zero' on page 6 undefined on input l
+ine 298.
+
+[6]
+
+LaTeX Warning: Reference `eq:estimator' on page 7 undefined on input line 310.
+
+
+Overfull \hbox (2.27711pt too wide) in paragraph at lines 330--332
+[]\T1/lmr/m/n/10 Sufficiency: The mle de-pends on the sam-ple ob-ser-va-tions o
+nly through
  []
 
+[7] <temp_eclipse_figure_20717.png, id=49, 490.83376pt x 425.33907pt>
+File: temp_eclipse_figure_20717.png Graphic file (type png)
 
-LaTeX Warning: Reference `simulated_example' on page 6 undefined on input line 
-328.
-
-[6] <figures/simulated_example.png, id=42, 1204.5pt x 1204.5pt>
+<use temp_eclipse_figure_20717.png>
+Package pdftex.def Info: temp_eclipse_figure_20717.png used on input line 371.
+(pdftex.def)             Requested size: 345.0pt x 298.97491pt.
+ [8] [9 <./temp_eclipse_figure_20717.png>]
+<figures/simulated_example.png, id=57, 1204.5pt x 1204.5pt>
 File: figures/simulated_example.png Graphic file (type png)
 
 <use figures/simulated_example.png>
-Package pdftex.def Info: figures/simulated_example.png used on input line 364.
+Package pdftex.def Info: figures/simulated_example.png used on input line 422.
 (pdftex.def)             Requested size: 345.0pt x 344.99533pt.
 
-<figures/pasted2.png, id=43, 1011.78pt x 722.7pt>
+<figures/pasted2.png, id=58, 1011.78pt x 722.7pt>
 File: figures/pasted2.png Graphic file (type png)
  <use figures/pasted2.png>
-Package pdftex.def Info: figures/pasted2.png used on input line 369.
+Package pdftex.def Info: figures/pasted2.png used on input line 422.
 (pdftex.def)             Requested size: 137.9979pt x 98.56378pt.
 
-<figures/pasted1.png, id=44, 1011.78pt x 722.7pt>
+<figures/pasted1.png, id=59, 1011.78pt x 722.7pt>
 File: figures/pasted1.png Graphic file (type png)
  <use figures/pasted1.png>
-Package pdftex.def Info: figures/pasted1.png used on input line 369.
+Package pdftex.def Info: figures/pasted1.png used on input line 422.
 (pdftex.def)             Requested size: 137.9979pt x 98.56378pt.
 
-<figures/gtex_image.png, id=45, 292.09125pt x 283.0575pt>
-File: figures/gtex_image.png Graphic file (type png)
-
-<use figures/gtex_image.png>
-Package pdftex.def Info: figures/gtex_image.png used on input line 402.
-(pdftex.def)             Requested size: 292.09052pt x 283.0568pt.
-
-Overfull \hbox (14.24278pt too wide) in paragraph at lines 402--404
-[][]\T1/lmr/m/n/10 [GTEx Sup-
+Overfull \hbox (275.99579pt too wide) in paragraph at lines 422--437
+[][][][] 
  []
 
-[7] [8 <./figures/simulated_example.png (PNG copy)> <./figures/pasted2.png> <./
-figures/pasted1.png>] <figures/pasted4.png, id=53, 361.35pt x 361.35pt>
-File: figures/pasted4.png Graphic file (type png)
 
-<use figures/pasted4.png>
-Package pdftex.def Info: figures/pasted4.png used on input line 423.
-(pdftex.def)             Requested size: 137.9979pt x 137.99812pt.
- <figures/pasted5.png, id=54, 361.35pt x 361.35pt>
-File: figures/pasted5.png Graphic file (type png)
+LaTeX Warning: Citation `langmead2009ultrafast' on page 10 undefined on input l
+ine 460.
 
-<use figures/pasted5.png>
-Package pdftex.def Info: figures/pasted5.png used on input line 423.
-(pdftex.def)             Requested size: 137.9979pt x 137.99812pt.
- <figures/pasted6.png, id=55, 361.35pt x 361.35pt>
-File: figures/pasted6.png Graphic file (type png)
 
-<use figures/pasted6.png>
-Package pdftex.def Info: figures/pasted6.png used on input line 425.
-(pdftex.def)             Requested size: 103.50105pt x 103.4986pt.
- <figures/pasted7.png, id=56, 361.35pt x 361.35pt>
-File: figures/pasted7.png Graphic file (type png)
+LaTeX Warning: Citation `liao2014featurecounts' on page 10 undefined on input l
+ine 462.
 
-<use figures/pasted7.png>
-Package pdftex.def Info: figures/pasted7.png used on input line 425.
-(pdftex.def)             Requested size: 103.50105pt x 103.4986pt.
- <figures/pasted8.png, id=57, 361.35pt x 361.35pt>
-File: figures/pasted8.png Graphic file (type png)
+[10] [11 <./figures/simulated_example.png (PNG copy)> <./figures/pasted2.png> <
+./figures/pasted1.png>]
 
-<use figures/pasted8.png>
-Package pdftex.def Info: figures/pasted8.png used on input line 425.
-(pdftex.def)             Requested size: 103.50105pt x 103.4986pt.
- [9 <./figures/gtex_image.png>]
+LaTeX Warning: Reference `ENCODE' on page 12 undefined on input line 474.
 
-LaTeX Warning: Reference `AgreementVsConfounder' on page 10 undefined on input 
-line 451.
 
-<figures/pasted9.png, id=61, 490.83376pt x 425.33907pt>
-File: figures/pasted9.png Graphic file (type png)
+LaTeX Warning: Reference `ENCODE' on page 12 undefined on input line 484.
 
-<use figures/pasted9.png>
-Package pdftex.def Info: figures/pasted9.png used on input line 454.
-(pdftex.def)             Requested size: 345.0pt x 298.97491pt.
- [10 <./figures/pasted4.png> <./figures/pasted5.png> <./figures/pasted6.png> <.
-/figures/pasted7.png> <./figures/pasted8.png>]
-[11 <./figures/pasted9.png>] (./batch_coexpression.aux)
+
+</home/dan/gd/Harvard/Research/network_batch/figures/encode_diffexpress.png, id
+=66, 578.16pt x 289.08pt>
+File: /home/dan/gd/Harvard/Research/network_batch/figures/encode_diffexpress.pn
+g Graphic file (type png)
+
+<use /home/dan/gd/Harvard/Research/network_batch/figures/encode_diffexpress.png
+>
+Package pdftex.def Info: /home/dan/gd/Harvard/Research/network_batch/figures/en
+code_diffexpress.png used on input line 490.
+(pdftex.def)             Requested size: 310.4979pt x 155.24954pt.
+
+</home/dan/gd/Harvard/Research/network_batch/figures/encode_diff_coex_density.p
+ng, id=67, 803.0pt x 401.5pt>
+File: /home/dan/gd/Harvard/Research/network_batch/figures/encode_diff_coex_dens
+ity.png Graphic file (type png)
+
+<use /home/dan/gd/Harvard/Research/network_batch/figures/encode_diff_coex_densi
+ty.png>
+Package pdftex.def Info: /home/dan/gd/Harvard/Research/network_batch/figures/en
+code_diff_coex_density.png used on input line 491.
+(pdftex.def)             Requested size: 310.4979pt x 155.24881pt.
+
+No file batch_coexpression.bbl.
+[12] [13 </home/dan/gd/Harvard/Research/network_batch/figures/encode_diffexpres
+s.png> </home/dan/gd/Harvard/Research/network_batch/figures/encode_diff_coex_de
+nsity.png (PNG copy)>] (./batch_coexpression.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -425,13 +477,13 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 3077 strings out of 494985
- 41194 string characters out of 6180356
- 104207 words of memory out of 5000000
- 6204 multiletter control sequences out of 15000+600000
+ 3083 strings out of 493304
+ 42005 string characters out of 6139871
+ 111360 words of memory out of 5000000
+ 6450 multiletter control sequences out of 15000+600000
  81229 words of font info for 52 fonts, out of 8000000 for 9000
- 36 hyphenation exceptions out of 8191
- 38i,12n,23p,379b,267s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 957 hyphenation exceptions out of 8191
+ 38i,11n,23p,1181b,267s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
 ips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share
 /texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
@@ -448,10 +500,10 @@ b></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/share/texmf/fonts/type
 1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr
 /share/texmf/fonts/type1/public/lm/lmsy5.pfb></usr/share/texmf/fonts/type1/publ
 ic/lm/lmsy7.pfb>
-Output written on batch_coexpression.pdf (11 pages, 1448731 bytes).
+Output written on batch_coexpression.pdf (13 pages, 1611044 bytes).
 PDF statistics:
- 135 PDF objects out of 1000 (max. 8388607)
- 92 compressed objects within 1 object stream
+ 149 PDF objects out of 1000 (max. 8388607)
+ 104 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 51 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -10,13 +10,13 @@ source('~/gd/Harvard/Research/network_batch/simulateData.R')
 source('~/gd/Harvard/Research/network_batch/generateMasterDF.R')
 
 seed <- sample(10000,1)
-set.seed(seed)
+set.seed(5620)
 numGenes <- 4000 
-numSamples <-200
+numSamples <-400
 addedError <- 8
 batchEffectMultiplier <- 2
 
-note <- "_testing"
+note <- "_larger_defense"
 outputDir <- paste0("figures/InSilico_",addedError,"Error_",batchEffectMultiplier,"Batch_UniformEffects_",numSamples,"samples_",numGenes,"genes","_",seed,note)
 dir.create(outputDir,showWarnings = F)
 
